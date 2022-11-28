@@ -1,0 +1,25 @@
+{
+	"GameObject": [
+		{
+			"name": "Camera",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 10
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": 
+				{
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		}
+	]
+}

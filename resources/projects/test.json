@@ -1,0 +1,123 @@
+{
+	"Shaders": [
+		{
+			"name": "defaultShader",
+			"vertexPath": "resources\\shaders\\default.vert",
+			"fragmentPath": "resources\\shaders\\default.frag"
+		},
+
+		{
+			"name": "gridShader",
+			"vertexPath": "resources\\shaders\\grid.vert",
+			"fragmentPath": "resources\\shaders\\grid.frag"
+		},
+
+		{
+			"name": "monochromeShader",
+			"vertexPath": "resources\\shaders\\monochrome.vert",
+			"fragmentPath": "resources\\shaders\\monochrome.frag"
+		}
+	],
+
+	"Models": [
+		{
+			"name": "sphere",
+			"filepath": "resources\\models\\sphere.fbx"
+		}
+	],
+	
+    "GameObjects" : [
+		{
+			"name": "MainCamera",
+			"tags": [ "camera" ],
+			"CameraComponent": {
+				"ProjectionMode": 0,
+				"farClipPlane": 100,
+				"nearClipPlane": 0.1,
+				"fieldOfView": 45,
+				"isMovable": true
+			},
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		},
+
+		{
+			"name": "Cube",
+			"tags": [ "lab3" ],
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 2
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			},
+			"ModelRendererComponent":
+			{
+				"shader": "defaultShader",
+				"model": "cube",
+				"color": {
+					"r": 1.0,
+					"g": 1.0,
+					"b": 1.0
+				}
+			}
+		},
+
+		{
+			"name": "Sphere",
+			"tags": [ "lab4" ],
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 5
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			},
+			"ModelRendererComponent":
+			{
+				"shader": "defaultShader",
+				"model": "sphere",
+				"color": {
+					"r": 1.0,
+					"g": 0.0,
+					"b": 0.0
+				}
+			}
+		}
+	]
+}

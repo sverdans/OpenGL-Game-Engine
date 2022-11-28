@@ -1,0 +1,221 @@
+{
+	"GameObject": [
+		{
+			"name": "Camera",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": -10
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		},
+		
+		{
+			"name": "Polygon",
+			"tag": "polygon1",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": -1,
+					"z": 1
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		},
+		
+		{
+			"name": "Polygon",
+			"tag": "polygon2",
+			"TransformComponent": {
+				"position": {
+					"x": 0.5,
+					"y": 0,
+					"z": 4
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		},
+
+		{
+			"name": "Polygon",
+			"tag": "polygon3",
+			"TransformComponent": {
+				"position": {
+					"x": -0.5,
+					"y": -0.5,
+					"z": 8
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		},
+
+		{
+			"name": "Polygon",
+			"tag": "cube",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 2
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		},
+
+		{
+			"name": "Polygon",
+			"tag": "cone1",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 2
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1.2,
+					"y": 1,
+					"z": 1.2
+				}
+			}
+		},
+
+		{
+			"name": "Polygon",
+			"tag": "cone2",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0.6,
+					"z": 2
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		},
+
+		{
+			"name": "Polygon",
+			"tag": "cone3",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 1.2,
+					"z": 2
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 0.8,
+					"y": 0.9,
+					"z": 0.8
+				}
+			}
+		},
+
+		{
+			"name": "Polygon",
+			"tag": "cone4",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": -0.4,
+					"z": 2
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 0.3,
+					"y": 2,
+					"z": 0.3
+				}
+			}
+		},
+
+		{
+			"name": "Hyperboloid",
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 1
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 1,
+					"y": 1,
+					"z": 1
+				}
+			}
+		}
+	]
+}
