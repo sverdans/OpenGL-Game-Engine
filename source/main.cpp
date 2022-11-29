@@ -17,19 +17,16 @@
 #include "Game/Systems/BehaviourSystem.h"
 
 #include "Editor/Editor.h"
-#include "initFunction.h"
 
 int main(int argc, char** argv)
 {
 	Parser::setDirectoryPath(argv[0]);
 
-	Window::init(glm::vec2(1000, 800), "OpenGL-Lab");
+	Window::init(glm::vec2(1000, 800), "OpenGL-Courswork");
 	Renderer::setClearColor(0.f, 0.f, 0.f, 0.f);
 	Renderer::enableDepthTest();
 
 	InputHandler::init();
-
-	initLabResources();
 
 	Editor::init();
 
@@ -56,6 +53,7 @@ int main(int argc, char** argv)
 			BehaviourSystem::lateUpdate();
 			BehaviourSystem::onPreRender();
 
+			LightingSystem::update();
 			RendererSystem::render();
 
 			Editor::update();

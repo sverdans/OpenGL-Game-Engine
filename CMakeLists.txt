@@ -10,8 +10,6 @@ add_executable(
 	source/Editor/ImGuiFileDialog/ImGuiFileDialog.cpp
 
 	source/main.cpp
-	source/initFunction.h
-	source/Lab.h
 
 	source/System/Parser.h
 	source/System/Parser.cpp
@@ -76,13 +74,10 @@ add_executable(
 
 	source/Game/Components/RendererComponent.h
 	source/Game/Components/RendererComponent.cpp
-	source/Game/Components/ShapeRendererComponent.h
-	source/Game/Components/ShapeRendererComponent.cpp
-	source/Game/Components/HyperboloidRendererComponent.h
-	source/Game/Components/HyperboloidRendererComponent.cpp
-
 	source/Game/Components/ModelRendererComponent.h
 	source/Game/Components/ModelRendererComponent.cpp
+	source/Game/Components/LightingComponent.h
+	source/Game/Components/LightingComponent.cpp
 
 	source/Game/Components/BehaviourComponent.h
 	source/Game/Components/BehaviourComponent.cpp

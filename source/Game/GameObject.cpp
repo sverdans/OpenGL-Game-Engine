@@ -5,6 +5,7 @@
 #include "Components/TransformComponent.h"
 #include "Components/CameraComponent.h"
 #include "Components/ModelRendererComponent.h"
+#include "Components/LightingComponent.h"
 
 //#include "Components/ShapeRendererComponent.h"
 //#include "Components/HyperboloidRendererComponent.h"
@@ -30,19 +31,25 @@ void GameObject::deserialize(const nlohmann::json& jsonObject)
 	if (jsonObject.contains("TransformComponent"))
 	{
 		auto component = contain<TransformComponent>() ? getComponent<TransformComponent>() : addComponent<TransformComponent>(); 
-		component->deserialize(jsonObject["TransformComponent"]);
+		component->deserialize(jsonObject[component->name()]);
 	}
 
 	if (jsonObject.contains("CameraComponent"))
 	{
 		auto component = contain<CameraComponent>() ? getComponent<CameraComponent>() : addComponent<CameraComponent>();
-		component->deserialize(jsonObject["CameraComponent"]);
+		component->deserialize(jsonObject[component->name()]);
 	}
 
 	if (jsonObject.contains("ModelRendererComponent"))
 	{
 		auto component = contain<ModelRendererComponent>() ? getComponent<ModelRendererComponent>() : addComponent<ModelRendererComponent>();
-		component->deserialize(jsonObject["ModelRendererComponent"]);
+		component->deserialize(jsonObject[component->name()]);
+	}
+
+	if (jsonObject.contains("LightingComponent"))
+	{
+		auto component = contain<LightingComponent>() ? getComponent<LightingComponent>() : addComponent<LightingComponent>();
+		component->deserialize(jsonObject[component->name()]);
 	}
 
 	/*auto childrenIt = jsonObject.find("GameObjects");

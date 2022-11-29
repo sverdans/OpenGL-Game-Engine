@@ -49,4 +49,6 @@ public:
 
 	void deserialize(const nlohmann::json& jsonObject) override;
 	void serialize(nlohmann::json& jsonObject) override;
+
+	std::string name() override { return "TransformComponent"; }
 };

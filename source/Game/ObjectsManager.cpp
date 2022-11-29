@@ -6,7 +6,6 @@
 
 #include "GameObject.h"
 
-
 void ObjectsManager::deleteGameObjects()
 {
 	for (auto it = gameObjects.begin(); it != gameObjects.end(); ++it)

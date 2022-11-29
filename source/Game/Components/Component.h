@@ -15,4 +15,6 @@ public:
 
 	virtual void deserialize(const nlohmann::json& jsonObject) = 0;
 	virtual void serialize(nlohmann::json& jsonObject) = 0;
+
+	virtual std::string name() = 0;
 };

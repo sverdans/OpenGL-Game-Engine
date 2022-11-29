@@ -21,11 +21,24 @@ void ModelRendererComponent::setModel(const Model* model)
 
 void ModelRendererComponent::setShader(const ShaderProgram* shader) { this->shader = shader; }
 
+void ModelRendererComponent::setSpecularStrength(const float specularStrength)
+{
+	this->specularStrength = specularStrength > 0.f ? (specularStrength < 1.f ? specularStrength : 1.f) : 0.f;
+}
+
+void ModelRendererComponent::setSpecularity(const int specularity)
+{
+	this->specularity = specularity > 0 ? (specularity < 256 ? specularity : 256) :0;
+}
+
 void ModelRendererComponent::render()
 {
 	shader->use();
 	shader->setMatrix("modelMat", gameObject->getComponent<TransformComponent>()->getModelMatrix());
 	shader->setVec3("modelColor", color);
+
+	shader->setInt("specularity", specularity);
+	shader->setFloat("specularStrength", specularStrength);
 
 	for (auto& mesh : model->meshes)
 		mesh->render();
@@ -37,6 +50,9 @@ void ModelRendererComponent::deserialize(const nlohmann::json& jsonObject)
 {
 	shader = ResourceManager::getShader(jsonObject["shader"]);
 	model = ResourceManager::getModel(jsonObject["model"]);
+	
+	setSpecularStrength(jsonObject["specularStrength"]);
+	setSpecularity(jsonObject["specularity"]);
 
 	color = glm::vec3(jsonObject["color"]["r"], 
 					  jsonObject["color"]["g"],
@@ -55,5 +71,8 @@ void ModelRendererComponent::serialize(nlohmann::json& jsonObject)
 	component["model"] = ResourceManager::getModelName(model);
 	component["color"] = colorJson;
 
-	jsonObject["ModelRenderer"] = component;
+	component["specularStrength"] = specularStrength;
+	component["specularity"] = specularity;
+
+	jsonObject[name()] = component;
 }

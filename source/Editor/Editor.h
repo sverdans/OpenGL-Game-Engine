@@ -1,3 +1,5 @@
+#include <limits>
+
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
@@ -10,11 +12,12 @@
 #include "../Game/GameObject.h"
 #include "../Editor/ImGuiFileDialog/ImGuiFileDialog.h"
 
+#include "../Game/Systems/LightingSystem.h"
+
 
 class Editor
 {
 private:
-	static nlohmann::json jsonGameObject;
 
 	static constexpr int indentValue = 10;
 	static ImVec2 managersSidebarSize;
@@ -46,7 +49,8 @@ private:
 			{
 				float f = it.value();
 
-				if (ImGui::InputFloat(tempInputUID.c_str(), &f))
+				if (ImGui::InputFloat(tempInputUID.c_str(), &f) && it.value() != f)
+			//	if (ImGui::DragFloat(tempInputUID.c_str(), &f, 0.005f, -FLT_MAX, +FLT_MAX) && it.value() != f)
 				{
 					needDeserializeCurrentObject = true;
 					it.value() = f;
@@ -59,7 +63,7 @@ private:
 			{
 				std::string s = it.value();
 
-				if (ImGui::InputText(tempInputUID.c_str(), &s[0], 20))
+				if (ImGui::InputText(tempInputUID.c_str(), &s[0], 20) && it.value() != s)
 				{
 					needDeserializeCurrentObject = true;
 					it.value() = s;
@@ -107,13 +111,15 @@ private:
 			if (ImGuiFileDialog::Instance()->IsOk())
 			{
 				std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-				std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
 
 				ObjectsManager::deleteGameObjects();
 				ResourceManager::deleteAllResources();
 
 				ResourceManager::loadResources(filePathName);
 				ObjectsManager::loadGameObjects(filePathName);
+
+				BehaviourSystem::init();
+				LightingSystem::update();
 			}
 			ImGuiFileDialog::Instance()->Close();
 		}
@@ -189,7 +195,7 @@ private:
 		{
 			gameObjectSidebarSize = ImVec2(ImGui::GetWindowSize().x, Window::size.y);
 		
-			jsonGameObject.clear();
+			nlohmann::json jsonGameObject;
 			currentGameObject->serialize(jsonGameObject);
 
 			needDeserializeCurrentObject = false;
@@ -236,7 +242,6 @@ public:
 	}
 };
 
-nlohmann::json Editor::jsonGameObject;
 
 ImVec2 Editor::managersSidebarSize;
 ImVec2 Editor::gameObjectSidebarSize;

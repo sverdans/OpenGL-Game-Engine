@@ -46,8 +46,8 @@ ShaderProgram* ResourceManager::getShader(const std::string& name)
 	auto it = shaders.find(name);
 	if (it == shaders.end())
 	{
-		std::cout << "Error! Shader not found. Shader name: " << name << "." << std::endl;
-		exit(-1);
+		std::cout << "Warning! Shader not found. Shader name: " << name << "." << std::endl;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -107,8 +107,8 @@ Texture* ResourceManager::getTexture(const std::string& name)
 	auto it = textures.find(name);
 	if (it == textures.end())
 	{
-		std::cout << "Error! Texture not found. Texture name: " << name << "." << std::endl;
-		exit(-1);
+		std::cout << "Warning! Texture not found. Texture name: " << name << "." << std::endl;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -125,8 +125,8 @@ Sprite* ResourceManager::getSprite(const std::string& name)
 	auto it = sprites.find(name);
 	if (it == sprites.end())
 	{
-		std::cout << "Error! Texture not found. Texture name: " << name << "." << std::endl;
-		exit(-1);
+		std::cout << "Warning! Texture not found. Texture name: " << name << "." << std::endl;
+		return nullptr;
 	}
 	return it->second;
 }
@@ -150,7 +150,7 @@ Model* ResourceManager::loadModel(const std::string& name, const std::string& fi
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
-		exit(-1);
+		return nullptr;
 	}
 
 	std::vector<Mesh*> meshes;
@@ -168,8 +168,8 @@ Model* ResourceManager::getModel(const std::string& name)
 	auto it = models.find(name);
 	if (it == models.end())
 	{
-		std::cout << "Error! Model not found. Model name: " << name << "." << std::endl;
-		exit(-1);
+		std::cout << "Warning! Model not found. Model name: " << name << "." << std::endl;
+		return nullptr;
 	}
 	return it->second;
 }

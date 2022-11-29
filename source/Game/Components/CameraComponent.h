@@ -127,15 +127,22 @@ public:
 
 		viewProjectionMatrix = projectionMatrix * viewMatrix;
 		
-		auto defaultShader = ResourceManager::getShader("defaultShader");
-		defaultShader->use();
-		defaultShader->setMatrix("viewProjectionMat", viewProjectionMatrix);
-		defaultShader->unuse();
+		auto ds = ResourceManager::getShader("defaultShader");
+		if (ds)
+		{
+			ds->use();
+			ds->setMatrix("viewProjectionMat", viewProjectionMatrix);
+			ds->setVec3("viewPosition", gameObject->getComponent<TransformComponent>()->getGlobalPosition());
+			ds->unuse();
+		}
 
-		auto monochromeShader = ResourceManager::getShader("monochromeShader");
-		monochromeShader->use();
-		monochromeShader->setMatrix("viewProjectionMat", viewProjectionMatrix);
-		monochromeShader->unuse();
+		auto ss = ResourceManager::getShader("simpleShader");
+		if (ss)
+		{
+			ss->use();
+			ss->setMatrix("viewProjectionMat", viewProjectionMatrix);
+			ss->unuse();
+		}
 	}
 
 	void deserialize(const nlohmann::json& jsonObject) override
@@ -164,6 +171,9 @@ public:
 		component["nearClipPlane"] = nearClipPlane;
 		component["ProjectionMode"] = static_cast<int>(projectionMode);
 
-		jsonObject["CameraComponent"] = component;
+		jsonObject[name()] = component;
 	}
+
+	std::string name() override { return "CameraComponent"; }
+
 };

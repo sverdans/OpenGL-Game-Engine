@@ -31,6 +31,7 @@ private:
 	VertexArray vertexArray;
 	VertexBuffer vertexCoordsBuffer;
 	VertexBuffer colorCoordsBuffer;
+	VertexBuffer normalsBuffer;
 	IndexBuffer indexBuffer;
 
 	std::vector<glm::vec3> vertexNormals;
@@ -41,7 +42,6 @@ private:
 
 	void setupMesh();
 
-	void recalculateVertexNormals();
 
 	std::vector<float>& getVertexPositions();
 
@@ -60,6 +60,8 @@ public:
 	void setDrawMode(Renderer::DrawMode mode) { drawMode = mode; }
 
 	void render(const ShaderProgram* shader, const glm::mat4& modelMatrix);
+
+	void recalculateVertexNormals();
 
 	void render();
 };

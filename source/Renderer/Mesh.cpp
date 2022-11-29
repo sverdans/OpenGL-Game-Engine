@@ -23,10 +23,10 @@ void Mesh::setupMesh()
 	vertexCoordsLayout.addElementLayoutFloat(3, false);
 	vertexArray.addBuffer(vertexCoordsBuffer, vertexCoordsLayout);
 
-	/*colorCoordsBuffer.init(&colorsPositions.front(), colorsPositions.size() * sizeof(float));
-	VertexBufferLayout vertexColorsLayout;
-	vertexColorsLayout.addElementLayoutFloat(3, false);
-	vertexArray.addBuffer(colorCoordsBuffer, vertexColorsLayout);*/
+	normalsBuffer.init(&vertexNormals.front(), vertexNormals.size() * sizeof(glm::vec3));
+	VertexBufferLayout normalsLayout;
+	normalsLayout.addElementLayoutFloat(3, false);
+	vertexArray.addBuffer(normalsBuffer, normalsLayout);
 
 	indexBuffer = IndexBuffer(&indices.front(), indices.size());
 
@@ -125,5 +125,3 @@ void Mesh::render()
 {
 	Renderer::draw(vertexArray, indexBuffer, drawMode);
 }
-
-

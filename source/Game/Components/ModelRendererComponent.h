@@ -17,6 +17,9 @@ private:
 	bool renderWithTexture;
 	glm::vec3 color;
 
+	float specularStrength;
+	int specularity;
+
 public:
 	ModelRendererComponent() = delete;
 	ModelRendererComponent(const ModelRendererComponent&) = delete;
@@ -28,8 +31,14 @@ public:
 	void setModel(const Model* model);
 	void setShader(const ShaderProgram* shader);
 
+	void setSpecularStrength(const float specularStrength);
+	void setSpecularity(const int specularity);
+
 	void render() override;
 
 	void deserialize(const nlohmann::json& jsonObject) override;
 	void serialize(nlohmann::json& jsonObject) override;
+
+	std::string name() override { return "ModelRendererComponent"; }
+
 };

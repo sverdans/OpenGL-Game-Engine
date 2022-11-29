@@ -7,15 +7,15 @@
 		},
 
 		{
-			"name": "gridShader",
-			"vertexPath": "resources\\shaders\\grid.vert",
-			"fragmentPath": "resources\\shaders\\grid.frag"
+			"name": "simpleShader",
+			"vertexPath": "resources\\shaders\\simple.vert",
+			"fragmentPath": "resources\\shaders\\simple.frag"
 		},
 
 		{
-			"name": "monochromeShader",
-			"vertexPath": "resources\\shaders\\monochrome.vert",
-			"fragmentPath": "resources\\shaders\\monochrome.frag"
+			"name": "gridShader",
+			"vertexPath": "resources\\shaders\\grid.vert",
+			"fragmentPath": "resources\\shaders\\grid.frag"
 		}
 	],
 
@@ -23,6 +23,10 @@
 		{
 			"name": "sphere",
 			"filepath": "resources\\models\\sphere.fbx"
+		},
+		{
+			"name": "cube",
+			"filepath": "resources\\models\\cube.fbx"
 		}
 	],
 	
@@ -59,6 +63,7 @@
 		{
 			"name": "Cube",
 			"tags": [ "lab3" ],
+		
 			"TransformComponent": {
 				"position": {
 					"x": 0,
@@ -76,21 +81,26 @@
 					"z": 1
 				}
 			},
+		
 			"ModelRendererComponent":
 			{
 				"shader": "defaultShader",
 				"model": "cube",
 				"color": {
 					"r": 1.0,
-					"g": 1.0,
-					"b": 1.0
-				}
+					"g": 0.0,
+					"b": 0.0
+				},
+
+				"specularity": 32,
+				"specularStrength": 0.5
 			}
 		},
 
 		{
 			"name": "Sphere",
 			"tags": [ "lab4" ],
+		
 			"TransformComponent": {
 				"position": {
 					"x": 0,
@@ -103,18 +113,68 @@
 					"z": 0
 				},
 				"size": {
-					"x": 1,
-					"y": 1,
-					"z": 1
+					"x": 0.01,
+					"y": 0.01,
+					"z": 0.01
 				}
 			},
+			
 			"ModelRendererComponent":
 			{
 				"shader": "defaultShader",
 				"model": "sphere",
 				"color": {
 					"r": 1.0,
-					"g": 0.0,
+					"g": 1.0,
+					"b": 1.0
+				},
+		
+				"specularity": 128,
+				"specularStrength": 1.0
+			}
+		},
+
+		{
+			"name": "LightSource",
+			"tags": [ "lab4" ],
+			
+			"TransformComponent": {
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"x": 0.2,
+					"y": 0.2,
+					"z": 0.2
+				}
+			},
+			
+			"ModelRendererComponent":
+			{
+				"shader": "simpleShader",
+				"model": "cube",
+				"color": {
+					"r": 1.0,
+					"g": 1.0,
+					"b": 0.0
+				},
+
+				"specularity": 2,
+				"specularStrength": 0.5
+			},
+		
+			"LightingComponent":
+			{
+				"color": {
+					"r": 1.0,
+					"g": 1.0,
 					"b": 0.0
 				}
 			}
