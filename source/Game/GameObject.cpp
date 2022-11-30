@@ -25,6 +25,7 @@ void GameObject::deserialize(const nlohmann::json& jsonObject)
 {
 	name = jsonObject["name"];
 
+	tags.clear();
 	for (const auto& jsonTag : jsonObject["tags"])
 		addTag(jsonTag);
 

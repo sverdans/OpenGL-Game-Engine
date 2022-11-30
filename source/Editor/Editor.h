@@ -44,13 +44,13 @@ private:
 			std::string tempInputUID = std::string("##" + inputUID + std::string(it.key()));
 
 			std::string type = it.value().type_name();
-			
+
 			if (type == "number")
 			{
 				float f = it.value();
 
-				if (ImGui::InputFloat(tempInputUID.c_str(), &f) && it.value() != f)
-			//	if (ImGui::DragFloat(tempInputUID.c_str(), &f, 0.005f, -FLT_MAX, +FLT_MAX) && it.value() != f)
+			//	if (ImGui::InputFloat(tempInputUID.c_str(), &f) && it.value() != f)
+				if (ImGui::DragFloat(tempInputUID.c_str(), &f, 0.005f, -FLT_MAX, +FLT_MAX) && it.value() != f)
 				{
 					needDeserializeCurrentObject = true;
 					it.value() = f;

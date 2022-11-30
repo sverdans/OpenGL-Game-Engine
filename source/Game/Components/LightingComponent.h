@@ -5,11 +5,19 @@
 
 class LightingComponent : public Component
 {
+public:
+	enum class Type
+	{
+		Directional,
+		Point
+	};
+
 private:
 	friend class LightingSystem;
 
+	Type type;
 	glm::vec3 color;
-	float specularStrength = 0.5f;
+	float intensity = 1;
 
 public:
 	LightingComponent(GameObject* gameObject);
@@ -25,6 +33,9 @@ public:
 		color = glm::vec3(jsonObject["color"]["r"],
 						  jsonObject["color"]["g"],
 						  jsonObject["color"]["b"]);
+
+		intensity = jsonObject["intensity"];
+		type = static_cast<Type>(jsonObject["type"]);
 	}
 
 	void serialize(nlohmann::json& jsonObject) override
@@ -33,9 +44,11 @@ public:
 		colorJson["r"] = color.r;
 		colorJson["g"] = color.g;
 		colorJson["b"] = color.b;
-	
+
 		nlohmann::json component;
+		component["type"] = static_cast<int>(type);
 		component["color"] = colorJson;
+		component["intensity"] = intensity;
 
 		jsonObject[name()] = component;
 	}

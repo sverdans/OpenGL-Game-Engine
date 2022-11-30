@@ -1,4 +1,6 @@
 #version 460
+#define MaxDirectionalLights 8
+#define MaxPointLights 8
 
 in VertOut 
 {
@@ -20,26 +22,44 @@ uniform float ambientStrength;
 uniform float specularStrength;
 uniform int specularity;
 
-uniform float lightIntensity;
-uniform vec3 lightDirection;
-uniform vec3 lightPosition;
-uniform vec3 lightColor;
+uniform struct DirectionalLights
+{
+	float intensity;
+	vec3 direction;
+	vec3 color;
+} directionalLights[MaxDirectionalLights];
+
+uniform struct PointLights
+{
+	float intensity;
+	vec3 position;
+	vec3 color;
+} pointLights[MaxPointLights];
 
 void main()
 {
 	vec3 norm = normalize(fragIn.normal);
-	vec3 lightDir = normalize(lightPosition - fragIn.fragPosition);
 
-	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = diff * lightColor;
+	vec3 lighting = ambientStrength * ambientColor;
+	
+	for (int i = 0; i < MaxPointLights; i++)
+	{
+		vec3 lightDir = normalize(pointLights[i].position - fragIn.fragPosition);
 
-    vec3 viewDir = normalize(viewPosition - fragIn.fragPosition);
-    vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularity);
-    vec3 specular = specularStrength * spec * lightColor;  
+		float diff = max(dot(norm, lightDir), 0.0);
+		vec3 diffuse = diff * pointLights[i].color;
 
-	vec3 ambient = ambientStrength * ambientColor;
-	vec3 result = (ambient + diffuse + specular) * modelColor;
+	//	float dist = pointLights[i].intensity / length(pointLights[i].position - fragIn.fragPosition);
+	//	vec3 diffuse = dist * pointLights[i].color;
 
-	fragColor = vec4(result, 1.0);
+		vec3 viewDir = normalize(viewPosition - fragIn.fragPosition);
+		vec3 reflectDir = reflect(-lightDir, norm);  
+
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularity);
+		vec3 specular = specularStrength * spec * pointLights[i].color;  
+
+		lighting += diffuse + specular;
+	}
+
+	fragColor = vec4(lighting * modelColor, 1.0);
 }

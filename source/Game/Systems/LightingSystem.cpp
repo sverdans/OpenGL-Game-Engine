@@ -15,21 +15,51 @@ void LightingSystem::removeLightingComponent(LightingComponent* LC)
 
 void LightingSystem::update()
 {
+	std::list<ShaderProgram*> shaders;
 	auto ds = ResourceManager::getShader("defaultShader");
-	if (ds)
-	{
-		ds->use();
-		ds->setFloat("ambientStrength", ambientStrength);
-		ds->setVec3("ambientColor", ambientColor);
+	if (ds) shaders.push_back(ds);
 
-		auto LC = lightingComponents.size() != 0 ? lightingComponents.front() : nullptr;
-		if (LC)
+	for (auto& shader : shaders)
+	{
+		shader->use();
+		shader->setFloat("ambientStrength", ambientStrength);
+		shader->setVec3("ambientColor", ambientColor);
+
+		unsigned int dirIndex = 0, pointIndex = 0;
+		for (auto& it : lightingComponents)
 		{
-			ds->setVec3("lightColor", LC->color);
-			ds->setVec3("lightPosition", LC->gameObject->getComponent<TransformComponent>()->getGlobalPosition());
+			switch (it->type)
+			{
+				case LightingComponent::Type::Directional:
+					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].color", it->color);
+					shader->setFloat("directionalLights[" + std::to_string(dirIndex) + "].intensity", it->intensity);
+					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].direction", -it->gameObject->getComponent<TransformComponent>()->getForward());
+					dirIndex++;
+					break;
+				case LightingComponent::Type::Point:
+					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].color", it->color);
+					shader->setFloat("pointLights[" + std::to_string(pointIndex) + "].intensity", it->intensity);
+					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].position", it->gameObject->getComponent<TransformComponent>()->getGlobalPosition());
+					pointIndex++;
+					break;
+			}
 		}
-		
-		ds->unuse();
+
+		for (unsigned int i = dirIndex; i < maxDirLights; ++i)
+		{
+			shader->setVec3("directionalLights[" + std::to_string(i) + "].color", glm::vec3(0, 0, 0));
+			shader->setFloat("directionalLights[" + std::to_string(i) + "].intensity", 0.f);
+			shader->setVec3("directionalLights[" + std::to_string(i) + "].direction", glm::vec3(0, 0, 0));
+		}
+
+		for (unsigned int i = pointIndex; i < maxPointLights; ++i)
+		{
+			shader->setVec3("pointLights[" + std::to_string(i) + "].color", glm::vec3(0, 0, 0));
+			shader->setFloat("pointLights[" + std::to_string(i) + "].intensity", 0.f);
+			shader->setVec3("pointLights[" + std::to_string(i) + "].position", glm::vec3(0, 0, 0));
+		}
+
+		shader->unuse();
 	}
 }
 
