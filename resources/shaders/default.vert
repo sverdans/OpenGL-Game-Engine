@@ -1,11 +1,12 @@
 #version 460
 layout (location = 0) in vec3 vertexPosition;
 layout (location = 1) in vec3 normal;
+layout (location = 2) in vec2 texCoords;
 
 out VertOut 
 {
-	vec3 fragPosition;
 	vec3 normal;
+	vec3 fragPosition;
 	vec2 textureCoords;
 } vertOut;
 
@@ -16,7 +17,7 @@ void main()
 {
 	vertOut.fragPosition = vec3(modelMat * vec4(vertexPosition, 1.0));
 	vertOut.normal = transpose(inverse(mat3(modelMat))) * normal;
-	vertOut.textureCoords = vec2(0.0, 0.0);
+	vertOut.textureCoords = texCoords;
 
 	gl_Position = viewProjectionMat * modelMat * vec4(vertexPosition, 1.0);
 }

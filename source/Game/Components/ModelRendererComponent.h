@@ -14,7 +14,7 @@ private:
 	const Model* model = nullptr;
 	const ShaderProgram* shader = nullptr;
 
-	bool renderWithTexture;
+	bool useTexture;
 	glm::vec3 color;
 
 	float specularStrength;
@@ -40,5 +40,4 @@ public:
 	void serialize(nlohmann::json& jsonObject) override;
 
 	std::string name() override { return "ModelRendererComponent"; }
-
 };

@@ -4,6 +4,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/backends/imgui_impl_glfw.h>
+
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 
@@ -52,11 +56,13 @@ void Renderer::setViewport(const unsigned int width, const unsigned int height, 
 
 void Renderer::enableDepthTest()
 {
+	depthTest = true;
 	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::disableDepthTest()
 {
+	depthTest = false;
 	glDisable(GL_DEPTH_TEST);
 }
 
@@ -78,3 +84,37 @@ const char* Renderer::getVersionString()
 {
 	return reinterpret_cast<const char*>(glGetString(GL_VERSION));
 }
+
+void Renderer::drawTools()
+{
+	int curPolygonMode = static_cast<int>(polygonMode);
+
+	if (ImGui::Combo("PolygonMode", &curPolygonMode, polygonModeStrings, 3))
+	{
+		switch (curPolygonMode)
+		{
+			case 0: setPolygonMode(GL_FILL); break;
+			case 1: setPolygonMode(GL_LINE); break;
+			case 2: setPolygonMode(GL_POINT); break;
+		}
+	}
+
+	if (ImGui::SliderInt("PointSize", &pointSize, 1, 10))
+	{
+		setPointSize(pointSize);
+	}
+
+	if (ImGui::Checkbox("DepthTest", &depthTest))
+	{
+		if (depthTest)
+			Renderer::enableDepthTest();
+		else
+			Renderer::disableDepthTest();
+	}
+}
+
+int Renderer::pointSize = 1;
+bool Renderer::depthTest = true;
+glm::vec3 Renderer::clearColor = glm::vec3(0.f, 0.f, 0.f);
+Renderer::PolygonMode Renderer::polygonMode = Renderer::PolygonMode::Fill;
+

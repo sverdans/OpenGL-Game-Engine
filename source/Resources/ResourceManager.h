@@ -11,7 +11,6 @@
 
 #include "../Renderer/ShaderProgram.h"
 #include "../Renderer/Texture.h"
-#include "../Renderer/Sprite.h"
 #include "../Renderer/Model.h"
 #include "../Renderer/Renderer.h"
 
@@ -23,10 +22,11 @@ private:
 	static std::map<std::string, ShaderProgram*> shaders;
 	static std::map<std::string, Model*> models;
 	static std::map<std::string, Texture*> textures;
-	static std::map<std::string, Sprite*> sprites;
 
 	static void processNode(std::vector<Mesh*>& meshes, aiNode* node, const aiScene* scene);
 	static Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
+
+	static std::vector<Texture*> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
 public:
 	ResourceManager() = default;
@@ -34,22 +34,17 @@ public:
 	ResourceManager(const ResourceManager&) = delete;
 	ResourceManager& operator = (const ResourceManager&) = delete;
 
-	static ShaderProgram* loadShader(const std::string& name,
-									 const std::string& vertexPath,
-									 const std::string& fragmentPath);
+	static ShaderProgram* loadShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath);
 	static ShaderProgram* getShader(const std::string& name);
+	static bool containShader(const std::string& name);
 
-	static Texture* loadTexture(const std::string& textureName,
-								const std::string& texturePath,
-								const std::vector<std::pair<std::string, std::pair<glm::vec2, glm::vec2>>>& subTextureNames);
+	static Texture* loadTexture(const std::string& name, const std::string& texturePath, const std::string& type);
 	static Texture* getTexture(const std::string& name);
+	static bool containTexture(const std::string& name);
 	
-	static Sprite* loadSprite(const std::string& spriteName, const std::string& textureName);
-	static Sprite* getSprite(const std::string& name);
-
 	static Model* loadModel(const std::string& name, const std::string& filepath);
-	static Model* addModel(const std::string& name, const std::vector<Mesh*> meshes, const Renderer::DrawMode drawMode);
 	static Model* getModel(const std::string& name);
+	static bool containModel(const std::string& name);
 
 	static std::string getShaderName(const ShaderProgram* shader)
 	{

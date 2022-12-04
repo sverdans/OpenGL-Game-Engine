@@ -4,6 +4,10 @@
 
 #include "Renderer.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 class Mesh;
 
 class Model
@@ -14,7 +18,6 @@ private:
 
 	mutable Renderer::DrawMode drawMode;
 	std::vector<Mesh*> meshes;
-	bool haveTexture;
 
 	Model(const std::vector<Mesh*>& meshes, const Renderer::DrawMode drawMode);
 	~Model();

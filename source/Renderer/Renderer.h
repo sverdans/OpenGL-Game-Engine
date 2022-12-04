@@ -1,5 +1,7 @@
 #pragma once
 #include <glad/glad.h>
+#include <glm/vec3.hpp>
+#include <nlohmann/json.hpp>
 
 struct GLFWwindow;
 class VertexArray;
@@ -7,6 +9,27 @@ class IndexBuffer;
 
 class Renderer 
 {
+public:
+	enum class PolygonMode
+	{
+		Fill,
+		Line,
+		Point
+	};
+
+private:
+	static int pointSize;
+	static glm::vec3 clearColor;
+	static PolygonMode polygonMode;
+	static bool depthTest;
+
+	static constexpr char* polygonModeStrings[] {
+		"Fill",
+		"Line",
+		"Point"
+	};
+
+
 public:
 	enum class DrawMode
 	{
@@ -32,4 +55,6 @@ public:
 	static const char* getVendorString();
 	static const char* getRendererString();
 	static const char* getVersionString();
+
+	static void drawTools();
 };

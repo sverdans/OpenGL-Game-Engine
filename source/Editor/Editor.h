@@ -72,6 +72,18 @@ private:
 				ImGui::Text(it.key().c_str());
 			}
 
+			if (type == "boolean")
+			{
+				bool b = it.value();
+				if (ImGui::Checkbox(tempInputUID.c_str(), &b) && it.value() != b)
+				{
+					needDeserializeCurrentObject = true;
+					it.value() = b;
+				}
+				ImGui::SameLine();
+				ImGui::Text(it.key().c_str());
+			}
+
 			if (type == "object")
 			{
 				if (ImGui::CollapsingHeader(it.key().c_str(), ImGuiTreeNodeFlags_FramePadding))
@@ -100,6 +112,12 @@ private:
 					ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Project file", ".json", ".");
 				}
 				
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Renderer"))
+			{
+				Renderer::drawTools();
 				ImGui::EndMenu();
 			}
 
@@ -135,6 +153,14 @@ private:
 				for (const auto& shader : ResourceManager::shaders)
 				{
 					ImGui::Text(shader.first.c_str());
+				}
+			}
+
+			if (ImGui::CollapsingHeader("Textures"))
+			{
+				for (const auto& texture : ResourceManager::textures)
+				{
+					ImGui::Text(texture.first.c_str());
 				}
 			}
 
@@ -232,7 +258,7 @@ public:
 
 		if (!isGameObjectSelected) currentGameObject = nullptr;
 
-	//	ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow();
 
 		menuStrip();
 		managersSidebar();

@@ -14,9 +14,6 @@ ModelRendererComponent::ModelRendererComponent(GameObject* gameObject)
 void ModelRendererComponent::setModel(const Model* model) 
 { 
 	this->model = model;
-	
-	if (!model->haveTexture)
-		renderWithTexture = false;
 }
 
 void ModelRendererComponent::setShader(const ShaderProgram* shader) { this->shader = shader; }
@@ -40,8 +37,10 @@ void ModelRendererComponent::render()
 	shader->setInt("specularity", specularity);
 	shader->setFloat("specularStrength", specularStrength);
 
+	shader->setInt("useTexture", useTexture);
+
 	for (auto& mesh : model->meshes)
-		mesh->render();
+		mesh->render(shader);
 
 	shader->unuse();
 }
@@ -57,6 +56,8 @@ void ModelRendererComponent::deserialize(const nlohmann::json& jsonObject)
 	color = glm::vec3(jsonObject["color"]["r"], 
 					  jsonObject["color"]["g"],
 					  jsonObject["color"]["b"]);
+
+	useTexture = jsonObject["useTexture"];
 }
 
 void ModelRendererComponent::serialize(nlohmann::json& jsonObject)
@@ -71,6 +72,7 @@ void ModelRendererComponent::serialize(nlohmann::json& jsonObject)
 	component["model"] = ResourceManager::getModelName(model);
 	component["color"] = colorJson;
 
+	component["useTexture"] = useTexture;
 	component["specularStrength"] = specularStrength;
 	component["specularity"] = specularity;
 

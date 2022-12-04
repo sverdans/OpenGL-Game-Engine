@@ -91,7 +91,7 @@
 					"g": 1.0,
 					"b": 1.0
 				},
-		
+				"useTexture": false,
 				"specularity": 128,
 				"specularStrength": 1.0
 			}
@@ -128,7 +128,7 @@
 					"g": 1.0,
 					"b": 1.0
 				},
-
+				"useTexture": false,
 				"specularity": 2,
 				"specularStrength": 0.5
 			},
@@ -176,7 +176,7 @@
 					"g": 0.0,
 					"b": 1.0
 				},
-
+				"useTexture": false,
 				"specularity": 2,
 				"specularStrength": 0.5
 			},

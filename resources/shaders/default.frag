@@ -4,8 +4,8 @@
 
 in VertOut 
 {
-	vec3 fragPosition;
 	vec3 normal;
+	vec3 fragPosition;
 	vec2 textureCoords;
 } fragIn;
 
@@ -13,8 +13,11 @@ out vec4 fragColor;
 
 uniform vec3 viewPosition;
 
-uniform int haveTextures;
+uniform int useTexture;
 uniform vec3 modelColor;
+
+uniform sampler2D diffuseTexture1;
+uniform sampler2D specularTexture1;
 
 uniform vec3 ambientColor;
 uniform float ambientStrength;
@@ -36,6 +39,7 @@ uniform struct PointLights
 	vec3 color;
 } pointLights[MaxPointLights];
 
+
 void main()
 {
 	vec3 norm = normalize(fragIn.normal);
@@ -47,19 +51,24 @@ void main()
 		vec3 lightDir = normalize(pointLights[i].position - fragIn.fragPosition);
 
 		float diff = max(dot(norm, lightDir), 0.0);
-		vec3 diffuse = diff * pointLights[i].color;
+		vec3 diffuse = diff * pointLights[i].color * pointLights[i].intensity;
 
-	//	float dist = pointLights[i].intensity / length(pointLights[i].position - fragIn.fragPosition);
+	//	float dist = pointLights[i].intensity / length(lightDir);
 	//	vec3 diffuse = dist * pointLights[i].color;
 
 		vec3 viewDir = normalize(viewPosition - fragIn.fragPosition);
 		vec3 reflectDir = reflect(-lightDir, norm);  
+		vec3 halfwayDir = normalize(lightDir + viewDir);
 
-		float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularity);
-		vec3 specular = specularStrength * spec * pointLights[i].color;  
+		float spec = pow(max(dot(norm, halfwayDir), 0.0), specularity);
+		vec3 specular = spec * pointLights[i].color;
 
 		lighting += diffuse + specular;
 	}
 
-	fragColor = vec4(lighting * modelColor, 1.0);
+	if (useTexture > 0.5)
+		fragColor = vec4(lighting, 1.0) * texture(diffuseTexture1, fragIn.textureCoords);
+	//	fragColor = vec4(fragIn.textureCoords, 1.0, 1.0);
+	else
+		fragColor = vec4(lighting * modelColor, 1.0);
 }

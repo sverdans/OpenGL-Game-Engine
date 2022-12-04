@@ -29,7 +29,7 @@ add_executable(
 	source/Editor/UiHandler.cpp
 	source/Editor/Editor.h
 	source/Editor/Editor.cpp
-	
+
 	external/stb_image.h
 
 	source/Renderer/ShaderProgram.h
@@ -42,9 +42,6 @@ add_executable(
 
 	source/Renderer/Texture.h
 	source/Renderer/Texture.cpp
-	source/Renderer/Sprite.h
-	source/Renderer/Sprite.cpp
-
 	source/Renderer/Mesh.h
 	source/Renderer/Mesh.cpp
 	source/Renderer/Model.h

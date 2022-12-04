@@ -1,10 +1,11 @@
 #include "Mesh.h"
 
 #include "ShaderProgram.h"
+#include "Texture.h"
 
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, bool recalculateNormals = true)
-	: vertices(vertices), indices(indices)
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture*> textures, bool recalculateNormals = true)
+	: vertices(vertices), textures(textures), indices(indices)
 {
 	if (recalculateNormals)
 		recalculateVertexNormals();
@@ -28,6 +29,11 @@ void Mesh::setupMesh()
 	normalsLayout.addElementLayoutFloat(3, false);
 	vertexArray.addBuffer(normalsBuffer, normalsLayout);
 
+	textureCoordsBuffer.init(&vertexTexturePositions.front(), vertexTexturePositions.size() * sizeof(glm::vec2));
+	VertexBufferLayout textureCoordsLayout;
+	textureCoordsLayout.addElementLayoutFloat(2, false);
+	vertexArray.addBuffer(textureCoordsBuffer, textureCoordsLayout);
+
 	indexBuffer = IndexBuffer(&indices.front(), indices.size());
 
 	vertexArray.unbind();
@@ -40,16 +46,16 @@ void Mesh::recalculateVertexNormals()
 	for (int i = 0; i < indices.size(); i += 3)
 	{
 		glm::vec3 a(vertices[indices[i]].position.x,
-			vertices[indices[i]].position.y,
-			vertices[indices[i]].position.z);
+					vertices[indices[i]].position.y,
+					vertices[indices[i]].position.z);
 
 		glm::vec3 b(vertices[indices[i + 1]].position.x,
-			vertices[indices[i + 1]].position.y,
-			vertices[indices[i + 1]].position.z);
+					vertices[indices[i + 1]].position.y,
+					vertices[indices[i + 1]].position.z);
 
 		glm::vec3 c(vertices[indices[i + 2]].position.x,
-			vertices[indices[i + 2]].position.y,
-			vertices[indices[i + 2]].position.z);
+					vertices[indices[i + 2]].position.y,
+					vertices[indices[i + 2]].position.z);
 
 		glm::vec3 n = glm::normalize(glm::cross(b - a, c - a));
 
@@ -95,7 +101,7 @@ std::vector<glm::vec2>& Mesh::getVertexTexturePositions()
 {
 	vertexTexturePositions.resize(vertices.size());
 
-	size_t i = 0;
+	unsigned int i = 0;
 	for (auto& n : vertices)
 		vertexTexturePositions[i++] = n.texturePosition;
 
@@ -113,15 +119,27 @@ std::vector<glm::vec3>& Mesh::getVertexNormals()
 	return vertexNormals;
 }
 
-void Mesh::render(const ShaderProgram* shader, const glm::mat4& modelMatrix)
+void Mesh::render(const ShaderProgram* shader)
 {
-	shader->use();
-	shader->setMatrix("modelMat", modelMatrix);
-	Renderer::draw(vertexArray, indexBuffer, drawMode);
-	shader->unuse();
-}
+	unsigned int diffuseIndex = 1;
+	unsigned int specularIndex = 1;
 
-void Mesh::render()
-{
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		
+		std::string type = textures[i]->getType();
+		std::string number;
+
+		if (type == "diffuseTexture")
+			number = std::to_string(diffuseIndex++);
+		else if (type == "specularTexture")
+			number = std::to_string(specularIndex++);
+
+		textures[i]->bind();
+		shader->setInt((type + number).c_str(), i);
+	}
+	glActiveTexture(GL_TEXTURE0);
+
 	Renderer::draw(vertexArray, indexBuffer, drawMode);
 }
