@@ -80,6 +80,15 @@ add_executable(
 	source/Game/Components/BehaviourComponent.cpp
 	source/Game/Components/CameraComponent.h
 	source/Game/Components/CameraComponent.cpp
+
+	source/Game/Components/L4T1_Component.h
+	source/Game/Components/L4T1_Component.cpp
+
+	source/Game/Components/L4T3_Component.h
+	source/Game/Components/L4T3_Component.cpp
+
+	source/Game/Components/L4T4_Component.h
+	source/Game/Components/L4T4_Component.cpp
 )
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)

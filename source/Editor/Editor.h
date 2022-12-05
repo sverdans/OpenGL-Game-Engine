@@ -258,7 +258,7 @@ public:
 
 		if (!isGameObjectSelected) currentGameObject = nullptr;
 
-		ImGui::ShowDemoWindow();
+	//	ImGui::ShowDemoWindow();
 
 		menuStrip();
 		managersSidebar();

@@ -30,6 +30,7 @@ public:
 
 	void setModel(const Model* model);
 	void setShader(const ShaderProgram* shader);
+	void setColor(const glm::vec3& color);
 
 	void setSpecularStrength(const float specularStrength);
 	void setSpecularity(const int specularity);

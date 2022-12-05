@@ -62,9 +62,7 @@ GameObject* ObjectsManager::findByName(const std::string name)
 {
 	for (auto object : gameObjects)
 	{
-		auto tags = object->getTags();
-		auto it = std::find(tags.begin(), tags.end(), name);
-		if (it != tags.end())
+		if (object->name == name)
 			return object;
 	}
 	return nullptr;

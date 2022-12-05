@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 	Time::setUpdateFrequency(60.0);
 	Time::start();
 
-	BehaviourSystem::init();
+//	BehaviourSystem::init();
 
 	while (!glfwWindowShouldClose(Window::window))
 	{
@@ -62,6 +62,7 @@ int main(int argc, char** argv)
 	}
 
 	ObjectsManager::deleteGameObjects();
+	ResourceManager::deleteAllResources();
 	Window::quit();
 
 	return 0;

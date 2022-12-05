@@ -194,6 +194,10 @@ void ResourceManager::deleteAllResources()
 	for (auto it = textures.cbegin(); it != textures.cend(); ++it)
 		delete it->second;
 	textures.clear();
+
+	for (auto it = models.cbegin(); it != models.cend(); ++it)
+		delete it->second;
+	models.clear();
 }
 
 
@@ -237,12 +241,10 @@ Mesh* ResourceManager::processMesh(aiMesh* mesh, const aiScene* scene)
 		{
 			vertex.texturePosition.x = mesh->mTextureCoords[0][i].x;
 			vertex.texturePosition.y = mesh->mTextureCoords[0][i].y;
-
-			std::cout << vertex.texturePosition.x << "\t" << vertex.texturePosition.y << std::endl;
 		}
 		else
 		{
-		//	vertex.texturePosition = glm::vec2(0.0f, 0.0f);
+			vertex.texturePosition = glm::vec2(0.0f, 0.0f);
 		}
 		
 		vertices.push_back(vertex);

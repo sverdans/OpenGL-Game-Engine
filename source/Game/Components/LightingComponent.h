@@ -27,14 +27,19 @@ public:
 	~LightingComponent();
 
 	std::string name() override { return "LightingComponent"; }
-
+	
+	float getIntensity() { return intensity; }
+	void setIntensity(float intensity) { this->intensity = intensity > 0.f ? (intensity < 1.f ? intensity : 1.f) : 0.f; }
+	
+	void setColor(const glm::vec3& color) { this->color = color; }
+	
 	void deserialize(const nlohmann::json& jsonObject) override
 	{
 		color = glm::vec3(jsonObject["color"]["r"],
 						  jsonObject["color"]["g"],
 						  jsonObject["color"]["b"]);
 
-		intensity = jsonObject["intensity"];
+		setIntensity(jsonObject["intensity"]);
 		type = static_cast<Type>(jsonObject["type"]);
 	}
 

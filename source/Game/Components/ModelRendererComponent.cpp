@@ -18,6 +18,8 @@ void ModelRendererComponent::setModel(const Model* model)
 
 void ModelRendererComponent::setShader(const ShaderProgram* shader) { this->shader = shader; }
 
+void ModelRendererComponent::setColor(const glm::vec3& color) { this->color = color; }
+
 void ModelRendererComponent::setSpecularStrength(const float specularStrength)
 {
 	this->specularStrength = specularStrength > 0.f ? (specularStrength < 1.f ? specularStrength : 1.f) : 0.f;

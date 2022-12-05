@@ -44,6 +44,9 @@ private:
 public:
 
 	CameraComponent(GameObject* gameObject) : BehaviourComponent(gameObject) {}
+	CameraComponent(const CameraComponent&) = delete;
+	CameraComponent& operator = (const CameraComponent&) = delete;
+	~CameraComponent() = default;
 
 	void updateViewMatrix()
 	{
