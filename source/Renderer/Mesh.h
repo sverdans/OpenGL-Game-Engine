@@ -12,6 +12,7 @@
 #include "Renderer.h"
 
 class ShaderProgram;
+class Material;
 class Texture;
 
 struct Vertex final
@@ -29,6 +30,8 @@ struct Vertex final
 class Mesh final
 {
 private:
+	Renderer::DrawMode drawMode;
+
 	VertexArray vertexArray;
 	VertexBuffer vertexCoordsBuffer;
 	VertexBuffer textureCoordsBuffer;
@@ -39,7 +42,7 @@ private:
 	std::vector<glm::vec3> vertexNormals;
 	std::vector<glm::vec2> vertexTexturePositions;
 	
-	Renderer::DrawMode drawMode;
+	Material* material;
 
 	void setupMesh();
 
@@ -57,6 +60,7 @@ public:
 	Mesh(std::vector<Vertex>& vertices,
 		 std::vector<unsigned int>& indices,
 		 std::vector<Texture*> textures,
+		 Material* material,
 		 bool recalculateNormals);
 	
 	void setDrawMode(Renderer::DrawMode mode) { drawMode = mode; }

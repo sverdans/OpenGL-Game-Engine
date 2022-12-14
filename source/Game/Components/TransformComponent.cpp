@@ -81,6 +81,20 @@ const glm::vec3 TransformComponent::getGlobalPosition() const
 
 	return globalPosition;
 }
+const glm::vec3 TransformComponent::getGlobalRotation() const
+{
+	glm::vec3 globalRotation(0, 0, 0);
+
+	auto object = gameObject;
+	do
+	{
+		auto TC = object->getComponent<TransformComponent>();
+		globalRotation += TC->rotation;
+	} while (object = object->getParent());
+
+	return globalRotation;
+}
+
 const glm::vec3& TransformComponent::getPosition() const { return position; }
 const glm::vec3& TransformComponent::getRotation() const { return rotation; }
 const glm::vec3& TransformComponent::getSize() const { return size; }
@@ -92,12 +106,13 @@ const glm::vec3& TransformComponent::getUp() const { return up; }
 const glm::mat4x4& TransformComponent::getModelMatrix() const
 {
 	model = glm::mat4(1.f);
+	auto& globalRotation = getGlobalRotation();
 
 	model = glm::scale(model, size);
 	model = glm::translate(model, getGlobalPosition() / size);
-	model = glm::rotate(model, glm::radians(rotation.z), constants::worldForward);
-	model = glm::rotate(model, glm::radians(rotation.y), constants::worldUp);
-	model = glm::rotate(model, glm::radians(rotation.x), constants::worldRight);
+	model = glm::rotate(model, glm::radians(globalRotation.z), constants::worldForward);
+	model = glm::rotate(model, glm::radians(globalRotation.y), constants::worldUp);
+	model = glm::rotate(model, glm::radians(globalRotation.x), constants::worldRight);
 
 	return model;
 }

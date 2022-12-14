@@ -63,6 +63,6 @@ void LightingSystem::update()
 	}
 }
 
-float LightingSystem::ambientStrength = 0.1;
+float LightingSystem::ambientStrength = 0.4;
 glm::vec3 LightingSystem::ambientColor = glm::vec3(1.f, 1.f, 1.f);
 std::list<LightingComponent*> LightingSystem::lightingComponents;

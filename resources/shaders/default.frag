@@ -19,6 +19,8 @@ uniform vec3 modelColor;
 uniform sampler2D diffuseTexture1;
 uniform sampler2D specularTexture1;
 
+uniform vec3 materialColor;
+
 uniform vec3 ambientColor;
 uniform float ambientStrength;
 
@@ -67,8 +69,8 @@ void main()
 	}
 
 	if (useTexture > 0.5)
-		fragColor = vec4(lighting, 1.0) * texture(diffuseTexture1, fragIn.textureCoords);
-	//	fragColor = vec4(fragIn.textureCoords, 1.0, 1.0);
+	//	fragColor = vec4(lighting, 1.0) * texture(diffuseTexture1, fragIn.textureCoords);
+		fragColor = vec4(lighting * materialColor, 1.0);
 	else
 		fragColor = vec4(lighting * modelColor, 1.0);
 }

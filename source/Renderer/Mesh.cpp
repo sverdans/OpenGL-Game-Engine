@@ -1,11 +1,16 @@
 #include "Mesh.h"
 
 #include "ShaderProgram.h"
+#include "Material.h"
 #include "Texture.h"
 
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture*> textures, bool recalculateNormals = true)
-	: vertices(vertices), textures(textures), indices(indices)
+Mesh::Mesh(std::vector<Vertex>& vertices,
+	std::vector<unsigned int>& indices,
+	std::vector<Texture*> textures,
+	Material* material,
+	bool recalculateNormals = true)
+	: vertices(vertices), textures(textures), indices(indices), material(material)
 {
 	if (recalculateNormals)
 		recalculateVertexNormals();
@@ -140,6 +145,9 @@ void Mesh::render(const ShaderProgram* shader)
 		shader->setInt((type + number).c_str(), i);
 	}
 	glActiveTexture(GL_TEXTURE0);
+
+	if (material)
+		shader->setVec3("materialColor", material->color);
 
 	Renderer::draw(vertexArray, indexBuffer, drawMode);
 }

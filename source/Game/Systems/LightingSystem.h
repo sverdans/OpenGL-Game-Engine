@@ -28,7 +28,7 @@ public:
 	static const glm::vec3& getAmbientColor() { return ambientColor; }
 	static const float getAmbientStrength() { return ambientStrength; }
 
-	static void setAmbientColor(const glm::vec4& color) { ambientColor = color; }
+	static void setAmbientColor(const glm::vec3& color) { ambientColor = color; }
 	static void setAmbientStrength(const float strength) { ambientStrength = strength; }
 
 	static void addLightingComponent(LightingComponent* LC);

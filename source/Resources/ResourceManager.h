@@ -11,6 +11,7 @@
 
 #include "../Renderer/ShaderProgram.h"
 #include "../Renderer/Texture.h"
+#include "../Renderer/Material.h"
 #include "../Renderer/Model.h"
 #include "../Renderer/Renderer.h"
 
@@ -20,8 +21,9 @@ private:
 	friend class Editor;
 
 	static std::map<std::string, ShaderProgram*> shaders;
-	static std::map<std::string, Model*> models;
+	static std::map<std::string, Material*> materials;
 	static std::map<std::string, Texture*> textures;
+	static std::map<std::string, Model*> models;
 
 	static void processNode(std::vector<Mesh*>& meshes, aiNode* node, const aiScene* scene);
 	static Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
@@ -42,6 +44,10 @@ public:
 	static Texture* getTexture(const std::string& name);
 	static bool containTexture(const std::string& name);
 	
+	static Material* loadMaterial(const std::string& name);
+	static Material* getMaterial(const std::string& name);
+	static bool containMaterial(const std::string& name);
+
 	static Model* loadModel(const std::string& name, const std::string& filepath);
 	static Model* getModel(const std::string& name);
 	static bool containModel(const std::string& name);
@@ -66,5 +72,5 @@ public:
 	}
 
 	static void loadResources(const std::string& filePath);
-	static void deleteAllResources();
+	static void deleteResources();
 };

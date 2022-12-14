@@ -57,16 +57,20 @@ public:
 
 	void updateProjectionMatrix()
 	{
+		float aspectRatio = viewportWidth / viewportHeight;
+		if (aspectRatio != aspectRatio)
+			return;
+
 		if (projectionMode == ProjectionMode::Perspective)
 			projectionMatrix = glm::perspective(
 				glm::radians(fieldOfView),
-				viewportWidth / viewportHeight,
+				aspectRatio,
 				nearClipPlane,
 				farClipPlane);
 		else
 			projectionMatrix = glm::ortho(
-				-orthoScale * viewportWidth / viewportHeight,
-				orthoScale * viewportWidth / viewportHeight,
+				-orthoScale * aspectRatio,
+				orthoScale * aspectRatio,
 				-orthoScale,
 				orthoScale,
 				nearClipPlane,

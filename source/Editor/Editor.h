@@ -30,11 +30,6 @@ private:
 	static bool needDeserializeCurrentObject;
 	static std::string inputUID;
 
-	static void writeInFile()
-	{
-
-	}
-
 	static void jsonObject(nlohmann::json& jsonValue)
 	{
 		ImGui::Indent(indentValue);
@@ -52,6 +47,7 @@ private:
 			//	if (ImGui::InputFloat(tempInputUID.c_str(), &f) && it.value() != f)
 				if (ImGui::DragFloat(tempInputUID.c_str(), &f, 0.005f, -FLT_MAX, +FLT_MAX) && it.value() != f)
 				{
+			//		glfwcursorhid
 					needDeserializeCurrentObject = true;
 					it.value() = f;
 				}
@@ -131,7 +127,7 @@ private:
 				std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
 
 				ObjectsManager::deleteGameObjects();
-				ResourceManager::deleteAllResources();
+				ResourceManager::deleteResources();
 
 				ResourceManager::loadResources(filePathName);
 				ObjectsManager::loadGameObjects(filePathName);
@@ -161,6 +157,14 @@ private:
 				for (const auto& texture : ResourceManager::textures)
 				{
 					ImGui::Text(texture.first.c_str());
+				}
+			}
+
+			if (ImGui::CollapsingHeader("Material"))
+			{
+				for (const auto& material : ResourceManager::materials)
+				{
+					ImGui::Text(material.first.c_str());
 				}
 			}
 

@@ -39,7 +39,9 @@ public:
 	const glm::vec3& getSize() const;
 	const glm::vec3& getRotation() const;
 	const glm::vec3& getPosition() const;
+
 	const glm::vec3 getGlobalPosition() const;
+	const glm::vec3 getGlobalRotation() const;
 
 	const glm::vec3& getForward() const;
 	const glm::vec3& getRight() const;

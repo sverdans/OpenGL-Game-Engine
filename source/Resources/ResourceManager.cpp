@@ -7,6 +7,7 @@
 #include "ResourceManager.h"
 #include "../System/Parser.h"
 #include "../Renderer/Mesh.h"
+#include "../Renderer/Material.h"
 
 ShaderProgram* ResourceManager::loadShader(const std::string& programName,
 										   const std::string& vertexPath,
@@ -55,6 +56,8 @@ bool ResourceManager::containShader(const std::string& name)
 	return !(shaders.find(name) == shaders.end());
 }
 
+
+
 Texture* ResourceManager::loadTexture(const std::string& name,
 									  const std::string& texturePath,
 									  const std::string& type)
@@ -98,6 +101,33 @@ bool ResourceManager::containTexture(const std::string& name)
 	return !(textures.find(name) == textures.end());
 }
 
+
+
+Material* ResourceManager::loadMaterial(const std::string& name)
+{
+	Material* material = new Material();
+	materials.emplace(std::make_pair(name, material));
+	return material;
+}
+
+Material* ResourceManager::getMaterial(const std::string& name)
+{
+	auto it = materials.find(name);
+	if (it == materials.end())
+	{
+		std::cout << "Warning! Material not found. Material name: " << name << "." << std::endl;
+		return nullptr;
+	}
+	return it->second;
+}
+
+bool ResourceManager::containMaterial(const std::string& name)
+{
+	return !(materials.find(name) == materials.end());
+}
+
+
+
 Model* ResourceManager::loadModel(const std::string& name, const std::string& filepath)
 {
 	Assimp::Importer importer;
@@ -132,6 +162,7 @@ bool ResourceManager::containModel(const std::string& name)
 {
 	return !(models.find(name) == models.end());
 }
+
 
 
 void ResourceManager::loadResources(const std::string& filePath)
@@ -185,7 +216,7 @@ void ResourceManager::loadResources(const std::string& filePath)
 	}
 }
 
-void ResourceManager::deleteAllResources()
+void ResourceManager::deleteResources()
 {
 	for (auto it = shaders.cbegin(); it != shaders.cend(); ++it)
 		delete it->second;
@@ -199,6 +230,7 @@ void ResourceManager::deleteAllResources()
 		delete it->second;
 	models.clear();
 }
+
 
 
 void ResourceManager::processNode(std::vector<Mesh*>& meshes, aiNode* node, const aiScene* scene)
@@ -257,17 +289,37 @@ Mesh* ResourceManager::processMesh(aiMesh* mesh, const aiScene* scene)
 			indices.push_back(face.mIndices[j]);
 	}
 
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	auto diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuseTexture");
+	Material* material = nullptr;
+
+	aiMaterial* sourceMaterial = scene->mMaterials[mesh->mMaterialIndex];
+	std::string materialName(sourceMaterial->GetName().C_Str());
+
+	if (ResourceManager::containMaterial(materialName))
+	{
+		material = ResourceManager::getMaterial(materialName);
+	}
+	else
+	{
+		material = ResourceManager::loadMaterial(materialName);
+		
+		aiColor3D color(0.f, 0.f, 0.f);
+		sourceMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+		material->color.r = color.r;
+		material->color.g = color.g;
+		material->color.b = color.b;
+	}
+
+
+	auto diffuseMaps = loadMaterialTextures(sourceMaterial, aiTextureType_DIFFUSE, "diffuseTexture");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-	auto specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specularTexture");
+	auto specularMaps = loadMaterialTextures(sourceMaterial, aiTextureType_SPECULAR, "specularTexture");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-	auto normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "normalTexture");
+	auto normalMaps = loadMaterialTextures(sourceMaterial, aiTextureType_HEIGHT, "normalTexture");
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-	auto heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "heightTexture");
+	auto heightMaps = loadMaterialTextures(sourceMaterial, aiTextureType_AMBIENT, "heightTexture");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	return new Mesh(vertices, indices, textures, !mesh->HasNormals());
+	return new Mesh(vertices, indices, textures, material, !mesh->HasNormals());
 }
 
 std::vector<Texture*> ResourceManager::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
@@ -289,49 +341,7 @@ std::vector<Texture*> ResourceManager::loadMaterialTextures(aiMaterial* mat, aiT
 	return textures;
 }
 
-
-/*
-unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma)
-{
-	std::string filename = std::string(path);
-	filename = directory + '/' + filename;
-
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrComponents;
-	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		GLenum format;
-		if (nrComponents == 1)
-			format = GL_RED;
-		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
-		stbi_image_free(data);
-	}
-
-	return textureID;
-}
-*/
-
 std::map<std::string, ShaderProgram*> ResourceManager::shaders;
+std::map<std::string, Material*> ResourceManager::materials;
 std::map<std::string, Texture*> ResourceManager::textures;
 std::map<std::string, Model*> ResourceManager::models;

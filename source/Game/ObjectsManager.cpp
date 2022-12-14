@@ -15,25 +15,6 @@ void ObjectsManager::deleteGameObjects()
 
 void ObjectsManager::loadGameObjects(const std::string& filePath)
 {
-	/*rapidjson::Document sourceDocument;
-
-	Parser::parseJsonFile(filePath, &sourceDocument);
-
-	auto gameObjectsIt = sourceDocument.FindMember("GameObjects");
-	
-	if (gameObjectsIt != sourceDocument.MemberEnd())
-	{
-		const auto objectsArray = gameObjectsIt->value.GetArray();
-
-		for (const auto& jsonGameObject : objectsArray)
-		{
-			GameObject* object = new GameObject();
-		
-			object->deserialize(jsonGameObject);
-			gameObjects.push_back(object);
-		}
-	}*/
-
 	nlohmann::json sourceObject;
 	Parser::parseJsonFile(filePath, sourceObject);
 

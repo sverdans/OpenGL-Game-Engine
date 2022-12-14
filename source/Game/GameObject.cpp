@@ -1,25 +1,28 @@
-#define RAPIDJSON_HAS_STDSTRING 1
-
 #include "GameObject.h"
+#include "ObjectsManager.h"
 
 #include "Components/TransformComponent.h"
 #include "Components/CameraComponent.h"
 #include "Components/ModelRendererComponent.h"
 #include "Components/LightingComponent.h"
+#include "Components/ClockComponent.h"
 
 #include "Components/L4T1_Component.h"
 #include "Components/L4T3_Component.h"
 #include "Components/L4T4_Component.h"
 
-//#include "Components/ShapeRendererComponent.h"
-//#include "Components/HyperboloidRendererComponent.h"
 
 void GameObject::serialize(nlohmann::json& jsonObject)
 {
 	jsonObject["name"] = name;
 
-	for (const auto& tag : tags)
-		jsonObject["tags"].push_back(tag);
+	if (tags.size() != 0)
+		for (const auto& tag : tags)
+			jsonObject["tags"].push_back(tag);
+
+	if (children.size() != 0)
+		for (const auto& obj : children)
+			jsonObject["GameObjects"].push_back(obj->name);
 
 	for (auto& componentIt : components)
 		componentIt.second->serialize(jsonObject);
@@ -29,9 +32,12 @@ void GameObject::deserialize(const nlohmann::json& jsonObject)
 {
 	name = jsonObject["name"];
 
-	tags.clear();
-	for (const auto& jsonTag : jsonObject["tags"])
-		addTag(jsonTag);
+	if (jsonObject.contains("tags"))
+	{
+		tags.clear();
+		for (const auto& jsonTag : jsonObject["tags"])
+			addTag(jsonTag);
+	}
 
 	if (jsonObject.contains("TransformComponent"))
 	{
@@ -63,12 +69,18 @@ void GameObject::deserialize(const nlohmann::json& jsonObject)
 		component->deserialize(jsonObject[component->name()]);
 	}
 
+	if (jsonObject.contains("ClockComponent"))
+	{
+		auto component = contain<ClockComponent>() ? getComponent<ClockComponent>() : addComponent<ClockComponent>();
+		component->deserialize(jsonObject[component->name()]);
+	}
+
+
 	if (jsonObject.contains("L4T1_Component"))
 	{
 		auto component = contain<L4T1_Component>() ? getComponent<L4T1_Component>() : addComponent<L4T1_Component>();
 		component->deserialize(jsonObject[component->name()]);
 	}
-
 
 	if (jsonObject.contains("L4T3_Component"))
 	{
@@ -82,15 +94,18 @@ void GameObject::deserialize(const nlohmann::json& jsonObject)
 		component->deserialize(jsonObject[component->name()]);
 	}
 
-	/*auto childrenIt = jsonObject.find("GameObjects");
 
-	if (childrenIt != jsonObject.MemberEnd())
+	if (jsonObject.contains("GameObjects"))
 	{
-		const auto childrenArray = childrenIt->value.GetArray();
-		for (const auto& jsonChildrenObject : childrenArray)
+		children.clear();
+		for (const auto& childrenName : jsonObject["GameObjects"])
 		{
-			auto childrenObject = addGameObject();
-			childrenObject->deserialize(jsonChildrenObject);
+			auto obj = ObjectsManager::findByName(childrenName);
+			if (obj)
+			{
+				children.push_back(obj);
+				obj->parent = this;
+			}
 		}
-	}*/
+	}
 }

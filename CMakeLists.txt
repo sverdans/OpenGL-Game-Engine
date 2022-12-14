@@ -42,6 +42,9 @@ add_executable(
 
 	source/Renderer/Texture.h
 	source/Renderer/Texture.cpp
+	source/Renderer/Material.h
+	source/Renderer/Material.cpp
+	
 	source/Renderer/Mesh.h
 	source/Renderer/Mesh.cpp
 	source/Renderer/Model.h
@@ -89,6 +92,9 @@ add_executable(
 
 	source/Game/Components/L4T4_Component.h
 	source/Game/Components/L4T4_Component.cpp
+
+	source/Game/Components/ClockComponent.h
+	source/Game/Components/ClockComponent.cpp
 )
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)

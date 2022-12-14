@@ -28,8 +28,9 @@ private:
 			delete it->second;
 		components.clear();
 
-		for (auto it = children.begin(); it != children.end(); ++it)
-			delete *it;
+		for (auto& it : children)
+			it->parent = nullptr;
+
 		children.clear();
 	}
 

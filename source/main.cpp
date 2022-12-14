@@ -23,17 +23,19 @@ int main(int argc, char** argv)
 	Parser::setDirectoryPath(argv[0]);
 
 	Window::init(glm::vec2(1000, 800), "OpenGL-Courswork");
-	Renderer::setClearColor(0.f, 0.f, 0.f, 0.f);
+
+	Renderer::setClearColor(60.f / 255.f , 60.f / 255.f, 60.f / 255.f, 0.f);
 	Renderer::enableDepthTest();
 
 	InputHandler::init();
 
 	Editor::init();
 
+	LightingSystem::setAmbientColor(glm::vec3(1.f, 1.f, 1.f));
+	LightingSystem::setAmbientStrength(0.225f);
+
 	Time::setUpdateFrequency(60.0);
 	Time::start();
-
-//	BehaviourSystem::init();
 
 	while (!glfwWindowShouldClose(Window::window))
 	{
@@ -62,7 +64,7 @@ int main(int argc, char** argv)
 	}
 
 	ObjectsManager::deleteGameObjects();
-	ResourceManager::deleteAllResources();
+	ResourceManager::deleteResources();
 	Window::quit();
 
 	return 0;
