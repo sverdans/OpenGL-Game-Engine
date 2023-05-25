@@ -39,7 +39,7 @@ void ModelRendererComponent::render()
 	shader->setInt("specularity", specularity);
 	shader->setFloat("specularStrength", specularStrength);
 
-	shader->setInt("useTexture", useTexture);
+	shader->setInt("useMaterial", useMaterial);
 
 	for (auto& mesh : model->meshes)
 		mesh->render(shader);
@@ -59,7 +59,7 @@ void ModelRendererComponent::deserialize(const nlohmann::json& jsonObject)
 					  jsonObject["color"]["g"],
 					  jsonObject["color"]["b"]);
 
-	useTexture = jsonObject["useTexture"];
+	useMaterial = jsonObject["useTexture"];
 }
 
 void ModelRendererComponent::serialize(nlohmann::json& jsonObject)
@@ -74,7 +74,7 @@ void ModelRendererComponent::serialize(nlohmann::json& jsonObject)
 	component["model"] = ResourceManager::getModelName(model);
 	component["color"] = colorJson;
 
-	component["useTexture"] = useTexture;
+	component["useTexture"] = useMaterial;
 	component["specularStrength"] = specularStrength;
 	component["specularity"] = specularity;
 

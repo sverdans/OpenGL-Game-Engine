@@ -1,6 +1,10 @@
 #include <limits>
 
+#ifndef IMGUI_DEFINE_MATH_OPERATORS
+	#define IMGUI_DEFINE_MATH_OPERATORS
+#endif
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 
@@ -10,7 +14,7 @@
 #include "../Resources/ResourceManager.h"
 #include "../Game/ObjectsManager.h"
 #include "../Game/GameObject.h"
-#include "../Editor/ImGuiFileDialog/ImGuiFileDialog.h"
+//#include "../Editor/ImGuiFileDialog/ImGuiFileDialog.h"
 
 #include "../Game/Systems/LightingSystem.h"
 
@@ -105,7 +109,7 @@ private:
 					ImGui::SetNextWindowPos(ImVec2(50, 50));
 					ImGui::SetNextWindowSize(size);
 
-					ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Project file", ".json", ".");
+				//	ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Project file", ".json", ".");
 				}
 				
 				ImGui::EndMenu();
@@ -120,7 +124,7 @@ private:
 			ImGui::EndMainMenuBar();
 		}
 
-		if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+		/*if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
 		{
 			if (ImGuiFileDialog::Instance()->IsOk())
 			{
@@ -136,7 +140,7 @@ private:
 				LightingSystem::update();
 			}
 			ImGuiFileDialog::Instance()->Close();
-		}
+		}*/
 	}
 
 	static void resourceManager()

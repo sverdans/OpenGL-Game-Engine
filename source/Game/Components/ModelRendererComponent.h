@@ -14,7 +14,7 @@ private:
 	const Model* model = nullptr;
 	const ShaderProgram* shader = nullptr;
 
-	bool useTexture;
+	bool useMaterial;
 	glm::vec3 color;
 
 	float specularStrength;

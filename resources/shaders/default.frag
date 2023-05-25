@@ -13,13 +13,13 @@ out vec4 fragColor;
 
 uniform vec3 viewPosition;
 
-uniform int useTexture;
 uniform vec3 modelColor;
+uniform vec3 materialColor;
+uniform int useMaterial;
+uniform int useTexture;
 
 uniform sampler2D diffuseTexture1;
 uniform sampler2D specularTexture1;
-
-uniform vec3 materialColor;
 
 uniform vec3 ambientColor;
 uniform float ambientStrength;
@@ -55,9 +55,6 @@ void main()
 		float diff = max(dot(norm, lightDir), 0.0);
 		vec3 diffuse = diff * pointLights[i].color * pointLights[i].intensity;
 
-	//	float dist = pointLights[i].intensity / length(lightDir);
-	//	vec3 diffuse = dist * pointLights[i].color;
-
 		vec3 viewDir = normalize(viewPosition - fragIn.fragPosition);
 		vec3 reflectDir = reflect(-lightDir, norm);  
 		vec3 halfwayDir = normalize(lightDir + viewDir);
@@ -68,9 +65,14 @@ void main()
 		lighting += diffuse + specular;
 	}
 
-	if (useTexture > 0.5)
-	//	fragColor = vec4(lighting, 1.0) * texture(diffuseTexture1, fragIn.textureCoords);
-		fragColor = vec4(lighting * materialColor, 1.0);
+
+	if (useMaterial)
+	{
+		if (useTexture)
+			fragColor = vec4(lighting, 1.0) * texture(diffuseTexture1, fragIn.textureCoords);
+		else
+			fragColor = vec4(lighting * materialColor, 1.0);
+	}
 	else
 		fragColor = vec4(lighting * modelColor, 1.0);
 }

@@ -54,12 +54,10 @@ private:
 
 public:
 	std::vector<Vertex> vertices;
-	std::vector<Texture*> textures;
 	std::vector<unsigned int> indices;
 
 	Mesh(std::vector<Vertex>& vertices,
 		 std::vector<unsigned int>& indices,
-		 std::vector<Texture*> textures,
 		 Material* material,
 		 bool recalculateNormals);
 	

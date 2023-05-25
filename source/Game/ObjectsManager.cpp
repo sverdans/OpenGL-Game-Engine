@@ -1,4 +1,3 @@
-#pragma once
 #include "ObjectsManager.h"
 
 #include <typeinfo>

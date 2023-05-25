@@ -1,4 +1,3 @@
-#pragma once
 #include "RendererComponent.h"
 
 #include "../GameObject.h"

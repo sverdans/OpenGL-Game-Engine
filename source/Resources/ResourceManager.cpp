@@ -250,7 +250,6 @@ Mesh* ResourceManager::processMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture*> textures;
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -307,19 +306,18 @@ Mesh* ResourceManager::processMesh(aiMesh* mesh, const aiScene* scene)
 		material->color.r = color.r;
 		material->color.g = color.g;
 		material->color.b = color.b;
+
+		auto diffuseMaps = loadMaterialTextures(sourceMaterial, aiTextureType_DIFFUSE, "diffuseTexture");
+		material->textures.insert(material->textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		auto specularMaps = loadMaterialTextures(sourceMaterial, aiTextureType_SPECULAR, "specularTexture");
+		material->textures.insert(material->textures.end(), specularMaps.begin(), specularMaps.end());
+		auto normalMaps = loadMaterialTextures(sourceMaterial, aiTextureType_HEIGHT, "normalTexture");
+		material->textures.insert(material->textures.end(), normalMaps.begin(), normalMaps.end());
+		auto heightMaps = loadMaterialTextures(sourceMaterial, aiTextureType_AMBIENT, "heightTexture");
+		material->textures.insert(material->textures.end(), heightMaps.begin(), heightMaps.end());
 	}
 
-
-	auto diffuseMaps = loadMaterialTextures(sourceMaterial, aiTextureType_DIFFUSE, "diffuseTexture");
-	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-	auto specularMaps = loadMaterialTextures(sourceMaterial, aiTextureType_SPECULAR, "specularTexture");
-	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-	auto normalMaps = loadMaterialTextures(sourceMaterial, aiTextureType_HEIGHT, "normalTexture");
-	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-	auto heightMaps = loadMaterialTextures(sourceMaterial, aiTextureType_AMBIENT, "heightTexture");
-	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
-	return new Mesh(vertices, indices, textures, material, !mesh->HasNormals());
+	return new Mesh(vertices, indices, material, !mesh->HasNormals());
 }
 
 std::vector<Texture*> ResourceManager::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)

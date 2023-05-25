@@ -1,6 +1,8 @@
 /build
 /external
+
 /resources/textures
 /resources/models
 /source/Editor/ImGuiFileDialog
 
+/.vscode

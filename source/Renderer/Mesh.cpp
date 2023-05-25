@@ -7,10 +7,9 @@
 
 Mesh::Mesh(std::vector<Vertex>& vertices,
 	std::vector<unsigned int>& indices,
-	std::vector<Texture*> textures,
 	Material* material,
 	bool recalculateNormals = true)
-	: vertices(vertices), textures(textures), indices(indices), material(material)
+	: vertices(vertices), indices(indices), material(material)
 {
 	if (recalculateNormals)
 		recalculateVertexNormals();
@@ -129,11 +128,11 @@ void Mesh::render(const ShaderProgram* shader)
 	unsigned int diffuseIndex = 1;
 	unsigned int specularIndex = 1;
 
-	for (unsigned int i = 0; i < textures.size(); i++)
+	for (unsigned int i = 0; i < material->textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		
-		std::string type = textures[i]->getType();
+		std::string type = material->textures[i]->getType();
 		std::string number;
 
 		if (type == "diffuseTexture")
@@ -141,13 +140,16 @@ void Mesh::render(const ShaderProgram* shader)
 		else if (type == "specularTexture")
 			number = std::to_string(specularIndex++);
 
-		textures[i]->bind();
+		material->textures[i]->bind();
 		shader->setInt((type + number).c_str(), i);
 	}
 	glActiveTexture(GL_TEXTURE0);
 
 	if (material)
+	{
 		shader->setVec3("materialColor", material->color);
+		shader->setInt("useTexture", material->textures.size() != 0);
+	}
 
 	Renderer::draw(vertexArray, indexBuffer, drawMode);
 }

@@ -25,6 +25,8 @@ int main(int argc, char** argv)
 	Window::init(glm::vec2(1000, 800), "OpenGL-Courswork");
 
 	Renderer::setClearColor(60.f / 255.f , 60.f / 255.f, 60.f / 255.f, 0.f);
+
+//	Renderer::setClearColor(0.f, 0.f, 0.f, 0.f);
 	Renderer::enableDepthTest();
 
 	InputHandler::init();
@@ -43,7 +45,7 @@ int main(int argc, char** argv)
 
 		Time::update();
 
-		if (Time::ñheckFPS())
+		if (Time::CheckFPS())
 		{
 			Renderer::clear();
 			

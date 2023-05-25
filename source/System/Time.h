@@ -2,8 +2,8 @@
 #include <iostream>
 #include <chrono>
 
-// время в миллисекундах
-// 0.001 (с) = 1 (мс)
+// пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// 0.001 (пїЅ) = 1 (пїЅпїЅ)
 
 class Time final
 {
@@ -11,8 +11,11 @@ private:
 	static double minUpdateDuration;
 	static double deltaTime;
 
-	static std::chrono::steady_clock::time_point previousTime;
-	static std::chrono::steady_clock::time_point currentTime;
+	static std::chrono::_V2::system_clock::time_point previousTime;
+	static std::chrono::_V2::system_clock::time_point currentTime;
+
+//	static std::chrono::steady_clock::time_point previousTime;
+//	static std::chrono::steady_clock::time_point currentTime;
 
 public:
 	Time() = delete;
@@ -24,7 +27,7 @@ public:
 	static void start();
 	static void update();
 
-	static bool сheckFPS();
+	static bool CheckFPS();
 
 	static double getDeltaTime();
 	static double getTime();

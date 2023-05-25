@@ -4,6 +4,7 @@
 #include <glm/geometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "../GameObject.h"
 #include "../../System/Constants.h"
 
 TransformComponent::TransformComponent(GameObject* gameObject) 
@@ -105,14 +106,14 @@ const glm::vec3& TransformComponent::getUp() const { return up; }
 
 const glm::mat4x4& TransformComponent::getModelMatrix() const
 {
-	model = glm::mat4(1.f);
-	auto& globalRotation = getGlobalRotation();
+	auto parent = gameObject->getParent();
+	model = parent ? parent->getComponent<TransformComponent>()->getModelMatrix() : glm::mat4(1.f);
 
 	model = glm::scale(model, size);
-	model = glm::translate(model, getGlobalPosition() / size);
-	model = glm::rotate(model, glm::radians(globalRotation.z), constants::worldForward);
-	model = glm::rotate(model, glm::radians(globalRotation.y), constants::worldUp);
-	model = glm::rotate(model, glm::radians(globalRotation.x), constants::worldRight);
+	model = glm::translate(model, position / size);
+	model = glm::rotate(model, glm::radians(rotation.z), constants::worldForward);
+	model = glm::rotate(model, glm::radians(rotation.y), constants::worldUp);
+	model = glm::rotate(model, glm::radians(rotation.x), constants::worldRight);
 
 	return model;
 }
