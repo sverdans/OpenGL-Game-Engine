@@ -5,10 +5,10 @@
 #include <list>
 #include <map>
 
-#include "Components/RendererComponent.h"
-#include "Components/BehaviourComponent.h"
+#include <Game/Components/RendererComponent.h>
+#include <Game/Components/BehaviourComponent.h>
 
-#include "../System/Parser.h"
+#include <System/Parser.h>
 
 class GameObject;
 

@@ -1,7 +1,7 @@
-#include "LightingSystem.h"
-#include "../GameObject.h"
-#include "../Components/LightingComponent.h"
-#include "../Components/TransformComponent.h"
+#include <Game/Systems/LightingSystem.h>
+#include <Game/GameObject.h>
+#include <Game/Components/LightingComponent.h>
+#include <Game/Components/TransformComponent.h>
 
 void LightingSystem::addLightingComponent(LightingComponent* LC)
 {

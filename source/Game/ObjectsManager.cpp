@@ -1,9 +1,8 @@
-#include "ObjectsManager.h"
-
 #include <typeinfo>
 #include <algorithm>
 
-#include "GameObject.h"
+#include <Game/ObjectsManager.h>
+#include <Game/GameObject.h>
 
 void ObjectsManager::deleteGameObjects()
 {

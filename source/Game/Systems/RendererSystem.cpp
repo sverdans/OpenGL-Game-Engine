@@ -1,5 +1,5 @@
-#include "RendererSystem.h"
-#include "../Components/RendererComponent.h"
+#include <Game/Systems/RendererSystem.h>
+#include <Game/Components/RendererComponent.h>
 
 void RendererSystem::addToRenderQueue(RendererComponent* RC)
 {

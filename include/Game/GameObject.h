@@ -5,7 +5,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "Components/Component.h"
+#include <Game/Components/Component.h>
 
 class GameObject final
 {

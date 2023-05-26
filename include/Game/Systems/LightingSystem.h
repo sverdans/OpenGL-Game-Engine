@@ -2,7 +2,7 @@
 #include <list>
 #include <glm/vec3.hpp>
 
-#include "../../Resources/ResourceManager.h"
+#include <Resources/ResourceManager.h>
 
 class LightingComponent;
 

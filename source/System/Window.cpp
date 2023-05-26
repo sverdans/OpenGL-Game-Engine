@@ -6,10 +6,11 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 
-#include "Window.h"
-#include "../Editor/UiHandler.h"
-#include "InputHandler.h"
-#include "../Renderer/Renderer.h"
+#include <System/Window.h>
+#include <System/InputHandler.h>
+#include <Editor/UiHandler.h>
+#include <Renderer/Renderer.h>
+
 
 void Window::init(const glm::vec2& windowSize, const char* windowTitle)
 {

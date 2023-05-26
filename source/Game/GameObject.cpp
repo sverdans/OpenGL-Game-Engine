@@ -1,15 +1,15 @@
-#include "GameObject.h"
-#include "ObjectsManager.h"
+#include <Game/GameObject.h>
+#include <Game/ObjectsManager.h>
 
-#include "Components/TransformComponent.h"
-#include "Components/CameraComponent.h"
-#include "Components/ModelRendererComponent.h"
-#include "Components/LightingComponent.h"
-#include "Components/ClockComponent.h"
+#include <Game/Components/TransformComponent.h>
+#include <Game/Components/CameraComponent.h>
+#include <Game/Components/ModelRendererComponent.h>
+#include <Game/Components/LightingComponent.h>
+#include <Game/Components/ClockComponent.h>
 
-#include "Components/L4T1_Component.h"
-#include "Components/L4T3_Component.h"
-#include "Components/L4T4_Component.h"
+#include <Game/Components/L4T1_Component.h>
+#include <Game/Components/L4T3_Component.h>
+#include <Game/Components/L4T4_Component.h>
 
 
 void GameObject::serialize(nlohmann::json& jsonObject)

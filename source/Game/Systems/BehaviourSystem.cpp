@@ -1,6 +1,5 @@
-#include "BehaviourSystem.h"
-#include "../Components/BehaviourComponent.h"
-
+#include <Game/Systems/BehaviourSystem.h>
+#include <Game/Components/BehaviourComponent.h>
 
 void BehaviourSystem::addToUpdateQueue(BehaviourComponent* BC)
 {

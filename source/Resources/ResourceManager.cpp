@@ -4,10 +4,10 @@
 
 #include "../../external/stb_image.h"
 
-#include "ResourceManager.h"
-#include "../System/Parser.h"
-#include "../Renderer/Mesh.h"
-#include "../Renderer/Material.h"
+#include <Resources/ResourceManager.h>
+#include <System/Parser.h>
+#include <Renderer/Mesh.h>
+#include <Renderer/Material.h>
 
 ShaderProgram* ResourceManager::loadShader(const std::string& programName,
 										   const std::string& vertexPath,

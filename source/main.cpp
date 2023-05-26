@@ -3,20 +3,19 @@
 #include <vector>
 #include <map>
 
-#include "System/Window.h"
-#include "System/Parser.h"
-#include "System/Time.h"
-#include "System/InputHandler.h"
+#include <System/Window.h>
+#include <System/Parser.h>
+#include <System/Time.h>
+#include <System/InputHandler.h>
 
-#include "Renderer/Renderer.h"
+#include <Renderer/Renderer.h>
+#include <Resources/ResourceManager.h>
 
-#include "Resources/ResourceManager.h"
-#include "Game/ObjectsManager.h"
+#include <Game/ObjectsManager.h>
+#include <Game/Systems/RendererSystem.h>
+#include <Game/Systems/BehaviourSystem.h>
 
-#include "Game/Systems/RendererSystem.h"
-#include "Game/Systems/BehaviourSystem.h"
-
-#include "Editor/Editor.h"
+#include <Editor/Editor.h>
 
 int main(int argc, char** argv)
 {

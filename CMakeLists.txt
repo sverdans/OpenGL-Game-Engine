@@ -72,6 +72,10 @@ if(${FETCH_DEPENDENCIES})
 
     add_library(imgui STATIC ${IMGUI_INCLUDES} ${IMGUI_SOURCES})
 
+    set_target_properties(imgui PROPERTIES 
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-build
+        ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-build)
+
     target_include_directories(imgui PUBLIC ${LIBS_DIR}/imgui)
     target_link_libraries(imgui PRIVATE glad glfw)
 
@@ -83,13 +87,14 @@ file(GLOB_RECURSE SOURCE "source/*.h" "source/*.cpp")
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 
-target_include_directories(${PROJECT_NAME} PUBLIC 
-    ${LIBS_DIR}/nlohmann/include
+target_include_directories(${PROJECT_NAME} PUBLIC
     ${LIBS_DIR}
     ${LIBS_DIR}/glm
     ${LIBS_DIR}/glfw/include
+    ${LIBS_DIR}/nlohmann/include
     ${LIBS_DIR}/assimp/include
-    ${GLAD_BINARY_DIR}/include)
+    ${GLAD_BINARY_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include)
     
 target_link_libraries(${PROJECT_NAME} PRIVATE
     glfw

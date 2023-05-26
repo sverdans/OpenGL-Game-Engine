@@ -1,5 +1,3 @@
-#include "UiHandler.h"
-
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 	#define IMGUI_DEFINE_MATH_OPERATORS
 #endif
@@ -8,7 +6,8 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 
-#include "../System/Window.h"
+#include <Editor/UiHandler.h>
+#include <System/Window.h>
 
 void UiHandler::onWindowCreate()
 {

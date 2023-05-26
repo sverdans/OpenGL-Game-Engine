@@ -9,11 +9,11 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "../Renderer/ShaderProgram.h"
-#include "../Renderer/Texture.h"
-#include "../Renderer/Material.h"
-#include "../Renderer/Model.h"
-#include "../Renderer/Renderer.h"
+#include <Renderer/ShaderProgram.h>
+#include <Renderer/Texture.h>
+#include <Renderer/Material.h>
+#include <Renderer/Model.h>
+#include <Renderer/Renderer.h>
 
 class ResourceManager
 {

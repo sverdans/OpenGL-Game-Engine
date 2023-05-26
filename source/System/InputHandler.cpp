@@ -1,5 +1,5 @@
-#include "InputHandler.h"
-#include "Window.h"
+#include <System/InputHandler.h>
+#include <System/Window.h>
 
 void InputHandler::init()
 {

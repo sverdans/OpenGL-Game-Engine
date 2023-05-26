@@ -10,14 +10,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "UiHandler.h"
-#include "../Resources/ResourceManager.h"
-#include "../Game/ObjectsManager.h"
-#include "../Game/GameObject.h"
-//#include "../Editor/ImGuiFileDialog/ImGuiFileDialog.h"
+#include <Editor/UiHandler.h>
+#include <Resources/ResourceManager.h>
 
-#include "../Game/Systems/LightingSystem.h"
-
+#include <Game/GameObject.h>
+#include <Game/ObjectsManager.h>
+#include <Game/Systems/LightingSystem.h>
 
 class Editor
 {
