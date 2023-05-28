@@ -89,7 +89,7 @@ if(${FETCH_DEPENDENCIES})
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-build
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-build)
 
-    target_include_directories(imgui PUBLIC ${LIBS_DIR}/imgui)
+    target_include_directories(imgui PUBLIC ${IMGUI_DIR})
     target_link_libraries(imgui PRIVATE glad glfw)
 
     message([STATUS] " DOWNLOAD_COMMAND done")
@@ -104,14 +104,14 @@ add_executable(${PROJECT_NAME} ${INCLUDE} ${SOURCE})
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "engine.exe")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-    ${LIBS_DIR}/nlohmann/single_include
     ${LIBS_DIR}/glm
     ${LIBS_DIR}/stb
     ${LIBS_DIR}/imgui
     ${LIBS_DIR}/glfw/include
     ${LIBS_DIR}/assimp/include
     ${GLAD_BINARY_DIR}/include
-    ${CMAKE_SOURCE_DIR}/include)
+    ${CMAKE_SOURCE_DIR}/include
+    ${LIBS_DIR}/nlohmann/single_include)
     
 target_link_libraries(${PROJECT_NAME} PRIVATE
     glfw
