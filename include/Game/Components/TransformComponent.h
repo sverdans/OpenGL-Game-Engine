@@ -2,8 +2,8 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-#include "Component.h"
-#include "../GameObject.h"
+#include <Game/GameObject.h>
+#include <Game/Components/Component.h>
 
 class TransformComponent : public Component
 {

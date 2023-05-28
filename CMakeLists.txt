@@ -20,7 +20,19 @@ if(${FETCH_DEPENDENCIES})
     message([STATUS] " DOWNLOAD_COMMAND start")
 
     set(LIBS_DIR ${CMAKE_BINARY_DIR}/external)
-    
+
+    set(STB_DIR ${LIBS_DIR}/stb)
+    FetchContent_Declare(stb
+        GIT_REPOSITORY https://github.com/nothings/stb.git
+        SOURCE_DIR ${STB_DIR})
+    FetchContent_MakeAvailable(stb)
+    file(REMOVE_RECURSE ${STB_DIR}/docs)
+    file(REMOVE_RECURSE ${STB_DIR}/data)
+    file(REMOVE_RECURSE ${STB_DIR}/tools)
+    file(REMOVE_RECURSE ${STB_DIR}/tests)
+    file(REMOVE_RECURSE ${STB_DIR}/.github)
+    file(REMOVE_RECURSE ${STB_DIR}/deprecated)
+
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -51,24 +63,25 @@ if(${FETCH_DEPENDENCIES})
         GIT_TAG v3.7.3)
     FetchContent_MakeAvailable(json)
 
+    set(IMGUI_DIR ${LIBS_DIR}/imgui/imgui)
     FetchContent_Declare(imgui
         GIT_REPOSITORY https://github.com/ocornut/imgui.git
-        SOURCE_DIR ${LIBS_DIR}/imgui)
+        SOURCE_DIR ${IMGUI_DIR})
     FetchContent_MakeAvailable(imgui)
-    
+
     set(IMGUI_INCLUDES
-        ${LIBS_DIR}/imgui/imgui.h
-        ${LIBS_DIR}/imgui/backends/imgui_impl_glfw.h
-        ${LIBS_DIR}/imgui/backends/imgui_impl_opengl3.h)
+        ${IMGUI_DIR}/imgui.h
+        ${IMGUI_DIR}/backends/imgui_impl_glfw.h
+        ${IMGUI_DIR}/backends/imgui_impl_opengl3.h)
 
     set(IMGUI_SOURCES
-        ${LIBS_DIR}/imgui/imgui.cpp
-        ${LIBS_DIR}/imgui/backends/imgui_impl_glfw.cpp
-        ${LIBS_DIR}/imgui/backends/imgui_impl_opengl3.cpp
-        ${LIBS_DIR}/imgui/imgui_demo.cpp
-        ${LIBS_DIR}/imgui/imgui_tables.cpp
-        ${LIBS_DIR}/imgui/imgui_widgets.cpp
-        ${LIBS_DIR}/imgui/imgui_draw.cpp)
+        ${IMGUI_DIR}/imgui.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+        ${IMGUI_DIR}/imgui_demo.cpp
+        ${IMGUI_DIR}/imgui_tables.cpp
+        ${IMGUI_DIR}/imgui_widgets.cpp
+        ${IMGUI_DIR}/imgui_draw.cpp)
 
     add_library(imgui STATIC ${IMGUI_INCLUDES} ${IMGUI_SOURCES})
 
@@ -83,15 +96,19 @@ if(${FETCH_DEPENDENCIES})
 
 endif()
 
-file(GLOB_RECURSE SOURCE "source/*.h" "source/*.cpp")
+file(GLOB_RECURSE SOURCE "source/*.cpp")
+file(GLOB_RECURSE INCLUDE "include/*.h")
 
-add_executable(${PROJECT_NAME} ${SOURCE})
+add_executable(${PROJECT_NAME} ${INCLUDE} ${SOURCE})
+
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "engine.exe")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-    ${LIBS_DIR}
+    ${LIBS_DIR}/nlohmann/single_include
     ${LIBS_DIR}/glm
+    ${LIBS_DIR}/stb
+    ${LIBS_DIR}/imgui
     ${LIBS_DIR}/glfw/include
-    ${LIBS_DIR}/nlohmann/include
     ${LIBS_DIR}/assimp/include
     ${GLAD_BINARY_DIR}/include
     ${CMAKE_SOURCE_DIR}/include)

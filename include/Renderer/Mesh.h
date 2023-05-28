@@ -5,11 +5,11 @@
 #include <glm/mat4x4.hpp>
 #include <vector>
 
-#include "VertexArray.h"
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
-#include "VertexBufferLayout.h"
-#include "Renderer.h"
+#include <Renderer/VertexArray.h>
+#include <Renderer/IndexBuffer.h>
+#include <Renderer/VertexBuffer.h>
+#include <Renderer/VertexBufferLayout.h>
+#include <Renderer/Renderer.h>
 
 class ShaderProgram;
 class Material;

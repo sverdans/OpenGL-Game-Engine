@@ -1,11 +1,12 @@
-#include "TransformComponent.h"
+#include <Game/Components/TransformComponent.h>
 
 #include <iostream>
+
 #include <glm/geometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../GameObject.h"
-#include "../../System/Constants.h"
+#include <Game/GameObject.h>
+#include <System/Constants.h>
 
 TransformComponent::TransformComponent(GameObject* gameObject) 
 	: Component(gameObject) {}

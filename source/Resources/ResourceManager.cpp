@@ -2,7 +2,7 @@
 #define STBI_ONLY_PNG
 #include <nlohmann/json.hpp>
 
-#include "../../external/stb_image.h"
+#include <stb/stb_image.h>
 
 #include <Resources/ResourceManager.h>
 #include <System/Parser.h>

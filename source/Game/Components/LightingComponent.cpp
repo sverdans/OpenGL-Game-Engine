@@ -1,6 +1,5 @@
-#include "LightingComponent.h"
-#include "../Systems/LightingSystem.h"
-
+#include <Game/Components/LightingComponent.h>
+#include <Game/Systems/LightingSystem.h>
 
 LightingComponent::LightingComponent(GameObject* gameObject) : Component(gameObject) 
 {

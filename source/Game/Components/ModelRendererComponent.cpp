@@ -1,12 +1,13 @@
-#include "ModelRendererComponent.h"
+#include <Game/Components/ModelRendererComponent.h>
 
-#include "TransformComponent.h"
-#include "../GameObject.h"
+#include <Game/GameObject.h>
+#include <Game/Components/TransformComponent.h>
 
-#include "../../Resources/ResourceManager.h"
-#include "../../Renderer/ShaderProgram.h"
-#include "../../Renderer/Model.h"
-#include "../../Renderer/Mesh.h"
+#include <Resources/ResourceManager.h>
+
+#include <Renderer/ShaderProgram.h>
+#include <Renderer/Model.h>
+#include <Renderer/Mesh.h>
 
 ModelRendererComponent::ModelRendererComponent(GameObject* gameObject) 
 	: RendererComponent(gameObject), drawMode(Renderer::DrawMode::Triangles) {}

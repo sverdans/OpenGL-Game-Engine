@@ -1,8 +1,8 @@
-#include "ClockComponent.h"
-#include "TransformComponent.h"
-#include "../ObjectsManager.h"
-#include "../GameObject.h"
+#include <Game/GameObject.h>
+#include <Game/ObjectsManager.h>
 
+#include <Game/Components/ClockComponent.h>
+#include <Game/Components/TransformComponent.h>
 
 void ClockComponent::init() 
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "BehaviourComponent.h"
+#include <Game/Components/BehaviourComponent.h>
 
 class TransformComponent;
 

@@ -1,5 +1,5 @@
-#include "BehaviourComponent.h"
-#include "../Systems/BehaviourSystem.h"
+#include <Game/Components/BehaviourComponent.h>
+#include <Game/Systems/BehaviourSystem.h>
 
 BehaviourComponent::BehaviourComponent(GameObject* gameObject) : Component(gameObject)
 {

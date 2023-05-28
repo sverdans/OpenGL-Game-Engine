@@ -3,16 +3,16 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../../Resources/ResourceManager.h"
-#include "../../System/InputHandler.h"
-#include "../../System/Constants.h"
-#include "../../System/Window.h"
-#include "../../System/Time.h"
-#include "../GameObject.h"
+#include <Resources/ResourceManager.h>
 
-#include "BehaviourComponent.h"
-#include "TransformComponent.h"
+#include <System/InputHandler.h>
+#include <System/Constants.h>
+#include <System/Window.h>
+#include <System/Time.h>
 
+#include <Game/GameObject.h>
+#include <Game/Components/BehaviourComponent.h>
+#include <Game/Components/TransformComponent.h>
 
 class CameraComponent : public BehaviourComponent
 {

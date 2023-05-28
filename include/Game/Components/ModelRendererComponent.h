@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-#include "RendererComponent.h"
+#include <Game/Components/RendererComponent.h>
 
 class Model;
 class ShaderProgram;

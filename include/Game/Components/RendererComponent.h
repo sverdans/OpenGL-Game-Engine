@@ -2,9 +2,9 @@
 #include <glm/vec2.hpp>
 #include <functional>
 
-#include "Component.h"
-#include "../../System/Time.h"
-#include "../../Resources/ResourceManager.h"
+#include <Game/Components/Component.h>
+#include <Resources/ResourceManager.h>
+#include <System/Time.h>
 
 class RendererComponent : public Component
 {

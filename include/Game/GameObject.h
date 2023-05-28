@@ -3,9 +3,8 @@
 #include <vector>
 #include <string>
 
-#include <nlohmann/json.hpp>
-
 #include <Game/Components/Component.h>
+#include <nlohmann/json.hpp>
 
 class GameObject final
 {
