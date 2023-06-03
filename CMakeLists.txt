@@ -6,7 +6,7 @@ set(PROJECT_NAME OpenGL-Game-Engine)
 
 option(FETCH_DEPENDENCIES "" ON)
 
-project(${PROJECT_NAME})
+project(${PROJECT_NAME} LANGUAGES CXX)
 
 if(NOT PKG_CONFIG_FOUND)
     include(CMakeFindDependencyMacro)
@@ -57,10 +57,11 @@ if(${FETCH_DEPENDENCIES})
         SOURCE_DIR ${LIBS_DIR}/assimp)
     FetchContent_MakeAvailable(assimp)
 
+    set(JSON_BuildTests OFF CACHE INTERNAL "")
     FetchContent_Declare(json
         GIT_REPOSITORY https://github.com/nlohmann/json.git
         SOURCE_DIR ${LIBS_DIR}/nlohmann
-        GIT_TAG v3.7.3)
+        GIT_TAG v3.11.2)
     FetchContent_MakeAvailable(json)
 
     set(IMGUI_DIR ${LIBS_DIR}/imgui/imgui)
