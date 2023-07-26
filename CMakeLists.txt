@@ -3,22 +3,21 @@ cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(PROJECT_NAME OpenGL-Game-Engine)
-
-option(FETCH_DEPENDENCIES "" ON)
+set(BUILD_SHARED_LIBS OFF)
 
 project(${PROJECT_NAME} LANGUAGES CXX)
+option(ASAN "" ON)
 
-if(NOT PKG_CONFIG_FOUND)
-    include(CMakeFindDependencyMacro)
-    find_dependency(PkgConfig)
+if(${ASAN})
+    message(STATUS "Building with Adress Sanitizer")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+    set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
 endif()
 
-if(${FETCH_DEPENDENCIES})
+function(fetch_dependencies)
+    message(STATUS "Fetching project dependency - start")
 
     include(FetchContent)
-
-    message([STATUS] " DOWNLOAD_COMMAND start")
-
     set(LIBS_DIR ${CMAKE_BINARY_DIR}/external)
 
     set(STB_DIR ${LIBS_DIR}/stb)
@@ -26,12 +25,17 @@ if(${FETCH_DEPENDENCIES})
         GIT_REPOSITORY https://github.com/nothings/stb.git
         SOURCE_DIR ${STB_DIR})
     FetchContent_MakeAvailable(stb)
-    file(REMOVE_RECURSE ${STB_DIR}/docs)
-    file(REMOVE_RECURSE ${STB_DIR}/data)
-    file(REMOVE_RECURSE ${STB_DIR}/tools)
-    file(REMOVE_RECURSE ${STB_DIR}/tests)
-    file(REMOVE_RECURSE ${STB_DIR}/.github)
-    file(REMOVE_RECURSE ${STB_DIR}/deprecated)
+
+    file(GLOB_RECURSE STB_FILES "${STB_DIR}/*")
+    foreach(STB_FILE_PATH ${STB_FILES})
+        string(FIND ${STB_FILE_PATH} "stb_image.h" EXCLUDE_FILE_INDEX)
+        if(NOT ${EXCLUDE_FILE_INDEX} EQUAL -1)
+            message(STATUS "NOT REMOVABLE FILE: ${STB_FILE_PATH}")
+        elseif()
+            file(REMOVE ${STB_FILE_PATH})
+        endif()
+    endforeach()
+    include_directories(${LIBS_DIR}/stb)
 
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -41,21 +45,25 @@ if(${FETCH_DEPENDENCIES})
         GIT_REPOSITORY https://github.com/glfw/glfw.git
         SOURCE_DIR ${LIBS_DIR}/glfw)
     FetchContent_MakeAvailable(glfw)
+    include_directories(${LIBS_DIR}/glfw/include)
 
     FetchContent_Declare(glad
         GIT_REPOSITORY https://github.com/Dav1dde/glad.git
         SOURCE_DIR ${LIBS_DIR}/glad)
     FetchContent_MakeAvailable(glad)
+    include_directories(${GLAD_BINARY_DIR}/include)
 
     FetchContent_Declare(glm
         GIT_REPOSITORY https://github.com/g-truc/glm.git
         SOURCE_DIR ${LIBS_DIR}/glm)
     FetchContent_MakeAvailable(glm)
+    include_directories(${LIBS_DIR}/glm)
 
     FetchContent_Declare(assimp
         GIT_REPOSITORY https://github.com/assimp/assimp.git
         SOURCE_DIR ${LIBS_DIR}/assimp)
     FetchContent_MakeAvailable(assimp)
+    include_directories(${LIBS_DIR}/assimp/include)
 
     set(JSON_BuildTests OFF CACHE INTERNAL "")
     FetchContent_Declare(json
@@ -63,6 +71,7 @@ if(${FETCH_DEPENDENCIES})
         SOURCE_DIR ${LIBS_DIR}/nlohmann
         GIT_TAG v3.11.2)
     FetchContent_MakeAvailable(json)
+    include_directories(${LIBS_DIR}/nlohmann/single_include)
 
     set(IMGUI_DIR ${LIBS_DIR}/imgui/imgui)
     FetchContent_Declare(imgui
@@ -90,12 +99,14 @@ if(${FETCH_DEPENDENCIES})
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-build
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-build)
 
-    target_include_directories(imgui PUBLIC ${IMGUI_DIR})
+    include_directories(${IMGUI_DIR})
+    include_directories(${LIBS_DIR}/imgui)
     target_link_libraries(imgui PRIVATE glad glfw)
 
-    message([STATUS] " DOWNLOAD_COMMAND done")
+    message(STATUS "Fetching project dependency - done")
+endfunction()
 
-endif()
+fetch_dependencies()
 
 file(GLOB_RECURSE SOURCE "source/*.cpp")
 file(GLOB_RECURSE INCLUDE "include/*.h")
@@ -104,15 +115,7 @@ add_executable(${PROJECT_NAME} ${INCLUDE} ${SOURCE})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "engine.exe")
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    ${LIBS_DIR}/glm
-    ${LIBS_DIR}/stb
-    ${LIBS_DIR}/imgui
-    ${LIBS_DIR}/glfw/include
-    ${LIBS_DIR}/assimp/include
-    ${GLAD_BINARY_DIR}/include
-    ${CMAKE_SOURCE_DIR}/include
-    ${LIBS_DIR}/nlohmann/single_include)
+include_directories(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/include)
     
 target_link_libraries(${PROJECT_NAME} PRIVATE
     glfw
