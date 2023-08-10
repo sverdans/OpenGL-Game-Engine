@@ -4,47 +4,57 @@
 #include <Game/ObjectsManager.h>
 #include <Game/GameObject.h>
 
-void ObjectsManager::deleteGameObjects()
+ObjectsManager::ObjectsManager() : pExample(new GameObject())
+{ }
+
+Component* ObjectsManager::GetComponentInstance(const std::string& sName)
 {
-	for (auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
-		delete *it;
-	gameObjects.clear();
+	auto it = mComponents.find(sName);
+	if (it == mComponents.end())
+		return nullptr;
+
+	return it->second;
 }
 
-void ObjectsManager::loadGameObjects(const std::string& filePath)
+void ObjectsManager::Clear()
+{
+	for (auto it : mGameObjects)
+		delete it;
+
+	mGameObjects.clear();
+}
+
+void ObjectsManager::Load(const std::string& sFilePath)
 {
 	nlohmann::json sourceObject;
-	Parser::parseJsonFile(filePath, sourceObject);
+	Parser::parseJsonFile(sFilePath, sourceObject);
 
 	for (const auto& jsonGameObject : sourceObject["GameObjects"])
 	{
 		GameObject* object = new GameObject();
-		object->deserialize(jsonGameObject);
-		gameObjects.push_back(object);
+		object->Deserialize(jsonGameObject);
+		mGameObjects.push_back(object);
 	}
-
 }
 
-GameObject* ObjectsManager::findByTag(const std::string tag)
+GameObject* ObjectsManager::FindByTag(const std::string sTag)
 {
-	for (auto object : gameObjects)
+	for (auto object : mGameObjects)
 	{
-		auto tags = object->getTags();
-		auto it = std::find(tags.begin(), tags.end(), tag);
+		auto tags = object->GetTags();
+		auto it = std::find(tags.begin(), tags.end(), sTag);
 		if (it != tags.end())
 			return object;
 	}
 	return nullptr;
 }
 
-GameObject* ObjectsManager::findByName(const std::string name)
+GameObject* ObjectsManager::FindByName(const std::string sName)
 {
-	for (auto object : gameObjects)
+	for (auto object : mGameObjects)
 	{
-		if (object->name == name)
+		if (object->msName == sName)
 			return object;
 	}
 	return nullptr;
 }
-
-std::vector<GameObject*> ObjectsManager::gameObjects;

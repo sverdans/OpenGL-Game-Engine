@@ -6,9 +6,11 @@
 
 void ClockComponent::init() 
 {
-	secondTransform = ObjectsManager::findByName("ArrowSecond")->getComponent<TransformComponent>();
-	minuteTransform = ObjectsManager::findByName("ArrowMinute")->getComponent<TransformComponent>();
-	hourTransform = ObjectsManager::findByName("ArrowHour")->getComponent<TransformComponent>();
+	auto& manager = ObjectsManager::Instance(); 
+	
+	secondTransform = manager.FindByName("ArrowSecond")->GetComponent<TransformComponent>();
+	minuteTransform = manager.FindByName("ArrowMinute")->GetComponent<TransformComponent>();
+	hourTransform   = manager.FindByName("ArrowHour")->GetComponent<TransformComponent>();
 }
 
 void ClockComponent::update() 

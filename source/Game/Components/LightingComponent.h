@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/vec3.hpp>
 
-#include <Game/Components/Component.h>
+#include <Game/Component.h>
 
 class LightingComponent : public Component
 {

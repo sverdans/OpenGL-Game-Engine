@@ -2,7 +2,7 @@
 #include <glm/vec2.hpp>
 #include <functional>
 
-#include <Game/Components/Component.h>
+#include <Game/Component.h>
 #include <Resources/ResourceManager.h>
 #include <System/Time.h>
 
@@ -20,7 +20,4 @@ public:
 
 	virtual void render() = 0;
 	virtual void update() {};
-
-	void deserialize(const nlohmann::json& jsonObject) override {}
-	void serialize(nlohmann::json& jsonObject) override {}
 };

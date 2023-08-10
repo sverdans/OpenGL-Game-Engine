@@ -7,7 +7,7 @@ private:
 	GLuint id;
 	unsigned int count;
 public:
-	IndexBuffer() : id(0) {}
+	IndexBuffer() : id(0) { }
 	IndexBuffer(const void* data, const unsigned int count) : count(count)
 	{
 		glGenBuffers(1, &id);

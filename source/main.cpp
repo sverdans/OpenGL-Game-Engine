@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	ObjectsManager::deleteGameObjects();
+	ObjectsManager::Instance().Clear();
 	ResourceManager::deleteResources();
 	Window::quit();
 

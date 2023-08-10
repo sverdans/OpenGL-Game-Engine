@@ -48,7 +48,7 @@ void ModelRendererComponent::render()
 	shader->unuse();
 }
 
-void ModelRendererComponent::deserialize(const nlohmann::json& jsonObject)
+void ModelRendererComponent::Deserialize(const nlohmann::json& jsonObject)
 {
 	shader = ResourceManager::getShader(jsonObject["shader"]);
 	model = ResourceManager::getModel(jsonObject["model"]);
@@ -63,7 +63,7 @@ void ModelRendererComponent::deserialize(const nlohmann::json& jsonObject)
 	useMaterial = jsonObject["useTexture"];
 }
 
-void ModelRendererComponent::serialize(nlohmann::json& jsonObject)
+void ModelRendererComponent::Serialize(nlohmann::json& jsonObject)
 {
 	nlohmann::json colorJson;
 	colorJson["r"] = color.r;

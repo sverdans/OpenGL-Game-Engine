@@ -6,158 +6,168 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Game/GameObject.h>
-#include <System/Constants.h>
+#include <General/Constants.h>
 
-TransformComponent::TransformComponent(GameObject* gameObject) 
-	: Component(gameObject) {}
+TransformComponent::TransformComponent(GameObject* pGameObject) 
+	: Component(pGameObject) 
+{ }
 
-const glm::vec3& TransformComponent::setPosition(const glm::vec3& position)
+const glm::vec3& TransformComponent::SetPosition(const glm::vec3& position)
 {
-	return this->position = position;
+	return mPosition = position;
 }
-const glm::vec3& TransformComponent::setRotation(const glm::vec3& rotation)
+
+const glm::vec3& TransformComponent::SetRotation(const glm::vec3& rotation)
 {
 	const float rollInRadians  = glm::radians(rotation.x);
 	const float pitchInRadians = glm::radians(rotation.y);
 	const float yawInRadians   = glm::radians(rotation.z);
 
-	const glm::mat3 rotateMatrixX(
-		1, 0, 0,
-		0, cos(rollInRadians), sin(rollInRadians),
-		0, -sin(rollInRadians), cos(rollInRadians));
+	const glm::mat3 rotateMatrixX
+	{
+		1, 0                  , 0                 ,
+		0, cos(rollInRadians) , sin(rollInRadians),
+		0, -sin(rollInRadians), cos(rollInRadians),
+	};
 
-	const glm::mat3 rotateMatrixY(
+	const glm::mat3 rotateMatrixY
+	{
 		cos(pitchInRadians), 0, -sin(pitchInRadians),
-		0, 1, 0,
-		sin(pitchInRadians), 0, cos(pitchInRadians));
+		0                  , 1, 0                   ,
+		sin(pitchInRadians), 0, cos(pitchInRadians) ,
+	};
 
-	const glm::mat3 rotateMatrixZ(
-		cos(yawInRadians), sin(yawInRadians), 0,
+	const glm::mat3 rotateMatrixZ
+	{
+		cos(yawInRadians) , sin(yawInRadians), 0,
 		-sin(yawInRadians), cos(yawInRadians), 0,
-		0, 0, 1);
+		0                 ,                 0, 1,
+	};
 
 	const glm::mat3 eulerRotateMatrix = rotateMatrixZ * rotateMatrixY * rotateMatrixX;
 	
-	forward = glm::normalize(eulerRotateMatrix * constants::worldForward);
-	right = glm::normalize(eulerRotateMatrix * constants::worldRight);
-	up = glm::cross(right, forward);
+	mForward = glm::normalize(eulerRotateMatrix * constants::WorldForward);
+	mRight   = glm::normalize(eulerRotateMatrix * constants::WorldRight);
+	mUp      = glm::cross(mRight, mForward);
 
-	return this->rotation = rotation;
+	return mRotation = rotation;
 }
-const glm::vec3& TransformComponent::setSize(const glm::vec3& size) 
+const glm::vec3& TransformComponent::SetSize(const glm::vec3& size) 
 { 
-	return this->size = size;
+	return mSize = size;
 }
 
-const glm::vec3& TransformComponent::translate(const glm::vec3& vec) { return position += vec; }
-const glm::vec3& TransformComponent::translate(const glm::vec3& direction, float distance)
-{
-	return position += glm::normalize(direction) * distance;
+const glm::vec3& TransformComponent::Translate(const glm::vec3& vec) 
+{ 
+	return mPosition += vec;
 }
 
-const glm::vec3& TransformComponent::rotate(const glm::vec3& axis, float angle)
+const glm::vec3& TransformComponent::Translate(const glm::vec3& direction, float distance)
 {
-	rotation.x += angle * ((axis.x > 0) - (axis.x < 0));
-	rotation.y += angle * ((axis.y > 0) - (axis.y < 0));
-	rotation.z += angle * ((axis.z > 0) - (axis.z < 0));
-	return rotation;
-}
-const glm::vec3& TransformComponent::scale(const glm::vec3& sc)
-{
-	size.x *= sc.x;
-	size.y *= sc.y;
-	size.z *= sc.z;
-	return this->size;
+	return mPosition += glm::normalize(direction) * distance;
 }
 
-const glm::vec3 TransformComponent::getGlobalPosition() const
+const glm::vec3& TransformComponent::Rotate(const glm::vec3& axis, float angle)
+{
+	mRotation.x += angle * ((axis.x > 0) - (axis.x < 0));
+	mRotation.y += angle * ((axis.y > 0) - (axis.y < 0));
+	mRotation.z += angle * ((axis.z > 0) - (axis.z < 0));
+	return mRotation;
+}
+const glm::vec3& TransformComponent::Scale(const glm::vec3& sc)
+{
+	mSize.x *= sc.x;
+	mSize.y *= sc.y;
+	mSize.z *= sc.z;
+	return mSize;
+}
+
+const glm::vec3 TransformComponent::GetGlobalPosition() const
 {
 	glm::vec3 globalPosition(0, 0, 0);
-
-	auto object = gameObject;
+	auto pObject = pGameObject;
 	do
 	{
-		auto TC = object->getComponent<TransformComponent>();
-		globalPosition += TC->position;
-	} while (object = object->getParent());
+		auto TC = pObject->GetComponent<TransformComponent>();
+		globalPosition += TC->mPosition;
+	}
+	while (pObject = pObject->GetParent());
 
 	return globalPosition;
 }
-const glm::vec3 TransformComponent::getGlobalRotation() const
+const glm::vec3 TransformComponent::GetGlobalRotation() const
 {
 	glm::vec3 globalRotation(0, 0, 0);
-
-	auto object = gameObject;
+	auto pObject = pGameObject;
 	do
 	{
-		auto TC = object->getComponent<TransformComponent>();
-		globalRotation += TC->rotation;
-	} while (object = object->getParent());
+		auto TC = pObject->GetComponent<TransformComponent>();
+		globalRotation += TC->mRotation;
+	}
+	while (pObject = pObject->GetParent());
 
 	return globalRotation;
 }
 
-const glm::vec3& TransformComponent::getPosition() const { return position; }
-const glm::vec3& TransformComponent::getRotation() const { return rotation; }
-const glm::vec3& TransformComponent::getSize() const { return size; }
+const glm::vec3& TransformComponent::GetPosition() const { return mPosition; }
+const glm::vec3& TransformComponent::GetRotation() const { return mRotation; }
+const glm::vec3& TransformComponent::GetSize() const     { return mSize;     }
+const glm::vec3& TransformComponent::GetForward() const  { return mForward;  }
+const glm::vec3& TransformComponent::GetRight() const    { return mRight;    }
+const glm::vec3& TransformComponent::GetUp() const       { return mUp;       }
 
-const glm::vec3& TransformComponent::getForward() const { return forward; }
-const glm::vec3& TransformComponent::getRight() const { return right; }
-const glm::vec3& TransformComponent::getUp() const { return up; }
-
-const glm::mat4x4& TransformComponent::getModelMatrix() const
+const glm::mat4x4& TransformComponent::GetModelMatrix() const
 {
-	auto parent = gameObject->getParent();
-	model = parent ? parent->getComponent<TransformComponent>()->getModelMatrix() : glm::mat4(1.f);
+	auto pParent = pGameObject->GetParent();
+	mModel = pParent ? pParent->GetComponent<TransformComponent>()->GetModelMatrix() : glm::mat4(1.f);
 
-	model = glm::scale(model, size);
-	model = glm::translate(model, position / size);
-	model = glm::rotate(model, glm::radians(rotation.z), constants::worldForward);
-	model = glm::rotate(model, glm::radians(rotation.y), constants::worldUp);
-	model = glm::rotate(model, glm::radians(rotation.x), constants::worldRight);
+	mModel = glm::scale(mModel, mSize);
+	mModel = glm::translate(mModel, mPosition / mSize);
+	mModel = glm::rotate(mModel, glm::radians(mRotation.z), constants::WorldForward);
+	mModel = glm::rotate(mModel, glm::radians(mRotation.y), constants::WorldUp);
+	mModel = glm::rotate(mModel, glm::radians(mRotation.x), constants::WorldRight);
 
-	return model;
+	return mModel;
 }
 
-void TransformComponent::deserialize(const nlohmann::json& jsonObject)
+void TransformComponent::Deserialize(const nlohmann::json& jsonObject)
 {
 	auto positionObj = jsonObject["position"];
-	setPosition(glm::vec3(positionObj["x"],
+	SetPosition(glm::vec3(positionObj["x"],
 						  positionObj["y"],
 						  positionObj["z"]));
 
 	auto rotationObj = jsonObject["rotation"];
-	setRotation(glm::vec3(rotationObj["x"],
+	SetRotation(glm::vec3(rotationObj["x"],
 						  rotationObj["y"],
 						  rotationObj["z"]));
 
 	auto sizeObj = jsonObject["size"];
-	setSize(glm::vec3(sizeObj["x"],
+	SetSize(glm::vec3(sizeObj["x"],
 					  sizeObj["y"],
 					  sizeObj["z"]));
 }
 
-void TransformComponent::serialize(nlohmann::json& jsonObject)
+void TransformComponent::Serialize(nlohmann::json& jsonObject)
 {
 	nlohmann::json component;
 
 	nlohmann::json positionJson;
-	positionJson["x"] = position.x;
-	positionJson["y"] = position.y;
-	positionJson["z"] = position.z;
+	positionJson["x"] = mPosition.x;
+	positionJson["y"] = mPosition.y;
+	positionJson["z"] = mPosition.z;
+	component["position"] = positionJson;
 
 	nlohmann::json rotationJson;
-	rotationJson["x"] = rotation.x;
-	rotationJson["y"] = rotation.y;
-	rotationJson["z"] = rotation.z;
+	rotationJson["x"] = mRotation.x;
+	rotationJson["y"] = mRotation.y;
+	rotationJson["z"] = mRotation.z;
+	component["rotation"] = rotationJson;
 
 	nlohmann::json sizeJson;
-	sizeJson["x"] = size.x;
-	sizeJson["y"] = size.y;
-	sizeJson["z"] = size.z;
-
-	component["position"] = positionJson;
-	component["rotation"] = rotationJson;
+	sizeJson["x"] = mSize.x;
+	sizeJson["y"] = mSize.y;
+	sizeJson["z"] = mSize.z;
 	component["size"] = sizeJson;
 
 	jsonObject["TransformComponent"] = component;

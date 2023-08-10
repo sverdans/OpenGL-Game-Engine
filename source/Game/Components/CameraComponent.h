@@ -23,39 +23,20 @@ public:
 		Orthographic
 	};
 
-private:
-	ProjectionMode projectionMode;
-
-	glm::mat4 viewMatrix = glm::mat4(1.0f);
-	glm::mat4 projectionMatrix = glm::mat4(1.0f);
-	glm::mat4 viewProjectionMatrix = glm::mat4(1.0f);
-
-	bool isMovable;
-
-	float orthoScale = 1;
-
-	float farClipPlane;
-	float nearClipPlane;
-
-	float viewportWidth = Window::size.x;
-	float viewportHeight = Window::size.y;
-	float fieldOfView;
-
 public:
-
 	CameraComponent(GameObject* gameObject) : BehaviourComponent(gameObject) {}
 	CameraComponent(const CameraComponent&) = delete;
 	CameraComponent& operator = (const CameraComponent&) = delete;
 	~CameraComponent() = default;
 
-	void updateViewMatrix()
+	void UpdateViewMatrix()
 	{
 		auto TC = gameObject->getComponent<TransformComponent>();
 		glm::vec3 position = TC->getGlobalPosition();
 		viewMatrix = glm::lookAt(position, position + TC->getForward(), constants::worldUp);
 	}
 
-	void updateProjectionMatrix()
+	void UpdateProjectionMatrix()
 	{
 		float aspectRatio = viewportWidth / viewportHeight;
 		if (aspectRatio != aspectRatio)
@@ -77,13 +58,13 @@ public:
 				farClipPlane);
 	}
 
-	void init() override 
+	void Init() override 
 	{
 		updateViewMatrix();
 		updateProjectionMatrix();
 	}
 
-	void update() override
+	void Update() override
 	{
 		if (!isMovable)
 			return;
@@ -121,13 +102,13 @@ public:
 		TC->translate(TC->getUp() * movementDelta.y);
 	}
 
-	void setProjectionMode(ProjectionMode mode)
+	void SetProjectionMode(ProjectionMode mode)
 	{
 		projectionMode = mode;
 		updateProjectionMatrix();
 	}
 	
-	void onPreRender() override
+	void OnPreRender() override
 	{
 		updateViewMatrix();
 		updateProjectionMatrix();
@@ -152,7 +133,7 @@ public:
 		}
 	}
 
-	void deserialize(const nlohmann::json& jsonObject) override
+	void Deserialize(const nlohmann::json& jsonObject) override
 	{
 		viewportWidth = Window::size.x;
 		viewportHeight = Window::size.y;
@@ -168,7 +149,7 @@ public:
 		updateProjectionMatrix();
 	}
 
-	void serialize(nlohmann::json& jsonObject) override
+	void Serialize(nlohmann::json& jsonObject) override
 	{
 		nlohmann::json component;
 
@@ -181,6 +162,25 @@ public:
 		jsonObject[name()] = component;
 	}
 
-	std::string name() override { return "CameraComponent"; }
+	std::string Name() override { return "CameraComponent"; }
 
+private:
+	ProjectionMode projectionMode;
+
+	glm::mat4 viewMatrix = glm::mat4(1.0f);
+	glm::mat4 projectionMatrix = glm::mat4(1.0f);
+	glm::mat4 viewProjectionMatrix = glm::mat4(1.0f);
+
+	bool isMovable;
+
+	float orthoScale = 1;
+
+	float farClipPlane;
+	float nearClipPlane;
+
+	float viewportWidth = Window::size.x;
+	float viewportHeight = Window::size.y;
+	float fieldOfView;
 };
+
+DECLARE_COMPONENT(CameraComponent) 

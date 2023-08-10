@@ -32,7 +32,7 @@ function(fetch_dependencies)
         if(NOT ${EXCLUDE_FILE_INDEX} EQUAL -1)
             message(STATUS "NOT REMOVABLE FILE: ${STB_FILE_PATH}")
         elseif()
-            file(REMOVE ${STB_FILE_PATH})
+            file(REMOVE_RECURSE ${STB_FILE_PATH})
         endif()
     endforeach()
     include_directories(${LIBS_DIR}/stb)
@@ -111,11 +111,12 @@ fetch_dependencies()
 file(GLOB_RECURSE SOURCE "source/*.cpp")
 file(GLOB_RECURSE INCLUDE "include/*.h")
 
-add_executable(${PROJECT_NAME} ${INCLUDE} ${SOURCE})
+add_executable(${PROJECT_NAME} ${SOURCE})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "engine.exe")
 
-include_directories(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/include)
+include_directories(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/include
+                                    ${CMAKE_SOURCE_DIR}/source)
     
 target_link_libraries(${PROJECT_NAME} PRIVATE
     glfw

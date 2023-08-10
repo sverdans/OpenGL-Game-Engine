@@ -37,8 +37,8 @@ public:
 
 	void render() override;
 
-	void deserialize(const nlohmann::json& jsonObject) override;
-	void serialize(nlohmann::json& jsonObject) override;
+	void Deserialize(const nlohmann::json& jsonObject) override;
+	void Serialize(nlohmann::json& jsonObject) override;
 
-	std::string name() override { return "ModelRendererComponent"; }
+	std::string Name() override { return "ModelRendererComponent"; }
 };

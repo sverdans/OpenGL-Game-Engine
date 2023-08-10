@@ -31,17 +31,22 @@ void LightingSystem::update()
 			switch (it->type)
 			{
 				case LightingComponent::Type::Directional:
+				{
 					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].color", it->color);
 					shader->setFloat("directionalLights[" + std::to_string(dirIndex) + "].intensity", it->intensity);
-					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].direction", -it->gameObject->getComponent<TransformComponent>()->getForward());
+					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].direction", -it->pGameObject->GetComponent<TransformComponent>()->GetForward());
 					dirIndex++;
 					break;
+				}
+					
 				case LightingComponent::Type::Point:
+				{
 					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].color", it->color);
 					shader->setFloat("pointLights[" + std::to_string(pointIndex) + "].intensity", it->intensity);
-					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].position", it->gameObject->getComponent<TransformComponent>()->getGlobalPosition());
+					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].position", it->pGameObject->GetComponent<TransformComponent>()->GetGlobalPosition());
 					pointIndex++;
 					break;
+				}
 			}
 		}
 

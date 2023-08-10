@@ -1,39 +1,86 @@
 #include <Game/GameObject.h>
 #include <Game/ObjectsManager.h>
 
-#include <Game/Components/TransformComponent.h>
-#include <Game/Components/CameraComponent.h>
-#include <Game/Components/ModelRendererComponent.h>
-#include <Game/Components/LightingComponent.h>
-#include <Game/Components/ClockComponent.h>
+GameObject::GameObject()
+	: mpParent(nullptr)
+{ }
 
-void GameObject::serialize(nlohmann::json& jsonObject)
+GameObject::GameObject(GameObject* pParent)
+	: mpParent(pParent)
+{ }
+
+GameObject::~GameObject()
 {
-	jsonObject["name"] = name;
+	for (auto& [sName, pComponent] : mComponents)
+		delete pComponent;
+	mComponents.clear();
 
-	if (tags.size() != 0)
-		for (const auto& tag : tags)
-			jsonObject["tags"].push_back(tag);
+	for (auto& it : mChildren)
+		it->mpParent = nullptr;
 
-	if (children.size() != 0)
-		for (const auto& obj : children)
-			jsonObject["GameObjects"].push_back(obj->name);
-
-	for (auto& componentIt : components)
-		componentIt.second->serialize(jsonObject);
+	mChildren.clear();
 }
 
-void GameObject::deserialize(const nlohmann::json& jsonObject)
+GameObject* GameObject::AddGameObject()
 {
-	name = jsonObject["name"];
+	auto pChild = new GameObject(this);
+	mChildren.push_back(pChild);
+	return pChild;
+}
+
+GameObject* GameObject::GetParent() const { return mpParent; }
+const std::string& GameObject::GetName() const { return msName; }
+const std::vector<std::string>& GameObject::GetTags() const { return mTags; }
+
+void GameObject::AddTag(const std::string sTag)
+{
+	mTags.push_back(sTag);
+}
+
+void GameObject::RemoveTag(const std::string sTag)
+{
+	for (auto it = mTags.begin(); it != mTags.end(); ++it)
+	{
+		if (*it == sTag)
+		{
+			mTags.erase(it);
+			break;
+		}
+	}
+}
+
+void GameObject::Serialize(nlohmann::json& jsonObject)
+{
+	jsonObject["name"] = msName;
+
+	if (!mTags.empty())
+	{
+		for (const auto& sTag : mTags)
+			jsonObject["tags"].push_back(sTag);
+	}
+
+	if (!mChildren.empty())
+	{
+		for (const auto& obj : mChildren)
+			jsonObject["GameObjects"].push_back(obj->msName);
+	}
+
+	for (auto& [sName, pComponent] : mComponents)
+		pComponent->Serialize(jsonObject);
+}
+
+void GameObject::Deserialize(const nlohmann::json& jsonObject)
+{
+	msName = jsonObject["name"];
 
 	if (jsonObject.contains("tags"))
 	{
-		tags.clear();
+		mTags.clear();
 		for (const auto& jsonTag : jsonObject["tags"])
-			addTag(jsonTag);
+			AddTag(jsonTag);
 	}
 
+/*
 	if (jsonObject.contains("TransformComponent"))
 	{
 		auto component = contain<TransformComponent>() ? getComponent<TransformComponent>() : addComponent<TransformComponent>(); 
@@ -69,17 +116,18 @@ void GameObject::deserialize(const nlohmann::json& jsonObject)
 		auto component = contain<ClockComponent>() ? getComponent<ClockComponent>() : addComponent<ClockComponent>();
 		component->deserialize(jsonObject[component->name()]);
 	}
+*/
 
 	if (jsonObject.contains("GameObjects"))
 	{
-		children.clear();
-		for (const auto& childrenName : jsonObject["GameObjects"])
+		mChildren.clear();
+
+		for (const auto& sChildrenName : jsonObject["GameObjects"])
 		{
-			auto obj = ObjectsManager::findByName(childrenName);
-			if (obj)
+			if (auto pChildren = ObjectsManager::Instance().FindByName(sChildrenName))
 			{
-				children.push_back(obj);
-				obj->parent = this;
+				mChildren.push_back(pChildren);
+				pChildren->mpParent = this;
 			}
 		}
 	}
