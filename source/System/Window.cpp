@@ -1,16 +1,7 @@
-#ifndef IMGUI_DEFINE_MATH_OPERATORS
-	#define IMGUI_DEFINE_MATH_OPERATORS
-#endif
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
-#include <imgui/backends/imgui_impl_glfw.h>
-
 #include <System/Window.h>
 #include <System/InputHandler.h>
 #include <Editor/UiHandler.h>
 #include <Renderer/Renderer.h>
-
 
 void Window::init(const glm::vec2& windowSize, const char* windowTitle)
 {
@@ -48,13 +39,10 @@ void Window::init(const glm::vec2& windowSize, const char* windowTitle)
 	glfwSetMouseButtonCallback(Window::window, InputHandler::setMouseButton);
 	glfwSetWindowSizeCallback(Window::window, Window::onResize);
 	glfwSetWindowSizeLimits(window, 800, 600, GLFW_DONT_CARE, GLFW_DONT_CARE);
-
-	UiHandler::onWindowCreate();
 }
 
 void Window::quit()
 {
-	UiHandler::onWindowClose();
 	glfwDestroyWindow(window);
 	glfwTerminate();
 }

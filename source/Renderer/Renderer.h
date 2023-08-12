@@ -23,13 +23,6 @@ private:
 	static PolygonMode polygonMode;
 	static bool depthTest;
 
-	static constexpr char* polygonModeStrings[] {
-		"Fill",
-		"Line",
-		"Point"
-	};
-
-
 public:
 	enum class DrawMode
 	{
@@ -55,6 +48,4 @@ public:
 	static const char* getVendorString();
 	static const char* getRendererString();
 	static const char* getVersionString();
-
-	static void drawTools();
 };

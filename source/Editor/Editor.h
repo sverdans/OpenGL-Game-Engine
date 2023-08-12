@@ -1,12 +1,13 @@
-#include <limits>
-
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 	#define IMGUI_DEFINE_MATH_OPERATORS
 #endif
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
-#include <imgui/backends/imgui_impl_glfw.h>
+
+#include <limits>
+
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
 
 #include <nlohmann/json.hpp>
 
@@ -110,12 +111,6 @@ private:
 				//	ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Project file", ".json", ".");
 				}
 				
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Renderer"))
-			{
-				Renderer::drawTools();
 				ImGui::EndMenu();
 			}
 

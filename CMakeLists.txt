@@ -9,10 +9,9 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 option(ASAN "" ON)
 
 function(fetch_dependencies)
-    message(STATUS "Fetching project dependency - start")
-
     include(FetchContent)
     set(LIBS_DIR ${CMAKE_BINARY_DIR}/external)
+    message(STATUS "Fetching project dependency - start")
 
     FetchContent_Declare(spdlog
         GIT_REPOSITORY https://github.com/gabime/spdlog.git
@@ -53,7 +52,6 @@ function(fetch_dependencies)
         GIT_REPOSITORY https://github.com/assimp/assimp.git
         SOURCE_DIR ${LIBS_DIR}/assimp)
     FetchContent_MakeAvailable(assimp)
-    #include_directories(${LIBS_DIR}/assimp/include)
 
     set(JSON_BuildTests OFF CACHE INTERNAL "")
     FetchContent_Declare(json
@@ -63,7 +61,7 @@ function(fetch_dependencies)
     FetchContent_MakeAvailable(json)
     include_directories(${LIBS_DIR}/nlohmann/single_include)
 
-    set(IMGUI_DIR ${LIBS_DIR}/imgui/imgui)
+    set(IMGUI_DIR ${LIBS_DIR}/imgui)
     FetchContent_Declare(imgui
         GIT_REPOSITORY https://github.com/ocornut/imgui.git
         SOURCE_DIR ${IMGUI_DIR})
@@ -89,8 +87,7 @@ function(fetch_dependencies)
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-build
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-build)
 
-    include_directories(${IMGUI_DIR})
-    include_directories(${LIBS_DIR}/imgui)
+    target_include_directories(imgui PUBLIC ${IMGUI_DIR})
     target_link_libraries(imgui PRIVATE glad glfw)
 
     message(STATUS "Fetching project dependency - done")
@@ -99,25 +96,25 @@ endfunction()
 fetch_dependencies()
 
 file(GLOB_RECURSE SOURCE "source/*.cpp")
-file(GLOB_RECURSE INCLUDE "include/*.h")
+file(GLOB_RECURSE INCLUDE "source/*.h")
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "engine.exe")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/source
+    ${LIBS_DIR}/imgui
     ${LIBS_DIR}/spdlog/include
-    ${LIBS_DIR}/assimp/include)
-    
+    ${LIBS_DIR}/assimp/include
+    ${CMAKE_SOURCE_DIR}/source)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
     spdlog
+    assimp
+    imgui
     glfw
     glad
-    glm
-    assimp
-    imgui)
+    glm)
 
 if(${ASAN})
     message(STATUS "Building with Adress Sanitizer")

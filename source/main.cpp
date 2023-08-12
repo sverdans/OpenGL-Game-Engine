@@ -19,6 +19,7 @@
 int main(int argc, char** argv)
 {
 	Window::init(glm::vec2(1000, 800), "OpenGL-Courswork");
+	UiHandler::onWindowCreate();
 
 	Renderer::setClearColor(60.f / 255.f , 60.f / 255.f, 60.f / 255.f, 0.f);
 
@@ -64,6 +65,7 @@ int main(int argc, char** argv)
 	ObjectsManager::Instance().Clear();
 	ResourceManager::deleteResources();
 	Window::quit();
+	UiHandler::onWindowClose();
 
 	return 0;
 }

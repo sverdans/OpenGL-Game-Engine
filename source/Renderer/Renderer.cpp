@@ -1,20 +1,11 @@
-#include "Renderer.h"
-
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-
-#ifndef IMGUI_DEFINE_MATH_OPERATORS
-	#define IMGUI_DEFINE_MATH_OPERATORS
-#endif
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
-#include <imgui/backends/imgui_impl_glfw.h>
-
-#include "VertexArray.h"
-#include "IndexBuffer.h"
+#include <Renderer/Renderer.h>
+#include <Renderer/IndexBuffer.h>
+#include <Renderer/VertexBuffer.h>
+#include <Renderer/VertexArray.h>
 
 bool Renderer::init(GLFWwindow* pWindow)
 {
@@ -31,9 +22,11 @@ bool Renderer::init(GLFWwindow* pWindow)
 	std::cout << "\tRenderer: " << getRendererString() << std::endl;
 	std::cout << "\tVersion: " << getVersionString() << std::endl;
 
+	depthTest = true;
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	glEnable(GL_DEPTH_TEST);
 	return true;
 }
 
@@ -88,34 +81,6 @@ const char* Renderer::getRendererString()
 const char* Renderer::getVersionString()
 {
 	return reinterpret_cast<const char*>(glGetString(GL_VERSION));
-}
-
-void Renderer::drawTools()
-{
-	int curPolygonMode = static_cast<int>(polygonMode);
-
-	if (ImGui::Combo("PolygonMode", &curPolygonMode, polygonModeStrings, 3))
-	{
-		switch (curPolygonMode)
-		{
-			case 0: setPolygonMode(GL_FILL); break;
-			case 1: setPolygonMode(GL_LINE); break;
-			case 2: setPolygonMode(GL_POINT); break;
-		}
-	}
-
-	if (ImGui::SliderInt("PointSize", &pointSize, 1, 10))
-	{
-		setPointSize(pointSize);
-	}
-
-	if (ImGui::Checkbox("DepthTest", &depthTest))
-	{
-		if (depthTest)
-			Renderer::enableDepthTest();
-		else
-			Renderer::disableDepthTest();
-	}
 }
 
 int Renderer::pointSize = 1;
