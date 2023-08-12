@@ -8,33 +8,23 @@ set(BUILD_SHARED_LIBS OFF)
 project(${PROJECT_NAME} LANGUAGES CXX)
 option(ASAN "" ON)
 
-if(${ASAN})
-    message(STATUS "Building with Adress Sanitizer")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
-    set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
-endif()
-
 function(fetch_dependencies)
     message(STATUS "Fetching project dependency - start")
 
     include(FetchContent)
     set(LIBS_DIR ${CMAKE_BINARY_DIR}/external)
 
+    FetchContent_Declare(spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        SOURCE_DIR ${LIBS_DIR}/spdlog
+        GIT_TAG  v1.11.0)
+    FetchContent_MakeAvailable(spdlog)
+    
     set(STB_DIR ${LIBS_DIR}/stb)
     FetchContent_Declare(stb
         GIT_REPOSITORY https://github.com/nothings/stb.git
         SOURCE_DIR ${STB_DIR})
     FetchContent_MakeAvailable(stb)
-
-    file(GLOB_RECURSE STB_FILES "${STB_DIR}/*")
-    foreach(STB_FILE_PATH ${STB_FILES})
-        string(FIND ${STB_FILE_PATH} "stb_image.h" EXCLUDE_FILE_INDEX)
-        if(NOT ${EXCLUDE_FILE_INDEX} EQUAL -1)
-            message(STATUS "NOT REMOVABLE FILE: ${STB_FILE_PATH}")
-        elseif()
-            file(REMOVE_RECURSE ${STB_FILE_PATH})
-        endif()
-    endforeach()
     include_directories(${LIBS_DIR}/stb)
 
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -63,7 +53,7 @@ function(fetch_dependencies)
         GIT_REPOSITORY https://github.com/assimp/assimp.git
         SOURCE_DIR ${LIBS_DIR}/assimp)
     FetchContent_MakeAvailable(assimp)
-    include_directories(${LIBS_DIR}/assimp/include)
+    #include_directories(${LIBS_DIR}/assimp/include)
 
     set(JSON_BuildTests OFF CACHE INTERNAL "")
     FetchContent_Declare(json
@@ -115,15 +105,25 @@ add_executable(${PROJECT_NAME} ${SOURCE})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "engine.exe")
 
-include_directories(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/include
-                                    ${CMAKE_SOURCE_DIR}/source)
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/source
+    ${LIBS_DIR}/spdlog/include
+    ${LIBS_DIR}/assimp/include)
     
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    spdlog
     glfw
     glad
     glm
     assimp
     imgui)
+
+if(${ASAN})
+    message(STATUS "Building with Adress Sanitizer")
+    target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
+    target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
+endif()
 
 file(GLOB INCLUDES_COMPONENT "source/Game/Components/*.h")
 

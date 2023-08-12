@@ -8,7 +8,9 @@
 #include <Game/GameObject.h>
 #include <General/Constants.h>
 
-TransformComponent::TransformComponent(GameObject* pGameObject) 
+DECLARE_COMPONENT(TransformComponent)
+
+TransformComponent::TransformComponent(GameObject* pGameObject)
 	: Component(pGameObject) 
 { }
 

@@ -5,6 +5,7 @@
 
 #include <Game/Component.h>
 #include <Game/GameObject.h>
+#include <spdlog/spdlog.h>
 
 #define DECLARE_COMPONENT(NAME) \
 bool l ## NAME = ObjectsManager::Instance().DeclareComponent<NAME>();
@@ -23,7 +24,7 @@ public:
     bool DeclareComponent()
     {
         std::string sName { std::string(typeid(T).name()).substr(2) };
-        // info        
+        spdlog::info(sName + " Declared");
         auto pComponent = mpExample->AddComponent<T>();
         mComponents.emplace(sName, pComponent);
         return true;
