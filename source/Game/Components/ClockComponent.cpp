@@ -4,7 +4,7 @@
 #include <Game/Components/ClockComponent.h>
 #include <Game/Components/TransformComponent.h>
 
-void ClockComponent::init() 
+void ClockComponent::Init() 
 {
 	auto& manager = ObjectsManager::Instance(); 
 	
@@ -13,32 +13,31 @@ void ClockComponent::init()
 	hourTransform   = manager.FindByName("ArrowHour")->GetComponent<TransformComponent>();
 }
 
-void ClockComponent::update() 
+void ClockComponent::Update() 
 {
-	auto hourRotation = hourTransform->getRotation();
-	auto minuteRotation = minuteTransform->getRotation();
-	auto secondRotation = secondTransform->getRotation();
+	auto hourRotation = hourTransform->GetRotation();
+	auto minuteRotation = minuteTransform->GetRotation();
+	auto secondRotation = secondTransform->GetRotation();
 	
 	hourRotation.z   -= Time::getDeltaTime() * scale * 0.005 / 60 / 12;
 	minuteRotation.z -= Time::getDeltaTime() * scale * 0.005 / 60;
 	secondRotation.z -= Time::getDeltaTime() * scale * 0.005;
 
-	hourTransform->setRotation(hourRotation);
-	minuteTransform->setRotation(minuteRotation);
-	secondTransform->setRotation(secondRotation);
+	hourTransform->SetRotation(hourRotation);
+	minuteTransform->SetRotation(minuteRotation);
+	secondTransform->SetRotation(secondRotation);
 }
 
-void ClockComponent::deserialize(const nlohmann::json& jsonObject)
+void ClockComponent::Deserialize(const nlohmann::json& jsonObject)
 {
 	scale = jsonObject["scale"];
 }
 
-void ClockComponent::serialize(nlohmann::json& jsonObject)
+void ClockComponent::Serialize(nlohmann::json& jsonObject)
 {
-	nlohmann::json component;
-	component["scale"] = scale;
-	jsonObject[name()] = component;
+	jsonObject[Name()] = {
+		{"scale", scale}
+	};
 }
 
-
-std::string ClockComponent::name() { return "ClockComponent"; }
+std::string ClockComponent::Name() { return "ClockComponent"; }

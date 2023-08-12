@@ -1,4 +1,3 @@
-#pragma once
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,181 +11,147 @@
 #include <System/Time.h>
 
 #include <Game/GameObject.h>
+#include <Game/Components/CameraComponent.h>
 #include <Game/Components/BehaviourComponent.h>
 #include <Game/Components/TransformComponent.h>
 
-class CameraComponent : public BehaviourComponent
+
+CameraComponent::CameraComponent(GameObject* pGameObject) 
+	: BehaviourComponent(pGameObject) 
+{ }
+
+void CameraComponent::UpdateViewMatrix()
 {
-public:
-	enum ProjectionMode
-	{
-		Perspective,
-		Orthographic
-	};
+	auto pTC = GetGameObject()->GetComponent<TransformComponent>();
+	glm::vec3 position = pTC->GetGlobalPosition();
+	viewMatrix = glm::lookAt(position, position + pTC->GetForward(), constants::WorldUp);
+}
 
-public:
-	CameraComponent(GameObject* gameObject) : BehaviourComponent(gameObject) {}
-	CameraComponent(const CameraComponent&) = delete;
-	CameraComponent& operator = (const CameraComponent&) = delete;
-	~CameraComponent() = default;
+void CameraComponent::UpdateProjectionMatrix()
+{
+	float aspectRatio = viewportWidth / viewportHeight;
+	if (aspectRatio != aspectRatio)
+		return;
 
-	void UpdateViewMatrix()
+	if (projectionMode == ProjectionMode::Perspective)
 	{
-		auto pTC = pGameObject->GetComponent<TransformComponent>();
-		glm::vec3 position = pTC->GetGlobalPosition();
-		viewMatrix = glm::lookAt(position, position + pTC->GetForward(), constants::WorldUp);
+		projectionMatrix = glm::perspective(
+			glm::radians(fieldOfView),
+			aspectRatio,
+			nearClipPlane,
+			farClipPlane);
 	}
-
-	void UpdateProjectionMatrix()
+	else if (projectionMode == ProjectionMode::Orthographic)
 	{
-		float aspectRatio = viewportWidth / viewportHeight;
-		if (aspectRatio != aspectRatio)
-			return;
-
-		if (projectionMode == ProjectionMode::Perspective)
-		{
-			projectionMatrix = glm::perspective(
-				glm::radians(fieldOfView),
-				aspectRatio,
-				nearClipPlane,
-				farClipPlane);
-		}
-		else if (projectionMode == ProjectionMode::Orthographic)
-		{
-			projectionMatrix = glm::ortho(
-				-orthoScale * aspectRatio,
-				orthoScale * aspectRatio,
-				-orthoScale,
-				orthoScale,
-				nearClipPlane,
-				farClipPlane);
-		}
-		else
-		{
-			std::cout << "warning" << std::endl;
-		}
+		projectionMatrix = glm::ortho(
+			-orthoScale * aspectRatio,
+			orthoScale * aspectRatio,
+			-orthoScale,
+			orthoScale,
+			nearClipPlane,
+			farClipPlane);
 	}
-
-	void Init() override 
+	else
 	{
-		UpdateViewMatrix();
-		UpdateProjectionMatrix();
+		std::cout << "warning" << std::endl;
 	}
+}
 
-	void Update() override
-	{
-		if (!isMovable)
-			return;
+void CameraComponent::Init() 
+{
+	UpdateViewMatrix();
+	UpdateProjectionMatrix();
+}
 
-		viewportWidth = Window::size.x;
-		viewportHeight = Window::size.y;
+void CameraComponent::Update()
+{
+	if (!isMovable)
+		return;
 
-		auto pTC = pGameObject->GetComponent<TransformComponent>();
-		auto& keys = InputHandler::getKeys();
-		
-		float delta = 0.002f * Time::getDeltaTime();
-		float deltaR = 0.05f * Time::getDeltaTime();
+	viewportWidth = Window::size.x;
+	viewportHeight = Window::size.y;
 
-		glm::vec3 movementDelta(0.f, 0.f, 0.f);
-		glm::vec3 rotationDelta(0.f, 0.f, 0.f);
-
-		if (keys[GLFW_KEY_W]) movementDelta.z += delta;
-		if (keys[GLFW_KEY_S]) movementDelta.z -= delta;
-		
-		if (keys[GLFW_KEY_A]) movementDelta.x += delta;	// -= ?
-		if (keys[GLFW_KEY_D]) movementDelta.x -= delta; // += ?
-		
-		if (keys[GLFW_KEY_E]) movementDelta.y += delta;
-		if (keys[GLFW_KEY_Q]) movementDelta.y -= delta;
-
-		if (keys[GLFW_KEY_RIGHT]) rotationDelta.y -= deltaR;
-		if (keys[GLFW_KEY_LEFT]) rotationDelta.y += deltaR;
-
-		if (keys[GLFW_KEY_UP]) rotationDelta.x -= deltaR;
-		if (keys[GLFW_KEY_DOWN]) rotationDelta.x += deltaR;
-
-		TC->setRotation(TC->getRotation() + rotationDelta);
-		TC->translate(TC->getForward() * movementDelta.z);
-		TC->translate(TC->getRight() * movementDelta.x);
-		TC->translate(TC->getUp() * movementDelta.y);
-	}
-
-	void SetProjectionMode(ProjectionMode mode)
-	{
-		projectionMode = mode;
-		UpdateProjectionMatrix();
-	}
+	auto pTC = GetGameObject()->GetComponent<TransformComponent>();
+	auto& keys = InputHandler::getKeys();
 	
-	void OnPreRender() override
+	float delta = 0.002f * Time::getDeltaTime();
+	float deltaR = 0.05f * Time::getDeltaTime();
+
+	glm::vec3 movementDelta(0.f, 0.f, 0.f);
+	glm::vec3 rotationDelta(0.f, 0.f, 0.f);
+
+	if (keys[GLFW_KEY_W]) movementDelta.z += delta;
+	if (keys[GLFW_KEY_S]) movementDelta.z -= delta;
+	
+	if (keys[GLFW_KEY_A]) movementDelta.x += delta;	// -= ?
+	if (keys[GLFW_KEY_D]) movementDelta.x -= delta; // += ?
+	
+	if (keys[GLFW_KEY_E]) movementDelta.y += delta;
+	if (keys[GLFW_KEY_Q]) movementDelta.y -= delta;
+
+	if (keys[GLFW_KEY_RIGHT]) rotationDelta.y -= deltaR;
+	if (keys[GLFW_KEY_LEFT])  rotationDelta.y += deltaR;
+
+	if (keys[GLFW_KEY_UP])   rotationDelta.x -= deltaR;
+	if (keys[GLFW_KEY_DOWN]) rotationDelta.x += deltaR;
+
+	pTC->SetRotation(pTC->GetRotation() + rotationDelta);
+	pTC->Translate(pTC->GetForward() * movementDelta.z);
+	pTC->Translate(pTC->GetRight() * movementDelta.x);
+	pTC->Translate(pTC->GetUp() * movementDelta.y);
+}
+
+void CameraComponent::SetProjectionMode(ProjectionMode mode)
+{
+	projectionMode = mode;
+	UpdateProjectionMatrix();
+}
+
+void CameraComponent::OnPreRender()
+{
+	UpdateViewMatrix();
+	UpdateProjectionMatrix();
+
+	viewProjectionMatrix = projectionMatrix * viewMatrix;
+	
+	if (auto pDefaultShader = ResourceManager::getShader("defaultShader"))
 	{
-		UpdateViewMatrix();
-		UpdateProjectionMatrix();
-
-		viewProjectionMatrix = projectionMatrix * viewMatrix;
-		
-		auto ds = ResourceManager::getShader("defaultShader");
-		if (ds)
-		{
-			ds->use();
-			ds->setMatrix("viewProjectionMat", viewProjectionMatrix);
-			ds->setVec3("viewPosition", pGameObject->GetComponent<TransformComponent>()->GetGlobalPosition());
-			ds->unuse();
-		}
-
-		auto ss = ResourceManager::getShader("simpleShader");
-		if (ss)
-		{
-			ss->use();
-			ss->setMatrix("viewProjectionMat", viewProjectionMatrix);
-			ss->unuse();
-		}
+		pDefaultShader->use();
+		pDefaultShader->setMatrix("viewProjectionMat", viewProjectionMatrix);
+		pDefaultShader->setVec3("viewPosition", GetGameObject()->GetComponent<TransformComponent>()->GetGlobalPosition());
+		pDefaultShader->unuse();
 	}
 
-	void Deserialize(const nlohmann::json& jsonObject) override
+	if (auto pSimpleShader = ResourceManager::getShader("simpleShader"))
 	{
-		viewportWidth = Window::size.x;
-		viewportHeight = Window::size.y;
-
-		isMovable      = jsonObject["isMovable"];
-		fieldOfView    = jsonObject["fieldOfView"];
-		farClipPlane   = jsonObject["farClipPlane"];
-		nearClipPlane  = jsonObject["nearClipPlane"];
-		projectionMode = jsonObject["ProjectionMode"];
-
-		UpdateViewMatrix();
-		UpdateProjectionMatrix();
+		pSimpleShader->use();
+		pSimpleShader->setMatrix("viewProjectionMat", viewProjectionMatrix);
+		pSimpleShader->unuse();
 	}
+}
 
-	void Serialize(nlohmann::json& jsonObject) override
-	{
-		jsonObject[Name()] = {
-			{ "isMovable",      isMovable      },
-			{ "fieldOfView",    fieldOfView    },
-			{ "farClipPlane",   farClipPlane   },
-			{ "nearClipPlane",  nearClipPlane  },
-			{ "ProjectionMode", projectionMode },
-		};
-	}
+void CameraComponent::Deserialize(const nlohmann::json& jsonObject)
+{
+	viewportWidth = Window::size.x;
+	viewportHeight = Window::size.y;
 
-	std::string Name() override { return "CameraComponent"; }
+	isMovable      = jsonObject["isMovable"];
+	fieldOfView    = jsonObject["fieldOfView"];
+	farClipPlane   = jsonObject["farClipPlane"];
+	nearClipPlane  = jsonObject["nearClipPlane"];
+	projectionMode = jsonObject["ProjectionMode"];
 
-private:
-	ProjectionMode projectionMode;
+	UpdateViewMatrix();
+	UpdateProjectionMatrix();
+}
 
-	glm::mat4 viewMatrix = glm::mat4(1.0f);
-	glm::mat4 projectionMatrix = glm::mat4(1.0f);
-	glm::mat4 viewProjectionMatrix = glm::mat4(1.0f);
-
-	bool isMovable;
-
-	float orthoScale { 1 };
-
-	float farClipPlane;
-	float nearClipPlane;
-
-	float viewportWidth  = Window::size.x;
-	float viewportHeight = Window::size.y;
-	float fieldOfView;
-};
-
-DECLARE_COMPONENT(CameraComponent) 
+void CameraComponent::Serialize(nlohmann::json& jsonObject)
+{
+	jsonObject[Name()] = {
+		{ "isMovable",      isMovable      },
+		{ "fieldOfView",    fieldOfView    },
+		{ "farClipPlane",   farClipPlane   },
+		{ "nearClipPlane",  nearClipPlane  },
+		{ "ProjectionMode", projectionMode },
+	};
+}

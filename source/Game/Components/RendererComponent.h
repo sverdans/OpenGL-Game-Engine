@@ -9,15 +9,15 @@
 class RendererComponent : public Component
 {
 public:
-	bool renderEnable = true;
+	bool mlRenderEnable;
 
 	RendererComponent() = delete;
 	RendererComponent(const RendererComponent&) = delete;
 	RendererComponent& operator = (const RendererComponent&) = delete;
 
-	RendererComponent(GameObject* gameObject);
+	RendererComponent(GameObject* pGameObject);
 	~RendererComponent();
 
-	virtual void render() = 0;
-	virtual void update() {};
+	virtual void Render() = 0;
+	virtual void Update() {};
 };

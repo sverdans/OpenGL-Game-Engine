@@ -28,22 +28,22 @@ void LightingSystem::update()
 		unsigned int dirIndex = 0, pointIndex = 0;
 		for (auto& it : lightingComponents)
 		{
-			switch (it->type)
+			switch (it->meType)
 			{
 				case LightingComponent::Type::Directional:
 				{
-					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].color", it->color);
-					shader->setFloat("directionalLights[" + std::to_string(dirIndex) + "].intensity", it->intensity);
-					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].direction", -it->pGameObject->GetComponent<TransformComponent>()->GetForward());
+					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].color", it->mColor);
+					shader->setFloat("directionalLights[" + std::to_string(dirIndex) + "].intensity", it->mIntensity);
+					shader->setVec3("directionalLights[" + std::to_string(dirIndex) + "].direction", -it->GetGameObject()->GetComponent<TransformComponent>()->GetForward());
 					dirIndex++;
 					break;
 				}
 					
 				case LightingComponent::Type::Point:
 				{
-					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].color", it->color);
-					shader->setFloat("pointLights[" + std::to_string(pointIndex) + "].intensity", it->intensity);
-					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].position", it->pGameObject->GetComponent<TransformComponent>()->GetGlobalPosition());
+					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].color", it->mColor);
+					shader->setFloat("pointLights[" + std::to_string(pointIndex) + "].intensity", it->mIntensity);
+					shader->setVec3("pointLights[" + std::to_string(pointIndex) + "].position", it->GetGameObject()->GetComponent<TransformComponent>()->GetGlobalPosition());
 					pointIndex++;
 					break;
 				}

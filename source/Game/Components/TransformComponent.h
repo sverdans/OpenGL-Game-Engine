@@ -53,5 +53,3 @@ protected:
 
 	mutable glm::mat4 mModel = glm::mat4(1.f);
 };
-
-DECLARE_COMPONENT(TransformComponent)

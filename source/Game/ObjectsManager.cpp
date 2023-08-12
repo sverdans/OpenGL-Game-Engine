@@ -1,10 +1,12 @@
 #include <typeinfo>
 #include <algorithm>
 
-#include <Game/ObjectsManager.h>
+#include <General/Utils.h>
+#include <Game/Component.h>
 #include <Game/GameObject.h>
+#include <Game/ObjectsManager.h>
 
-ObjectsManager::ObjectsManager() : pExample(new GameObject())
+ObjectsManager::ObjectsManager() : mpExample(new GameObject())
 { }
 
 Component* ObjectsManager::GetComponentInstance(const std::string& sName)
@@ -27,7 +29,7 @@ void ObjectsManager::Clear()
 void ObjectsManager::Load(const std::string& sFilePath)
 {
 	nlohmann::json sourceObject;
-	Parser::parseJsonFile(sFilePath, sourceObject);
+	utils::ParseJsonFile(sFilePath, sourceObject);
 
 	for (const auto& jsonGameObject : sourceObject["GameObjects"])
 	{

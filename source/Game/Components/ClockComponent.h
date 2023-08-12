@@ -27,12 +27,11 @@ public:
 	ClockComponent& operator = (const ClockComponent&) = delete;
 	~ClockComponent() = default;
 
-	void init() override;
+	void Init() override;
+	void Update() override;
 
-	void update() override;
-	void deserialize(const nlohmann::json& jsonObject) override;
+	void Deserialize(const nlohmann::json& jsonObject) override;
+	void Serialize(nlohmann::json& jsonObject) override;
 
-	void serialize(nlohmann::json& jsonObject) override;
-
-	std::string name() override;
+	std::string Name() override;
 };

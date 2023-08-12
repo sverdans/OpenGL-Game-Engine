@@ -1,23 +1,26 @@
 #include <Game/Systems/RendererSystem.h>
 #include <Game/Components/RendererComponent.h>
 
-void RendererSystem::addToRenderQueue(RendererComponent* RC)
+void RendererSystem::AddToRenderQueue(RendererComponent* RC)
 {
 	renderQueue.push_back(RC);
 }
 
-void RendererSystem::removeFromRenderQueue(RendererComponent* RC)
+void RendererSystem::RemoveFromRenderQueue(RendererComponent* RC)
 {
 	renderQueue.remove(RC);
 }
 
-void RendererSystem::render()
+void RendererSystem::Render()
 {
 	for (auto it : renderQueue)
-		it->update(), it->render();
+	{
+		it->Update();
+		it->Render();
+	}
 }
 
-std::list<RendererComponent*>& RendererSystem::getRenderQueue()
+std::list<RendererComponent*>& RendererSystem::GetRenderQueue()
 {
 	return renderQueue;
 }

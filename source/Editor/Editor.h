@@ -186,9 +186,9 @@ private:
 	{
 		if (ImGui::CollapsingHeader("GameObjects"))
 		{
-			for (const auto& object : ObjectsManager::gameObjects)
+			for (const auto& object : ObjectsManager::Instance().mGameObjects)
 			{
-				if (ImGui::Selectable(object->name.c_str(), object == currentGameObject))
+				if (ImGui::Selectable(object->GetName().c_str(), object == currentGameObject))
 				{
 					currentGameObject = object;
 					isGameObjectSelected = true;
@@ -228,7 +228,7 @@ private:
 			gameObjectSidebarSize = ImVec2(ImGui::GetWindowSize().x, Window::size.y);
 		
 			nlohmann::json jsonGameObject;
-			currentGameObject->serialize(jsonGameObject);
+			currentGameObject->Serialize(jsonGameObject);
 
 			needDeserializeCurrentObject = false;
 			inputUID.clear();
@@ -238,7 +238,7 @@ private:
 
 			if (needDeserializeCurrentObject)
 			{
-				currentGameObject->deserialize(jsonGameObject);
+				currentGameObject->Deserialize(jsonGameObject);
 			}
 
 			ImGui::End();

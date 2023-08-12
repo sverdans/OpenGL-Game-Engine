@@ -16,9 +16,10 @@ public:
 	RendererSystem(const RendererSystem&) = delete;
 	RendererSystem& operator = (const RendererSystem&) = delete;
 
-	static void addToRenderQueue(RendererComponent* RC);
-	static void removeFromRenderQueue(RendererComponent* RC);
-	static void render();
+	static void AddToRenderQueue(RendererComponent* RC);
+	static void RemoveFromRenderQueue(RendererComponent* RC);
+	
+	static void Render();
 
-	static std::list<RendererComponent*>& getRenderQueue();
+	static std::list<RendererComponent*>& GetRenderQueue();
 };

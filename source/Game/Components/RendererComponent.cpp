@@ -3,12 +3,14 @@
 #include <Game/GameObject.h>
 #include <Game/Components/RendererComponent.h>
 
-RendererComponent::RendererComponent(GameObject* gameObject) : Component(gameObject)
+RendererComponent::RendererComponent(GameObject* pGameObject) 
+	: Component(pGameObject)
+	, mlRenderEnable(true)
 {
-	RendererSystem::addToRenderQueue(this);
+	RendererSystem::AddToRenderQueue(this);
 }
 
 RendererComponent::~RendererComponent()
 {
-	RendererSystem::removeFromRenderQueue(this);
+	RendererSystem::RemoveFromRenderQueue(this);
 }

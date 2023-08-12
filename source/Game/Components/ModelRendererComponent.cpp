@@ -10,74 +10,90 @@
 #include <Renderer/Mesh.h>
 
 ModelRendererComponent::ModelRendererComponent(GameObject* gameObject) 
-	: RendererComponent(gameObject), drawMode(Renderer::DrawMode::Triangles) {}
+	: RendererComponent(gameObject)
+	, mpModel(nullptr)
+	, mpShader(nullptr)
+	, mlUseMaterial(true)
+	, meDrawMode(Renderer::DrawMode::Triangles)
+{ }
 
-void ModelRendererComponent::setModel(const Model* model) 
+void ModelRendererComponent::SetModel(const Model* pModel) 
 { 
-	this->model = model;
+	mpModel = pModel;
 }
 
-void ModelRendererComponent::setShader(const ShaderProgram* shader) { this->shader = shader; }
-
-void ModelRendererComponent::setColor(const glm::vec3& color) { this->color = color; }
-
-void ModelRendererComponent::setSpecularStrength(const float specularStrength)
+void ModelRendererComponent::SetShader(const ShaderProgram* pShader) 
 {
-	this->specularStrength = specularStrength > 0.f ? (specularStrength < 1.f ? specularStrength : 1.f) : 0.f;
+	mpShader = pShader;
 }
 
-void ModelRendererComponent::setSpecularity(const int specularity)
+void ModelRendererComponent::SetColor(const glm::vec3& color) 
 {
-	this->specularity = specularity > 0 ? (specularity < 256 ? specularity : 256) :0;
+	mColor = color;
 }
 
-void ModelRendererComponent::render()
+void ModelRendererComponent::SetSpecularStrength(const float specularStrength)
 {
-	shader->use();
-	shader->setMatrix("modelMat", gameObject->getComponent<TransformComponent>()->getModelMatrix());
-	shader->setVec3("modelColor", color);
+	mSpecularStrength = specularStrength > 0.f 
+		? (specularStrength < 1.f ? specularStrength : 1.f) 
+		: 0.f;
+}
 
-	shader->setInt("specularity", specularity);
-	shader->setFloat("specularStrength", specularStrength);
+void ModelRendererComponent::SetSpecularity(const int specularity)
+{
+	mSpecularity = specularity > 0 
+		? (specularity < 256 ? specularity : 256) 
+		: 0;
+}
 
-	shader->setInt("useMaterial", useMaterial);
+void ModelRendererComponent::Render()
+{
+	mpShader->use();
+	mpShader->setMatrix("modelMat", GetGameObject()->GetComponent<TransformComponent>()->GetModelMatrix());
+	mpShader->setVec3("modelColor", mColor);
 
-	for (auto& mesh : model->meshes)
-		mesh->render(shader);
+	mpShader->setInt("specularity", mSpecularity);
+	mpShader->setFloat("specularStrength", mSpecularStrength);
 
-	shader->unuse();
+	mpShader->setInt("useMaterial", mlUseMaterial);
+
+	for (auto& mesh : mpModel->meshes)
+		mesh->render(mpShader);
+
+	mpShader->unuse();
 }
 
 void ModelRendererComponent::Deserialize(const nlohmann::json& jsonObject)
 {
-	shader = ResourceManager::getShader(jsonObject["shader"]);
-	model = ResourceManager::getModel(jsonObject["model"]);
+	mpShader = ResourceManager::getShader(jsonObject["shader"]);
+	mpModel = ResourceManager::getModel(jsonObject["model"]);
 	
-	setSpecularStrength(jsonObject["specularStrength"]);
-	setSpecularity(jsonObject["specularity"]);
+	SetSpecularStrength(jsonObject["specularStrength"]);
+	SetSpecularity(jsonObject["specularity"]);
 
-	color = glm::vec3(jsonObject["color"]["r"], 
-					  jsonObject["color"]["g"],
-					  jsonObject["color"]["b"]);
+	mColor = {
+		jsonObject["color"]["r"], 
+		jsonObject["color"]["g"],
+		jsonObject["color"]["b"]
+	};
 
-	useMaterial = jsonObject["useTexture"];
+	mlUseMaterial = jsonObject["useTexture"];
 }
 
 void ModelRendererComponent::Serialize(nlohmann::json& jsonObject)
 {
-	nlohmann::json colorJson;
-	colorJson["r"] = color.r;
-	colorJson["g"] = color.g;
-	colorJson["b"] = color.b;
+	nlohmann::json colorJson {
+		{ "r", mColor.r },
+		{ "g", mColor.g },
+		{ "b", mColor.b },
+	};
 
-	nlohmann::json component;
-	component["shader"] = ResourceManager::getShaderName(shader);
-	component["model"] = ResourceManager::getModelName(model);
-	component["color"] = colorJson;
-
-	component["useTexture"] = useMaterial;
-	component["specularStrength"] = specularStrength;
-	component["specularity"] = specularity;
-
-	jsonObject[name()] = component;
+	jsonObject[Name()] = {
+		{ "shader", ResourceManager::getShaderName(mpShader) },
+		{ "model" , ResourceManager::getModelName(mpModel) },
+		{ "specularStrength", mSpecularStrength },
+		{ "useTexture", mlUseMaterial },
+		{ "specularity", mSpecularity },
+		{ "color", colorJson },
+	};
 }

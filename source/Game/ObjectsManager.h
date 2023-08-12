@@ -1,18 +1,13 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <vector>
-#include <list>
 #include <map>
+#include <list>
+#include <string>
 
-#include <System/Parser.h>
+#include <Game/Component.h>
 #include <Game/GameObject.h>
 
 #define DECLARE_COMPONENT(NAME) \
 bool l ## NAME = ObjectsManager::Instance().DeclareComponent<NAME>();
-
-class GameObject;
-class Component;
 
 class ObjectsManager final
 {
@@ -28,9 +23,8 @@ public:
     bool DeclareComponent()
     {
         std::string sName { std::string(typeid(T).name()).substr(2) };
-        std::cout << sName << std::endl;
-        
-        auto pComponent = pExample->AddComponent<T>();
+        // info        
+        auto pComponent = mpExample->AddComponent<T>();
         mComponents.emplace(sName, pComponent);
         return true;
     }
@@ -51,7 +45,7 @@ private:
     ObjectsManager& operator = (const ObjectsManager&&) = delete;
 
 private:
-    GameObject* pExample;
+    GameObject* mpExample;
     std::list<GameObject*> mGameObjects;
     std::map<std::string, Component*> mComponents;
 };

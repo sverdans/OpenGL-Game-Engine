@@ -5,15 +5,15 @@
 #include <stb_image.h>
 
 #include <Resources/ResourceManager.h>
-#include <System/Parser.h>
 #include <Renderer/Mesh.h>
 #include <Renderer/Material.h>
+#include <General/Utils.h>
 
 ShaderProgram* ResourceManager::loadShader(const std::string& programName,
 										   const std::string& vertexPath,
 										   const std::string& fragmentPath)
 {
-	std::string vertexString = Parser::getFileString(vertexPath);
+	std::string vertexString = utils::FetchDataFromFile(vertexPath);
 	
 	if (vertexString.empty())
 	{
@@ -21,7 +21,7 @@ ShaderProgram* ResourceManager::loadShader(const std::string& programName,
 		exit(-1);
 	}
 
-	std::string fragmentString = Parser::getFileString(fragmentPath);
+	std::string fragmentString = utils::FetchDataFromFile(fragmentPath);
 	if (fragmentString.empty())
 	{
 		std::cout << "Error! File with fragment shader is empty. File path: " << vertexPath << "." << std::endl;
@@ -168,7 +168,7 @@ bool ResourceManager::containModel(const std::string& name)
 void ResourceManager::loadResources(const std::string& filePath)
 {
 	nlohmann::json document;
-	Parser::parseJsonFile(filePath, document);
+	utils::ParseJsonFile(filePath, document);
 
 	if (document.contains("Shaders"))
 	{
@@ -180,7 +180,7 @@ void ResourceManager::loadResources(const std::string& filePath)
 				const std::string name = currentShader["name"];
 				const std::string vertexPath = currentShader["vertexPath"];
 				const std::string fragmentPath = currentShader["fragmentPath"];
-				loadShader(name, Parser::getDirectoryPath() + vertexPath, Parser::getDirectoryPath() + fragmentPath);
+				loadShader(name, vertexPath, fragmentPath);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ void ResourceManager::loadResources(const std::string& filePath)
 			{
 				const std::string name = currentModel["name"];
 				const std::string modelFile = currentModel["filepath"];
-				loadModel(name, Parser::getDirectoryPath() + modelFile);
+				loadModel(name, modelFile);
 			}
 		}
 	}
@@ -329,7 +329,7 @@ std::vector<Texture*> ResourceManager::loadMaterialTextures(aiMaterial* mat, aiT
 		aiString str;
 		mat->GetTexture(type, i, &str);
 		
-		std::string texturePath = Parser::getDirectoryPath() + "resources\\models\\" + str.C_Str();
+		std::string texturePath = str.C_Str();
 
 		if (ResourceManager::containTexture(str.C_Str()))
 			textures.push_back(ResourceManager::getTexture(str.C_Str()));

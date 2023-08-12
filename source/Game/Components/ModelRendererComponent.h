@@ -9,16 +9,16 @@ class ShaderProgram;
 class ModelRendererComponent : public RendererComponent
 {
 private:
-	Renderer::DrawMode drawMode;
+	Renderer::DrawMode meDrawMode;
 
-	const Model* model = nullptr;
-	const ShaderProgram* shader = nullptr;
+	const Model* mpModel { nullptr };
+	const ShaderProgram* mpShader { nullptr };
 
-	bool useMaterial;
-	glm::vec3 color;
+	bool mlUseMaterial;
+	glm::vec3 mColor;
 
-	float specularStrength;
-	int specularity;
+	float mSpecularStrength;
+	int mSpecularity;
 
 public:
 	ModelRendererComponent() = delete;
@@ -26,16 +26,16 @@ public:
 	ModelRendererComponent& operator = (const ModelRendererComponent&) = delete;
 	~ModelRendererComponent() = default;
 
-	ModelRendererComponent(GameObject * gameObject);
+	ModelRendererComponent(GameObject* pGameObject);
 
-	void setModel(const Model* model);
-	void setShader(const ShaderProgram* shader);
-	void setColor(const glm::vec3& color);
+	void SetModel(const Model* pModel);
+	void SetShader(const ShaderProgram* pShader);
+	void SetColor(const glm::vec3& color);
 
-	void setSpecularStrength(const float specularStrength);
-	void setSpecularity(const int specularity);
+	void SetSpecularStrength(const float specularStrength);
+	void SetSpecularity(const int specularity);
 
-	void render() override;
+	void Render() override;
 
 	void Deserialize(const nlohmann::json& jsonObject) override;
 	void Serialize(nlohmann::json& jsonObject) override;

@@ -5,19 +5,20 @@
 
 class LightingComponent : public Component
 {
+	friend class LightingSystem;
+
 public:
-	enum class Type
+	enum Type
 	{
 		Directional,
 		Point
 	};
 
 private:
-	friend class LightingSystem;
 
-	Type type;
-	glm::vec3 color;
-	float intensity = 1;
+	Type meType;
+	glm::vec3 mColor;
+	float mIntensity = 1;
 
 public:
 	LightingComponent(GameObject* gameObject);
@@ -26,35 +27,50 @@ public:
 	LightingComponent& operator = (const LightingComponent&) = delete;
 	~LightingComponent();
 
-	std::string name() override { return "LightingComponent"; }
+	std::string Name() override { return "LightingComponent"; }
 	
-	float getIntensity() { return intensity; }
-	void setIntensity(float intensity) { this->intensity = intensity > 0.f ? (intensity < 1.f ? intensity : 1.f) : 0.f; }
-	
-	void setColor(const glm::vec3& color) { this->color = color; }
-	
-	void deserialize(const nlohmann::json& jsonObject) override
-	{
-		color = glm::vec3(jsonObject["color"]["r"],
-						  jsonObject["color"]["g"],
-						  jsonObject["color"]["b"]);
-
-		setIntensity(jsonObject["intensity"]);
-		type = static_cast<Type>(jsonObject["type"]);
+	float GetIntensity() 
+	{ 
+		return mIntensity; 
 	}
 
-	void serialize(nlohmann::json& jsonObject) override
+	float SetIntensity(float intensity) 
 	{
-		nlohmann::json colorJson;
-		colorJson["r"] = color.r;
-		colorJson["g"] = color.g;
-		colorJson["b"] = color.b;
+		return mIntensity = mIntensity > 0.f 
+			? (mIntensity < 1.f ? mIntensity : 1.f) 
+			: 0.f;
+	}
+	
+	void SetColor(const glm::vec3& color) 
+	{ 
+		mColor = color;
+	}
+	
+	void Deserialize(const nlohmann::json& jsonObject) override
+	{
+		int r = jsonObject["color"]["r"];
+		int g = jsonObject["color"]["g"];
+		int b = jsonObject["color"]["b"];
+		mColor = { r, g, b };
 
-		nlohmann::json component;
-		component["type"] = static_cast<int>(type);
-		component["color"] = colorJson;
-		component["intensity"] = intensity;
+		SetIntensity(jsonObject["intensity"]);
+		meType = jsonObject["type"];
+	}
 
-		jsonObject[name()] = component;
+	void Serialize(nlohmann::json& jsonObject) override
+	{
+		nlohmann::json colorJson {
+			{ "r", mColor.r },
+			{ "g", mColor.g },
+			{ "b", mColor.b },
+		};
+
+		nlohmann::json component {
+			{ "type", meType },
+			{ "intensity", mIntensity },
+			{ "color", colorJson },
+		};
+
+		jsonObject[Name()] = component;
 	}
 };

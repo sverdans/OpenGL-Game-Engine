@@ -124,3 +124,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     glm
     assimp
     imgui)
+
+file(GLOB INCLUDES_COMPONENT "source/Game/Components/*.h")
+
+target_precompile_headers(${PROJECT_NAME} PUBLIC ${INCLUDES_COMPONENT})

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 
+/*
 #include <System/Parser.h>
 
 void Parser::setDirectoryPath(const std::string& path) 
@@ -53,3 +54,5 @@ void Parser::parseJsonFile(const std::string& filePath, nlohmann::json& outJson)
 }
 
 std::string Parser::directoryPath;
+
+*/

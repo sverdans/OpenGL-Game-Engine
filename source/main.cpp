@@ -4,7 +4,6 @@
 #include <map>
 
 #include <System/Window.h>
-#include <System/Parser.h>
 #include <System/Time.h>
 #include <System/InputHandler.h>
 
@@ -19,8 +18,6 @@
 
 int main(int argc, char** argv)
 {
-	Parser::setDirectoryPath(argv[0]);
-
 	Window::init(glm::vec2(1000, 800), "OpenGL-Courswork");
 
 	Renderer::setClearColor(60.f / 255.f , 60.f / 255.f, 60.f / 255.f, 0.f);
@@ -57,7 +54,7 @@ int main(int argc, char** argv)
 			BehaviourSystem::onPreRender();
 
 			LightingSystem::update();
-			RendererSystem::render();
+			RendererSystem::Render();
 
 			Editor::update();
 			Window::update();

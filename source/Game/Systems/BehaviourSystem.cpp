@@ -14,25 +14,25 @@ void BehaviourSystem::removeFromUpdateQueue(BehaviourComponent* BC)
 void BehaviourSystem::init()
 {
 	for (auto it : updateQueue)
-		it->init();
+		it->Init();
 }
 
 void BehaviourSystem::update()
 {
 	for (auto it : updateQueue)
-		it->update();
+		it->Update();
 }
 
 void BehaviourSystem::lateUpdate()
 {
 	for (auto it : updateQueue)
-		it->lateUpdate();
+		it->LateUpdate();
 }
 
 void BehaviourSystem::onPreRender()
 {
 	for (auto it : updateQueue)
-		it->onPreRender();
+		it->OnPreRender();
 }
 
 
