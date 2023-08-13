@@ -12,8 +12,8 @@
 #include <nlohmann/json.hpp>
 
 #include <Editor/UiHandler.h>
-#include <Resources/ResourceManager.h>
 
+#include <Game/ResourceManager.h>
 #include <Game/GameObject.h>
 #include <Game/ObjectsManager.h>
 #include <Game/Systems/LightingSystem.h>

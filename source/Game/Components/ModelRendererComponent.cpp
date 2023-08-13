@@ -3,7 +3,7 @@
 #include <Game/GameObject.h>
 #include <Game/Components/TransformComponent.h>
 
-#include <Resources/ResourceManager.h>
+#include <Game/ResourceManager.h>
 
 #include <Renderer/ShaderProgram.h>
 #include <Renderer/Model.h>

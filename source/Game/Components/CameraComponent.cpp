@@ -4,7 +4,7 @@
 
 #include <General/Constants.h>
 
-#include <Resources/ResourceManager.h>
+#include <Game/ResourceManager.h>
 
 #include <System/InputHandler.h>
 #include <System/Window.h>

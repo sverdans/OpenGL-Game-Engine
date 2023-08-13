@@ -3,7 +3,7 @@
 #include <functional>
 
 #include <Game/Component.h>
-#include <Resources/ResourceManager.h>
+#include <Game/ResourceManager.h>
 #include <System/Time.h>
 
 class RendererComponent : public Component

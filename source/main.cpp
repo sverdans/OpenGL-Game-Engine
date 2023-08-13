@@ -10,8 +10,8 @@
 #include <System/InputHandler.h>
 
 #include <Renderer/Renderer.h>
-#include <Resources/ResourceManager.h>
 
+#include <Game/ResourceManager.h>
 #include <Game/ObjectsManager.h>
 #include <Game/Systems/RendererSystem.h>
 #include <Game/Systems/BehaviourSystem.h>

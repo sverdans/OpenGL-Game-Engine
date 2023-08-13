@@ -4,10 +4,11 @@
 
 #include <stb_image.h>
 
-#include <Resources/ResourceManager.h>
+#include <General/Utils.h>
 #include <Renderer/Mesh.h>
 #include <Renderer/Material.h>
-#include <General/Utils.h>
+#include <Game/ResourceManager.h>
+
 
 //--Load--------------------------------------------------------------------------------------------------------
 
