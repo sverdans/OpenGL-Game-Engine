@@ -14,7 +14,7 @@ public:
 		return instance;
 	}
 
-	bool Initialize(const glm::vec2& size, const char* title);
+	bool Initialize(int width, int height, const std::string& sTitle);
 	bool NeedFinalize() const;
 	void Finalize();
 

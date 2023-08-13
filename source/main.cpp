@@ -15,6 +15,7 @@
 #include <Game/ObjectsManager.h>
 #include <Game/Systems/RendererSystem.h>
 #include <Game/Systems/BehaviourSystem.h>
+#include <Game/Systems/LightingSystem.h>
 
 #include <Editor/Editor.h>
 
@@ -34,8 +35,7 @@ int main(int argc, char** argv)
 {
 	basic_logfile_example();
 
-	Window::Instance().Initialize(glm::vec2(1000, 800), "OpenGL-Courswork");
-	UiHandler::onWindowCreate();
+	Window::Instance().Initialize(1000, 800, "OpenGL-Courswork");
 
 	Renderer::setClearColor(60.f / 255.f , 60.f / 255.f, 60.f / 255.f, 0.f);
 
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
 	InputHandler::init();
 
-	Editor::init();
+	Editor::Instance().Initialize();
 
 	LightingSystem::setAmbientColor(glm::vec3(1.f, 1.f, 1.f));
 	LightingSystem::setAmbientStrength(0.225f);
@@ -69,15 +69,16 @@ int main(int argc, char** argv)
 			LightingSystem::update();
 			RendererSystem::Render();
 
-			Editor::update();
+			Editor::Instance().Update();
 			Window::Instance().Update();
 		}
 	}
 
 	ObjectsManager::Instance().Clear();
 	ResourceManager::Instance().Clear();
+	
 	Window::Instance().Finalize();
-	UiHandler::onWindowClose();
+	Editor::Instance().Finalize();
 
 	return 0;
 }

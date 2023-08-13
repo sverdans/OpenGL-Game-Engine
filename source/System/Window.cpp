@@ -1,9 +1,8 @@
 #include <System/Window.h>
 #include <System/InputHandler.h>
-#include <Editor/UiHandler.h>
 #include <Renderer/Renderer.h>
 
-bool Window::Initialize(const glm::vec2& size, const char* title)
+bool Window::Initialize(int width, int height, const std::string& sTitle)
 {
 	if (!glfwInit())
 	{
@@ -16,8 +15,8 @@ bool Window::Initialize(const glm::vec2& size, const char* title)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 //	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	mSize = size;
-	mpWindow = glfwCreateWindow(size.x, size.y, title, nullptr, nullptr);
+	mSize = { width, height };
+	mpWindow = glfwCreateWindow(mSize.x, mSize.y, sTitle.c_str(), nullptr, nullptr);
 
 	if (!mpWindow)
 	{
