@@ -15,9 +15,11 @@
 #include <Game/Components/BehaviourComponent.h>
 #include <Game/Components/TransformComponent.h>
 
-
 CameraComponent::CameraComponent(GameObject* pGameObject) 
-	: BehaviourComponent(pGameObject) 
+	: BehaviourComponent(pGameObject)
+	, mOrthoScale(1)
+	, mViewportWidth(Window::Instance().GetWidth())
+	, mViewportHeight(Window::Instance().GetHeight())
 { }
 
 void CameraComponent::UpdateViewMatrix()
@@ -29,31 +31,37 @@ void CameraComponent::UpdateViewMatrix()
 
 void CameraComponent::UpdateProjectionMatrix()
 {
-	float aspectRatio = viewportWidth / viewportHeight;
+	float aspectRatio = mViewportWidth / mViewportHeight;
 	if (aspectRatio != aspectRatio)
 		return;
 
-	if (projectionMode == ProjectionMode::Perspective)
+	switch (meProjectionMode)
 	{
-		projectionMatrix = glm::perspective(
-			glm::radians(fieldOfView),
-			aspectRatio,
-			nearClipPlane,
-			farClipPlane);
-	}
-	else if (projectionMode == ProjectionMode::Orthographic)
-	{
-		projectionMatrix = glm::ortho(
-			-orthoScale * aspectRatio,
-			orthoScale * aspectRatio,
-			-orthoScale,
-			orthoScale,
-			nearClipPlane,
-			farClipPlane);
-	}
-	else
-	{
-		std::cout << "warning" << std::endl;
+		case EnProjectionMode::ePerspective: 
+		{
+			projectionMatrix = glm::perspective(
+				glm::radians(mFieldOfView),
+				aspectRatio,
+				mNearClipPlane,
+				mFarClipPlane);
+			break;
+		}
+		case EnProjectionMode::eOrthographic:
+		{
+			projectionMatrix = glm::ortho(
+				-mOrthoScale * aspectRatio,
+				 mOrthoScale * aspectRatio,
+				-mOrthoScale,
+				 mOrthoScale,
+				mNearClipPlane,
+				mFarClipPlane);
+			break;
+		}
+		default:
+		{
+			std::cout << "warning" << std::endl;
+			break;
+		}
 	}
 }
 
@@ -65,11 +73,11 @@ void CameraComponent::Init()
 
 void CameraComponent::Update()
 {
-	if (!isMovable)
+	if (!mlIsMovable)
 		return;
 
-	viewportWidth = Window::size.x;
-	viewportHeight = Window::size.y;
+	mViewportWidth  = Window::Instance().GetWidth();
+	mViewportHeight = Window::Instance().GetHeight();
 
 	auto pTC = GetGameObject()->GetComponent<TransformComponent>();
 	auto& keys = InputHandler::getKeys();
@@ -101,9 +109,9 @@ void CameraComponent::Update()
 	pTC->Translate(pTC->GetUp() * movementDelta.y);
 }
 
-void CameraComponent::SetProjectionMode(ProjectionMode mode)
+void CameraComponent::SetProjectionMode(EnProjectionMode eMode)
 {
-	projectionMode = mode;
+	meProjectionMode = eMode;
 	UpdateProjectionMatrix();
 }
 
@@ -132,14 +140,14 @@ void CameraComponent::OnPreRender()
 
 void CameraComponent::Deserialize(const nlohmann::json& jsonObject)
 {
-	viewportWidth = Window::size.x;
-	viewportHeight = Window::size.y;
+	mViewportWidth  = Window::Instance().GetWidth();
+	mViewportHeight = Window::Instance().GetHeight();
 
-	isMovable      = jsonObject["isMovable"];
-	fieldOfView    = jsonObject["fieldOfView"];
-	farClipPlane   = jsonObject["farClipPlane"];
-	nearClipPlane  = jsonObject["nearClipPlane"];
-	projectionMode = jsonObject["ProjectionMode"];
+	mlIsMovable      = jsonObject["isMovable"];
+	mFieldOfView     = jsonObject["fieldOfView"];
+	mFarClipPlane    = jsonObject["farClipPlane"];
+	mNearClipPlane   = jsonObject["nearClipPlane"];
+	meProjectionMode = jsonObject["ProjectionMode"];
 
 	UpdateViewMatrix();
 	UpdateProjectionMatrix();
@@ -148,10 +156,10 @@ void CameraComponent::Deserialize(const nlohmann::json& jsonObject)
 void CameraComponent::Serialize(nlohmann::json& jsonObject)
 {
 	jsonObject[Name()] = {
-		{ "isMovable",      isMovable      },
-		{ "fieldOfView",    fieldOfView    },
-		{ "farClipPlane",   farClipPlane   },
-		{ "nearClipPlane",  nearClipPlane  },
-		{ "ProjectionMode", projectionMode },
+		{ "isMovable",      mlIsMovable      },
+		{ "fieldOfView",    mFieldOfView     },
+		{ "farClipPlane",   mFarClipPlane    },
+		{ "nearClipPlane",  mNearClipPlane   },
+		{ "ProjectionMode", meProjectionMode },
 	};
 }

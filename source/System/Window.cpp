@@ -3,12 +3,12 @@
 #include <Editor/UiHandler.h>
 #include <Renderer/Renderer.h>
 
-void Window::init(const glm::vec2& windowSize, const char* windowTitle)
+bool Window::Initialize(const glm::vec2& size, const char* title)
 {
 	if (!glfwInit())
 	{
 		std::cout << "Error! GLFW initialization failed." << std::endl;
-		exit(-1);
+		return false;
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -16,41 +16,56 @@ void Window::init(const glm::vec2& windowSize, const char* windowTitle)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 //	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	size = windowSize;
-	window = glfwCreateWindow(size.x, size.y, windowTitle, nullptr, nullptr);
+	mSize = size;
+	mpWindow = glfwCreateWindow(size.x, size.y, title, nullptr, nullptr);
 
-	if (!window)
+	if (!mpWindow)
 	{
 		glfwTerminate();
 		std::cout << "Error! GLFW window creating failed." << std::endl;
-		exit(-1);
+		return false;
 	}
 
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(mpWindow);
 
-	if (!Renderer::init(window))
+	if (!Renderer::init(mpWindow))
 	{
 		std::cout << "Error! GLAD initialization failed." << std::endl;
-		exit(-1);
+		return false;
 	}
 
-	glfwSetKeyCallback(Window::window, InputHandler::setKey);
-	glfwSetCursorPosCallback(Window::window, InputHandler::setMouseCoord);
-	glfwSetMouseButtonCallback(Window::window, InputHandler::setMouseButton);
-	glfwSetWindowSizeCallback(Window::window, Window::onResize);
-	glfwSetWindowSizeLimits(window, 800, 600, GLFW_DONT_CARE, GLFW_DONT_CARE);
+	glfwSetKeyCallback(mpWindow, InputHandler::setKey);
+	glfwSetCursorPosCallback(mpWindow, InputHandler::setMouseCoord);
+	glfwSetMouseButtonCallback(mpWindow, InputHandler::setMouseButton);
+	glfwSetWindowSizeCallback(mpWindow, OnResize);
+	glfwSetWindowSizeLimits(mpWindow, 800, 600, GLFW_DONT_CARE, GLFW_DONT_CARE);
+
+	return true;
 }
 
-void Window::quit()
+void Window::Finalize()
 {
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(mpWindow);
 	glfwTerminate();
 }
 
-void Window::update()
+bool Window::NeedFinalize() const
 {
-	glfwSwapBuffers(window);
+	return glfwWindowShouldClose(mpWindow);
 }
 
-GLFWwindow* Window::window;
-glm::vec2 Window::size;
+void Window::Resize(int width, int height)
+{
+	mSize = glm::vec2(width, height);
+	glViewport(0, 0, width, height);
+}
+
+void Window::Update()
+{
+	glfwSwapBuffers(mpWindow);
+}
+
+float Window::GetWidth() const  { return mSize.x; }
+float Window::GetHeight() const { return mSize.y; }
+const glm::vec2& Window::GetSize() const { return mSize; }
+GLFWwindow* Window::GetWindowPtr() { return mpWindow; }

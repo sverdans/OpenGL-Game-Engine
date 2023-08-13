@@ -18,7 +18,9 @@ void UiHandler::onWindowCreate()
 	ImGuiIO& io = ImGui::GetIO();
    
 	ImGui_ImplOpenGL3_Init();
-	std::cout << "ImGui_ImplGlfw_InitForOpenGL: " << ImGui_ImplGlfw_InitForOpenGL(Window::window, true) << std::endl;
+	bool lInit = ImGui_ImplGlfw_InitForOpenGL(Window::Instance().GetWindowPtr(), true);
+
+	std::cout << "ImGui_ImplGlfw_InitForOpenGL: " << lInit << std::endl;
 }
 
 void UiHandler::onWindowClose()

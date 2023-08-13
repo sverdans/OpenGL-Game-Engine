@@ -9,7 +9,7 @@ class ShaderProgram;
 class ModelRendererComponent : public RendererComponent
 {
 private:
-	Renderer::DrawMode meDrawMode;
+	Renderer::EnDrawMode meDrawMode;
 
 	const Model* mpModel { nullptr };
 	const ShaderProgram* mpShader { nullptr };

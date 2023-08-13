@@ -16,10 +16,10 @@ private:
 	friend class ResourceManager;
 	friend class ModelRendererComponent;
 
-	mutable Renderer::DrawMode drawMode;
+	mutable Renderer::EnDrawMode drawMode;
 	std::vector<Mesh*> meshes;
 
-	Model(const std::vector<Mesh*>& meshes, const Renderer::DrawMode drawMode);
+	Model(const std::vector<Mesh*>& meshes, const Renderer::EnDrawMode drawMode);
 	~Model();
 
 public:
@@ -28,5 +28,5 @@ public:
 	Model(const Model&) = delete;
 	Model operator = (const Model&) = delete;
 
-	void setDrawMode(Renderer::DrawMode mode) const;
+	void setDrawMode(Renderer::EnDrawMode mode) const;
 };

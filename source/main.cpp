@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 {
 	basic_logfile_example();
 
-	Window::init(glm::vec2(1000, 800), "OpenGL-Courswork");
+	Window::Instance().Initialize(glm::vec2(1000, 800), "OpenGL-Courswork");
 	UiHandler::onWindowCreate();
 
 	Renderer::setClearColor(60.f / 255.f , 60.f / 255.f, 60.f / 255.f, 0.f);
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 	Time::setUpdateFrequency(60.0);
 	Time::start();
 
-	while (!glfwWindowShouldClose(Window::window))
+	while (!Window::Instance().NeedFinalize())
 	{
 		glfwPollEvents();
 
@@ -61,10 +61,6 @@ int main(int argc, char** argv)
 		if (Time::CheckFPS())
 		{
 			Renderer::clear();
-			
-			const auto& buttons = InputHandler::getKeys();
-			if (buttons[GLFW_KEY_LEFT_CONTROL] && buttons[GLFW_KEY_Q])
-				glfwSetWindowShouldClose(Window::window, GLFW_TRUE);
 
 			BehaviourSystem::update();
 			BehaviourSystem::lateUpdate();
@@ -74,13 +70,13 @@ int main(int argc, char** argv)
 			RendererSystem::Render();
 
 			Editor::update();
-			Window::update();
+			Window::Instance().Update();
 		}
 	}
 
 	ObjectsManager::Instance().Clear();
 	ResourceManager::Instance().Clear();
-	Window::quit();
+	Window::Instance().Finalize();
 	UiHandler::onWindowClose();
 
 	return 0;

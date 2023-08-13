@@ -10,21 +10,14 @@ class IndexBuffer;
 class Renderer 
 {
 public:
-	enum class PolygonMode
+	enum EnPolygonMode
 	{
 		Fill,
 		Line,
 		Point
 	};
 
-private:
-	static int pointSize;
-	static glm::vec3 clearColor;
-	static PolygonMode polygonMode;
-	static bool depthTest;
-
-public:
-	enum class DrawMode
+	enum class EnDrawMode
 	{
 		Triangles = GL_TRIANGLES,
 		TriangleFan = GL_TRIANGLE_FAN,
@@ -32,10 +25,16 @@ public:
 		LineStrip = GL_LINE_STRIP,
 		LineLoop = GL_LINE_LOOP
 	};
+private:
+	static int pointSize;
+	static glm::vec3 clearColor;
+	static EnPolygonMode mePolygonMode;
+	static bool depthTest;
 
+public:
 	static bool init(GLFWwindow* pWindow);
 
-	static void draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const DrawMode mode);
+	static void draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const EnDrawMode mode);
 	static void setClearColor(const float r, const float g, const float b, const float a);
 	static void clear();
 	static void setViewport(const unsigned int width, const unsigned int height, const unsigned int left_offset = 0, const unsigned int bottom_offset = 0);

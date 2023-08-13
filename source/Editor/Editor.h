@@ -12,6 +12,7 @@
 #include <nlohmann/json.hpp>
 
 #include <Editor/UiHandler.h>
+#include <System/Window.h>
 
 #include <Game/ResourceManager.h>
 #include <Game/GameObject.h>
@@ -21,7 +22,6 @@
 class Editor
 {
 private:
-
 	static constexpr int indentValue = 10;
 	static ImVec2 managersSidebarSize;
 	static ImVec2 gameObjectSidebarSize;
@@ -104,7 +104,10 @@ private:
 			{
 				if (ImGui::MenuItem("Open"))
 				{
-					ImVec2 size = ImVec2(Window::size.x - 100, Window::size.y - 100);
+					ImVec2 size = ImVec2(
+						Window::Instance().GetWidth() - 100,
+						Window::Instance().GetHeight() - 100);
+
 					ImGui::SetNextWindowPos(ImVec2(50, 50));
 					ImGui::SetNextWindowSize(size);
 
@@ -200,7 +203,7 @@ private:
 
 		if (ImGui::Begin("Managers", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
 		{
-			managersSidebarSize = ImVec2(ImGui::GetWindowSize().x, Window::size.y);
+			managersSidebarSize = ImVec2(ImGui::GetWindowSize().x, Window::Instance().GetHeight());
 
 			gameObjectsManager();
 			resourceManager();
@@ -214,13 +217,18 @@ private:
 		if (!isGameObjectSelected)
 			return;
 
-		ImGui::SetNextWindowPos(ImVec2(Window::size.x - gameObjectSidebarSize.x, 18));
+		const auto& window = Window::Instance();
+
+		ImGui::SetNextWindowPos(
+			ImVec2(
+				window.GetWidth() - gameObjectSidebarSize.x,
+				18));
 		ImGui::SetNextWindowSizeConstraints(sidebarMinSize, sidebarMaxSize);
 		ImGui::SetNextWindowSize(gameObjectSidebarSize);
 
 		if (ImGui::Begin("GameObject", &isGameObjectSelected, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
 		{
-			gameObjectSidebarSize = ImVec2(ImGui::GetWindowSize().x, Window::size.y);
+			gameObjectSidebarSize = ImVec2(ImGui::GetWindowSize().x, window.GetHeight());
 		
 			nlohmann::json jsonGameObject;
 			currentGameObject->Serialize(jsonGameObject);
@@ -243,17 +251,21 @@ private:
 public:
 	static void init()
 	{
-		managersSidebarSize = ImVec2(200, Window::size.y);
-		gameObjectSidebarSize = ImVec2(200, Window::size.y);
+		const auto& window = Window::Instance();
 
-		sidebarMinSize = ImVec2(200, Window::size.y);
-		sidebarMaxSize = ImVec2(400, Window::size.y);
+		managersSidebarSize   = ImVec2(200, window.GetHeight());
+		gameObjectSidebarSize = ImVec2(200, window.GetHeight());
+
+		sidebarMinSize = ImVec2(200, window.GetHeight());
+		sidebarMaxSize = ImVec2(400, window.GetHeight());
 	}
 
 	static void update()
 	{
-		sidebarMinSize = ImVec2(200, Window::size.y);
-		sidebarMaxSize = ImVec2(400, Window::size.y);
+		const auto& window = Window::Instance();
+
+		sidebarMinSize = ImVec2(200, window.GetHeight());
+		sidebarMaxSize = ImVec2(400, window.GetHeight());
 
 		UiHandler::onDrawBegin();
 

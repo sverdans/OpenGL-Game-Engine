@@ -24,7 +24,7 @@ void InputHandler::setMouseButton(GLFWwindow* window, int button, int action, in
 void InputHandler::setMouseCoord(GLFWwindow* window, double x, double y) 
 {
 	prevMousePosition = mousePosition;
-	mousePosition = glm::vec2(x, Window::size.y - y);
+	mousePosition = glm::vec2(x, Window::Instance().GetHeight() - y);
 }
 
 const std::vector<bool>& InputHandler::getKeys() { return keys; }

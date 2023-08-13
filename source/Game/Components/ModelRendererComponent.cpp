@@ -14,7 +14,7 @@ ModelRendererComponent::ModelRendererComponent(GameObject* gameObject)
 	, mpModel(nullptr)
 	, mpShader(nullptr)
 	, mlUseMaterial(true)
-	, meDrawMode(Renderer::DrawMode::Triangles)
+	, meDrawMode(Renderer::EnDrawMode::Triangles)
 { }
 
 void ModelRendererComponent::SetModel(const Model* pModel) 

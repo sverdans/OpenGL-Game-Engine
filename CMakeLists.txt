@@ -59,7 +59,6 @@ function(fetch_dependencies)
         SOURCE_DIR ${LIBS_DIR}/nlohmann
         GIT_TAG v3.11.2)
     FetchContent_MakeAvailable(json)
-    include_directories(${LIBS_DIR}/nlohmann/single_include)
 
     set(IMGUI_DIR ${LIBS_DIR}/imgui)
     FetchContent_Declare(imgui
@@ -106,9 +105,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${LIBS_DIR}/imgui
     ${LIBS_DIR}/spdlog/include
     ${LIBS_DIR}/assimp/include
+    ${LIBS_DIR}/nlohmann/include
     ${CMAKE_SOURCE_DIR}/source)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    nlohmann_json::nlohmann_json
     spdlog
     assimp
     imgui

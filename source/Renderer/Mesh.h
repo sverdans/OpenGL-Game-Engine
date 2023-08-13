@@ -30,7 +30,7 @@ struct Vertex final
 class Mesh final
 {
 private:
-	Renderer::DrawMode drawMode;
+	Renderer::EnDrawMode drawMode;
 
 	VertexArray vertexArray;
 	VertexBuffer vertexCoordsBuffer;
@@ -61,7 +61,7 @@ public:
 		 Material* material,
 		 bool recalculateNormals);
 	
-	void setDrawMode(Renderer::DrawMode mode) { drawMode = mode; }
+	void setDrawMode(Renderer::EnDrawMode mode) { drawMode = mode; }
 
 	void recalculateVertexNormals();
 

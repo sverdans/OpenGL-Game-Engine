@@ -9,7 +9,6 @@
 #include <Renderer/Material.h>
 #include <Game/ResourceManager.h>
 
-
 //--Load--------------------------------------------------------------------------------------------------------
 
 ShaderProgram* ResourceManager::LoadShader(
@@ -93,7 +92,7 @@ Model* ResourceManager::LoadModel(const std::string& sName, const std::string& s
 	std::vector<Mesh*> meshes;
 	ProcessNode(meshes, pScene->mRootNode, pScene);
 
-	Model* pModel = new Model(meshes, Renderer::DrawMode::Triangles);
+	Model* pModel = new Model(meshes, Renderer::EnDrawMode::Triangles);
 	mModels.emplace(std::make_pair(sName, pModel));
 	return pModel;
 }

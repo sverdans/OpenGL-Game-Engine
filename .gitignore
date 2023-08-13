@@ -1,8 +1,5 @@
+/logs
 /build
-/external
-
+/.vscode
 /resources/textures
 /resources/models
-/source/Editor/ImGuiFileDialog
-
-/.vscode

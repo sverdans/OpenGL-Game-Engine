@@ -11,10 +11,10 @@ class GameObject;
 class CameraComponent : public BehaviourComponent
 {
 public:
-	enum ProjectionMode
+	enum EnProjectionMode
 	{
-		Perspective,
-		Orthographic
+		ePerspective,
+		eOrthographic,
 	};
 
 public:
@@ -30,7 +30,7 @@ public:
 	void Update() override;
 	void OnPreRender() override;
 
-	void SetProjectionMode(ProjectionMode mode);
+	void SetProjectionMode(EnProjectionMode eMode);
 
 	void Deserialize(const nlohmann::json& jsonObject) override;
 	void Serialize(nlohmann::json& jsonObject) override;
@@ -38,22 +38,19 @@ public:
 	std::string Name() override { return "CameraComponent"; }
 
 private:
-	ProjectionMode projectionMode;
+	EnProjectionMode meProjectionMode;
 
 	glm::mat4 viewMatrix = glm::mat4(1.0f);
 	glm::mat4 projectionMatrix = glm::mat4(1.0f);
 	glm::mat4 viewProjectionMatrix = glm::mat4(1.0f);
 
-	bool isMovable;
+	bool mlIsMovable;
 
-	float orthoScale = 1;
-
-	float farClipPlane;
-	float nearClipPlane;
-
-	float viewportWidth = Window::size.x;
-	float viewportHeight = Window::size.y;
-	float fieldOfView;
+	float mOrthoScale;
+	float mFarClipPlane;
+	float mNearClipPlane;
+	float mViewportWidth;
+	float mViewportHeight;
+	float mFieldOfView;
 };
 
-//DECLARE_COMPONENT(CameraComponent) 

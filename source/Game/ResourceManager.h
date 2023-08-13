@@ -18,14 +18,6 @@
 class ResourceManager
 {
 	friend class Editor;
-private:
-	ResourceManager() = default;
-	~ResourceManager() = default;
-	ResourceManager(const ResourceManager&) = delete;
-	ResourceManager(const ResourceManager&&) = delete;
-	ResourceManager& operator = (const ResourceManager&) = delete;
-	ResourceManager& operator = (const ResourceManager&&) = delete;
-
 public:
 	static ResourceManager& Instance() 
 	{ 
@@ -64,4 +56,12 @@ private:
 	Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
 	std::vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+
+private:
+	ResourceManager() = default;
+	~ResourceManager() = default;
+	ResourceManager(const ResourceManager&) = delete;
+	ResourceManager(const ResourceManager&&) = delete;
+	ResourceManager& operator = (const ResourceManager&) = delete;
+	ResourceManager& operator = (const ResourceManager&&) = delete;
 };

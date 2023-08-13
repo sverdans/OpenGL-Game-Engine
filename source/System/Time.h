@@ -2,9 +2,6 @@
 #include <iostream>
 #include <chrono>
 
-// ����� � �������������
-// 0.001 (�) = 1 (��)
-
 class Time final
 {
 private:

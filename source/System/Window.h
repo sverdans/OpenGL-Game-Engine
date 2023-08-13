@@ -5,27 +5,43 @@
 #include <GLFW/glfw3.h>
 #include <glm/vec2.hpp>
 
-class Window
+class Window final
 {
-private:
-	static void onResize(GLFWwindow* window, int width, int height)
+public:
+	static Window& Instance()
 	{
-		size = glm::vec2(width, height);
-		glViewport(0, 0, width, height);
+		static Window instance;
+		return instance;
 	}
 
-public:
-	static GLFWwindow* window;
-	static glm::vec2 size;
+	bool Initialize(const glm::vec2& size, const char* title);
+	bool NeedFinalize() const;
+	void Finalize();
 
+	void Update();
+	void Resize(int width, int height);
+
+
+	float GetWidth() const;
+	float GetHeight() const;
+	const glm::vec2& GetSize() const;
+	GLFWwindow* GetWindowPtr();
+
+private:
+	static void OnResize(GLFWwindow* window, int width, int height)
+	{
+		Window::Instance().Resize(width, height);
+	}
+
+private:
 	Window() = default;
 	~Window() = default;
 	Window(const Window&) = delete;
+	Window(const Window&&) = delete;
 	Window& operator = (const Window&) = delete;
+	Window& operator = (const Window&&) = delete;
 
-	static void init(const glm::vec2& windowSize, const char* windowTitle);
-
-	static void update();
-
-	static void quit();
+private:
+	GLFWwindow* mpWindow;
+	glm::vec2 mSize;
 };

@@ -30,7 +30,7 @@ bool Renderer::init(GLFWwindow* pWindow)
 	return true;
 }
 
-void Renderer::draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const DrawMode mode)
+void Renderer::draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const EnDrawMode mode)
 {
 	vertexArray.bind();
 	indexBuffer.bind();
@@ -86,5 +86,5 @@ const char* Renderer::getVersionString()
 int Renderer::pointSize = 1;
 bool Renderer::depthTest = true;
 glm::vec3 Renderer::clearColor = glm::vec3(0.f, 0.f, 0.f);
-Renderer::PolygonMode Renderer::polygonMode = Renderer::PolygonMode::Fill;
+Renderer::EnPolygonMode Renderer::mePolygonMode = Renderer::EnPolygonMode::Fill;
 
