@@ -16,8 +16,9 @@ void LightingSystem::removeLightingComponent(LightingComponent* LC)
 void LightingSystem::update()
 {
 	std::list<ShaderProgram*> shaders;
-	auto ds = ResourceManager::getShader("defaultShader");
-	if (ds) shaders.push_back(ds);
+	auto ds = ResourceManager::Instance().GetShader("defaultShader");
+	if (ds)
+		shaders.push_back(ds);
 
 	for (auto& shader : shaders)
 	{

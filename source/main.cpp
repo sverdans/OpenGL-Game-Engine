@@ -3,6 +3,8 @@
 #include <vector>
 #include <map>
 
+#include <spdlog/sinks/basic_file_sink.h>
+
 #include <System/Window.h>
 #include <System/Time.h>
 #include <System/InputHandler.h>
@@ -16,8 +18,22 @@
 
 #include <Editor/Editor.h>
 
+void basic_logfile_example()
+{
+    try 
+    {
+        auto logger = spdlog::basic_logger_mt("basic_logger", "logs/basic-log.txt");
+    }
+    catch (const spdlog::spdlog_ex &ex)
+    {
+        std::cout << "Log init failed: " << ex.what() << std::endl;
+    }
+}
+
 int main(int argc, char** argv)
 {
+	basic_logfile_example();
+
 	Window::init(glm::vec2(1000, 800), "OpenGL-Courswork");
 	UiHandler::onWindowCreate();
 
@@ -63,7 +79,7 @@ int main(int argc, char** argv)
 	}
 
 	ObjectsManager::Instance().Clear();
-	ResourceManager::deleteResources();
+	ResourceManager::Instance().Clear();
 	Window::quit();
 	UiHandler::onWindowClose();
 

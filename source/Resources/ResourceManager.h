@@ -17,60 +17,51 @@
 
 class ResourceManager
 {
-private:
 	friend class Editor;
-
-	static std::map<std::string, ShaderProgram*> shaders;
-	static std::map<std::string, Material*> materials;
-	static std::map<std::string, Texture*> textures;
-	static std::map<std::string, Model*> models;
-
-	static void processNode(std::vector<Mesh*>& meshes, aiNode* node, const aiScene* scene);
-	static Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
-
-	static std::vector<Texture*> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
-
-public:
+private:
 	ResourceManager() = default;
 	~ResourceManager() = default;
 	ResourceManager(const ResourceManager&) = delete;
+	ResourceManager(const ResourceManager&&) = delete;
 	ResourceManager& operator = (const ResourceManager&) = delete;
+	ResourceManager& operator = (const ResourceManager&&) = delete;
 
-	static ShaderProgram* loadShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath);
-	static ShaderProgram* getShader(const std::string& name);
-	static bool containShader(const std::string& name);
+public:
+	static ResourceManager& Instance() 
+	{ 
+		static ResourceManager instance;
+		return instance;
+	}
 
-	static Texture* loadTexture(const std::string& name, const std::string& texturePath, const std::string& type);
-	static Texture* getTexture(const std::string& name);
-	static bool containTexture(const std::string& name);
+	ShaderProgram* LoadShader(const std::string& sName, const std::string& vertexPath, const std::string& fragmentPath);
+	Texture* LoadTexture(const std::string& sName, const std::string& texturePath, const std::string& type);
+	Material* LoadMaterial(const std::string& sName);
+	Model* LoadModel(const std::string& sName, const std::string& filepath);
 	
-	static Material* loadMaterial(const std::string& name);
-	static Material* getMaterial(const std::string& name);
-	static bool containMaterial(const std::string& name);
+	ShaderProgram* GetShader(const std::string& sName);
+	Texture* GetTexture(const std::string& sName);
+	Material* GetMaterial(const std::string& sName);
+	Model* GetModel(const std::string& sName);
 
-	static Model* loadModel(const std::string& name, const std::string& filepath);
-	static Model* getModel(const std::string& name);
-	static bool containModel(const std::string& name);
+	bool ContainShader(const std::string& sName) const;
+	bool ContainTexture(const std::string& sName) const;
+	bool ContainMaterial(const std::string& sName) const;
+	bool ContainModel(const std::string& sName) const;
 
-	static std::string getShaderName(const ShaderProgram* shader)
-	{
-		for (const auto& it : shaders)
-		{
-			if (it.second == shader)
-				return it.first;
-		}
-		return "";
-	}
-	static std::string getModelName(const Model* model)
-	{
-		for (const auto& it : models)
-		{
-			if (it.second == model)
-				return it.first;
-		}
-		return "";
-	}
+	std::string GetShaderName(const ShaderProgram* pShader) const;
+	std::string GetModelName(const Model* pModel) const;
 
-	static void loadResources(const std::string& filePath);
-	static void deleteResources();
+	void Load(const std::string& sFilePath);
+	void Clear();
+
+private:
+	std::map<std::string, ShaderProgram*> mShaders;
+	std::map<std::string, Material*> mMaterials;
+	std::map<std::string, Texture*> mTextures;
+	std::map<std::string, Model*> mModels;
+
+	void ProcessNode(std::vector<Mesh*>& meshes, aiNode* node, const aiScene* scene);
+	Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+
+	std::vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 };

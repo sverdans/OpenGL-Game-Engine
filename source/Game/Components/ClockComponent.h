@@ -5,6 +5,20 @@ class TransformComponent;
 
 class ClockComponent : public BehaviourComponent
 {
+public:
+	ClockComponent(GameObject* gameObject) : BehaviourComponent(gameObject) {}
+	ClockComponent(const ClockComponent&) = delete;
+	ClockComponent& operator = (const ClockComponent&) = delete;
+	~ClockComponent() = default;
+
+	void Init() override;
+	void Update() override;
+
+	void Deserialize(const nlohmann::json& jsonObject) override;
+	void Serialize(nlohmann::json& jsonObject) override;
+
+	std::string Name() override;
+
 private:
 	TransformComponent* secondTransform;
 	TransformComponent* minuteTransform;
@@ -19,19 +33,4 @@ private:
 	unsigned int second;
 
 	float scale = 1;
-
-public:
-
-	ClockComponent(GameObject* gameObject) : BehaviourComponent(gameObject) {}
-	ClockComponent(const ClockComponent&) = delete;
-	ClockComponent& operator = (const ClockComponent&) = delete;
-	~ClockComponent() = default;
-
-	void Init() override;
-	void Update() override;
-
-	void Deserialize(const nlohmann::json& jsonObject) override;
-	void Serialize(nlohmann::json& jsonObject) override;
-
-	std::string Name() override;
 };

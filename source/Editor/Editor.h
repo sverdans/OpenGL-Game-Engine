@@ -143,7 +143,7 @@ private:
 			ImGui::Indent(indentValue);
 			if (ImGui::CollapsingHeader("Shaders"))
 			{
-				for (const auto& shader : ResourceManager::shaders)
+				for (const auto& shader : ResourceManager::Instance().mShaders)
 				{
 					ImGui::Text(shader.first.c_str());
 				}
@@ -151,7 +151,7 @@ private:
 
 			if (ImGui::CollapsingHeader("Textures"))
 			{
-				for (const auto& texture : ResourceManager::textures)
+				for (const auto& texture : ResourceManager::Instance().mTextures)
 				{
 					ImGui::Text(texture.first.c_str());
 				}
@@ -159,7 +159,7 @@ private:
 
 			if (ImGui::CollapsingHeader("Material"))
 			{
-				for (const auto& material : ResourceManager::materials)
+				for (const auto& material : ResourceManager::Instance().mMaterials)
 				{
 					ImGui::Text(material.first.c_str());
 				}
@@ -167,7 +167,7 @@ private:
 
 			if (ImGui::CollapsingHeader("Models"))
 			{
-				for (const auto& model : ResourceManager::models)
+				for (const auto& model : ResourceManager::Instance().mModels)
 				{
 					ImGui::Text(model.first.c_str());
 				}

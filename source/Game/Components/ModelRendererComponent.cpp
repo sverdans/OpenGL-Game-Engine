@@ -65,8 +65,8 @@ void ModelRendererComponent::Render()
 
 void ModelRendererComponent::Deserialize(const nlohmann::json& jsonObject)
 {
-	mpShader = ResourceManager::getShader(jsonObject["shader"]);
-	mpModel = ResourceManager::getModel(jsonObject["model"]);
+	mpShader = ResourceManager::Instance().GetShader(jsonObject["shader"]);
+	mpModel = ResourceManager::Instance().GetModel(jsonObject["model"]);
 	
 	SetSpecularStrength(jsonObject["specularStrength"]);
 	SetSpecularity(jsonObject["specularity"]);
@@ -89,8 +89,8 @@ void ModelRendererComponent::Serialize(nlohmann::json& jsonObject)
 	};
 
 	jsonObject[Name()] = {
-		{ "shader", ResourceManager::getShaderName(mpShader) },
-		{ "model" , ResourceManager::getModelName(mpModel) },
+		{ "shader", ResourceManager::Instance().GetShaderName(mpShader) },
+		{ "model" , ResourceManager::Instance().GetModelName(mpModel) },
 		{ "specularStrength", mSpecularStrength },
 		{ "useTexture", mlUseMaterial },
 		{ "specularity", mSpecularity },

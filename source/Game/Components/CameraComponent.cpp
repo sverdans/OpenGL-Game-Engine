@@ -114,7 +114,7 @@ void CameraComponent::OnPreRender()
 
 	viewProjectionMatrix = projectionMatrix * viewMatrix;
 	
-	if (auto pDefaultShader = ResourceManager::getShader("defaultShader"))
+	if (auto pDefaultShader = ResourceManager::Instance().GetShader("defaultShader"))
 	{
 		pDefaultShader->use();
 		pDefaultShader->setMatrix("viewProjectionMat", viewProjectionMatrix);
@@ -122,7 +122,7 @@ void CameraComponent::OnPreRender()
 		pDefaultShader->unuse();
 	}
 
-	if (auto pSimpleShader = ResourceManager::getShader("simpleShader"))
+	if (auto pSimpleShader = ResourceManager::Instance().GetShader("simpleShader"))
 	{
 		pSimpleShader->use();
 		pSimpleShader->setMatrix("viewProjectionMat", viewProjectionMatrix);
