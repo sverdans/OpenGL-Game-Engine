@@ -51,22 +51,29 @@ void GameObject::RemoveTag(const std::string sTag)
 
 void GameObject::Serialize(nlohmann::json& jsonObject)
 {
-	jsonObject["name"] = msName;
+	nlohmann::json jsonTags;
+	for (const auto& sTag : mTags)
+		jsonTags.push_back(sTag);
 
-	if (!mTags.empty())
-	{
-		for (const auto& sTag : mTags)
-			jsonObject["tags"].push_back(sTag);
-	}
+	nlohmann::json jsonComponents;
+	for (auto& [sName, pComponent] : mComponents)
+		pComponent->Serialize(jsonComponents);
 
+	nlohmann::json jsonChildren;
+/*
 	if (!mChildren.empty())
 	{
 		for (const auto& obj : mChildren)
 			jsonObject["GameObjects"].push_back(obj->msName);
 	}
+*/
 
-	for (auto& [sName, pComponent] : mComponents)
-		pComponent->Serialize(jsonObject);
+	jsonObject = {
+		{ "name", msName },
+		{ "tags", jsonTags },
+		{ "components", jsonComponents },
+		{ "children", jsonChildren },
+	};
 }
 
 void GameObject::Deserialize(const nlohmann::json& jsonObject)
@@ -78,6 +85,12 @@ void GameObject::Deserialize(const nlohmann::json& jsonObject)
 		mTags.clear();
 		for (const auto& jsonTag : jsonObject["tags"])
 			AddTag(jsonTag);
+	}
+
+	auto& jsonComponents = jsonObject["components"];
+	for (auto& jsonComponent : jsonComponents.items())
+	{
+		std::cout << "key: " << jsonComponent.key() << ", value:" << jsonComponent.value() << '\n';
 	}
 
 /*
