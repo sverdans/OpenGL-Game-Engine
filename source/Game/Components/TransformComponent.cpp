@@ -134,51 +134,51 @@ const glm::mat4x4& TransformComponent::GetModelMatrix() const
 
 void TransformComponent::Deserialize(const nlohmann::json& jsonObject)
 {
-	const auto& positionJson = jsonObject["position"];
+	const auto& jsonPosition = jsonObject["position"];
 	SetPosition({
-		positionJson["x"],
-		positionJson["y"],
-		positionJson["z"] 
+		jsonPosition["x"],
+		jsonPosition["y"],
+		jsonPosition["z"] 
 	});
 
-	const auto& rotationJson = jsonObject["rotation"];
+	const auto& jsonRotation = jsonObject["rotation"];
 	SetRotation({
-		rotationJson["x"],
-		rotationJson["y"],
-		rotationJson["z"]
+		jsonRotation["x"],
+		jsonRotation["y"],
+		jsonRotation["z"]
 	});
 
-	const auto& sizeJson = jsonObject["size"];
+	const auto& jsonSize = jsonObject["size"];
 	SetSize({
-		sizeJson["x"],
-		sizeJson["y"],
-		sizeJson["z"]
+		jsonSize["x"],
+		jsonSize["y"],
+		jsonSize["z"]
 	});
 }
 
 void TransformComponent::Serialize(nlohmann::json& jsonObject)
 {
-	nlohmann::json positionJson {
+	nlohmann::json jsonPosition {
 		{ "x", mPosition.x },
 		{ "y", mPosition.y },
 		{ "z", mPosition.z },
 	};
 
-	nlohmann::json rotationJson {
+	nlohmann::json jsonRotation {
 		{ "x", mRotation.x },
 		{ "y", mRotation.y },
 		{ "z", mRotation.z },
 	};
 	
-	nlohmann::json sizeJson {
+	nlohmann::json jsonSize {
 		{ "x", mSize.x },
 		{ "y", mSize.y },
 		{ "z", mSize.z },
 	};
 
 	jsonObject[Name()] = {
-		{ "position", positionJson },
-		{ "rotation", rotationJson },
-		{ "size", sizeJson },
+		{ "position", jsonPosition },
+		{ "rotation", jsonRotation },
+		{ "size", jsonSize },
 	};
 }
