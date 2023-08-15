@@ -15,6 +15,8 @@
 #include <Game/Components/BehaviourComponent.h>
 #include <Game/Components/TransformComponent.h>
 
+DECLARE_COMPONENT(CameraComponent)
+
 CameraComponent::CameraComponent(GameObject* pGameObject) 
 	: BehaviourComponent(pGameObject)
 	, mOrthoScale(1)

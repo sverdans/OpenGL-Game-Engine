@@ -1,19 +1,19 @@
 #include <Game/Systems/RendererSystem.h>
 #include <Game/Components/RendererComponent.h>
 
-void RendererSystem::AddToRenderQueue(RendererComponent* RC)
+void RendererSystem::AddToRenderQueue(RendererComponent* pComponent)
 {
-	renderQueue.push_back(RC);
+	mRenderQueue.push_back(pComponent);
 }
 
-void RendererSystem::RemoveFromRenderQueue(RendererComponent* RC)
+void RendererSystem::RemoveFromRenderQueue(RendererComponent* pComponent)
 {
-	renderQueue.remove(RC);
+	mRenderQueue.remove(pComponent);
 }
 
 void RendererSystem::Render()
 {
-	for (auto it : renderQueue)
+	for (auto it : mRenderQueue)
 	{
 		it->Update();
 		it->Render();
@@ -22,8 +22,5 @@ void RendererSystem::Render()
 
 std::list<RendererComponent*>& RendererSystem::GetRenderQueue()
 {
-	return renderQueue;
+	return mRenderQueue;
 }
-
-
-std::list<RendererComponent*> RendererSystem::renderQueue;

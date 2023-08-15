@@ -5,21 +5,29 @@ class RendererComponent;
 
 class RendererSystem final
 {
-private:
 	friend class Editor;
-
-	static std::list<RendererComponent*> renderQueue;
-
 public:
-	RendererSystem() = delete;
-	~RendererSystem() = delete;
-	RendererSystem(const RendererSystem&) = delete;
-	RendererSystem& operator = (const RendererSystem&) = delete;
+    static RendererSystem& Instance() 
+    { 
+        static RendererSystem instance;
+        return instance;
+    }
 
-	static void AddToRenderQueue(RendererComponent* RC);
-	static void RemoveFromRenderQueue(RendererComponent* RC);
+	void AddToRenderQueue(RendererComponent* pComponent);
+	void RemoveFromRenderQueue(RendererComponent* pComponent);
 	
-	static void Render();
+	void Render();
+	
+	std::list<RendererComponent*>& GetRenderQueue();
 
-	static std::list<RendererComponent*>& GetRenderQueue();
+private:
+	RendererSystem() = default;
+	~RendererSystem() = default;
+	RendererSystem(const RendererSystem&) = delete;
+	RendererSystem(const RendererSystem&&) = delete;
+	RendererSystem& operator = (const RendererSystem&) = delete;
+	RendererSystem& operator = (const RendererSystem&&) = delete;
+
+private:
+	std::list<RendererComponent*> mRenderQueue;
 };

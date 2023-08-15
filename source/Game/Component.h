@@ -7,7 +7,7 @@ class GameObject;
 class Component 
 {
 private:
-	GameObject* mpGameObject;
+	GameObject* mpGameObject { nullptr };
 
 public:
 	Component(GameObject* pGameObject) 

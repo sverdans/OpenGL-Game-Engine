@@ -25,7 +25,7 @@ public:
     {
         std::string sName { std::string(typeid(T).name()).substr(2) };
         spdlog::info(sName + " Declared");
-        auto pComponent = mpExample->AddComponent<T>();
+        auto pComponent = new T(nullptr);
         mComponents.emplace(sName, pComponent);
         return true;
     }
@@ -46,7 +46,6 @@ private:
     ObjectsManager& operator = (const ObjectsManager&&) = delete;
 
 private:
-    GameObject* mpExample;
     std::list<GameObject*> mGameObjects;
     std::map<std::string, Component*> mComponents;
 };

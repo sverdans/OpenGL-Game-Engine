@@ -4,6 +4,8 @@
 #include <Game/Components/ClockComponent.h>
 #include <Game/Components/TransformComponent.h>
 
+DECLARE_COMPONENT(ClockComponent)
+
 void ClockComponent::Init() 
 {
 	auto& manager = ObjectsManager::Instance(); 

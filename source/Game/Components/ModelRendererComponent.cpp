@@ -9,6 +9,8 @@
 #include <Renderer/Model.h>
 #include <Renderer/Mesh.h>
 
+DECLARE_COMPONENT(ModelRendererComponent)
+
 ModelRendererComponent::ModelRendererComponent(GameObject* gameObject) 
 	: RendererComponent(gameObject)
 	, mpModel(nullptr)

@@ -5,24 +5,32 @@ class BehaviourComponent;
 
 class BehaviourSystem final
 {
-private:
 	friend class Editor;
-
-	static std::list<BehaviourComponent*> updateQueue;
-
 public:
-	BehaviourSystem() = delete;
-	~BehaviourSystem() = delete;
-	BehaviourSystem(const BehaviourSystem&) = delete;
-	BehaviourSystem& operator = (const BehaviourSystem&) = delete;
-
-	static void addToUpdateQueue(BehaviourComponent* BC);
-	static void removeFromUpdateQueue(BehaviourComponent* BC);
+	static BehaviourSystem& Instance() 
+    { 
+        static BehaviourSystem instance;
+        return instance;
+    }
 	
-	static void init();
-	static void update();
-	static void lateUpdate();
-	static void onPreRender();
+	void AddToUpdateQueue(BehaviourComponent* pComponent);
+	void RemoveFromUpdateQueue(BehaviourComponent* pComponent);
+	
+	void Init();
+	void Update();
+	void LateUpdate();
+	void OnPreRender();
 
-	static std::list<BehaviourComponent*>& getUpdateQueue();
+	std::list<BehaviourComponent*>& getUpdateQueue();
+
+private:
+	BehaviourSystem() = default;
+	~BehaviourSystem() = default;
+	BehaviourSystem(const BehaviourSystem&) = delete;
+	BehaviourSystem(const BehaviourSystem&&) = delete;
+	BehaviourSystem& operator = (const BehaviourSystem&) = delete;
+	BehaviourSystem& operator = (const BehaviourSystem&&) = delete;
+
+private:
+	std::list<BehaviourComponent*> mUpdateQueue;
 };

@@ -1,12 +1,13 @@
 #include <Game/Components/BehaviourComponent.h>
 #include <Game/Systems/BehaviourSystem.h>
 
-BehaviourComponent::BehaviourComponent(GameObject* gameObject) : Component(gameObject)
+BehaviourComponent::BehaviourComponent(GameObject* pGameObject) : Component(pGameObject)
 {
-	BehaviourSystem::addToUpdateQueue(this);
+    if (pGameObject)
+	    BehaviourSystem::Instance().AddToUpdateQueue(this);
 }
 
 BehaviourComponent::~BehaviourComponent()
 {
-	BehaviourSystem::removeFromUpdateQueue(this);
+	BehaviourSystem::Instance().RemoveFromUpdateQueue(this);
 }

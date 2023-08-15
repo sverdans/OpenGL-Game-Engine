@@ -6,8 +6,7 @@
 #include <Game/GameObject.h>
 #include <Game/ObjectsManager.h>
 
-ObjectsManager::ObjectsManager() : mpExample(new GameObject())
-{ }
+ObjectsManager::ObjectsManager() { }
 
 Component* ObjectsManager::GetComponentInstance(const std::string& sName)
 {

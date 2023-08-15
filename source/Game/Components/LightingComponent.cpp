@@ -1,15 +1,17 @@
 #include <Game/Components/LightingComponent.h>
 #include <Game/Systems/LightingSystem.h>
 
-LightingComponent::LightingComponent(GameObject* gameObject) : Component(gameObject) 
-{
-	LightingSystem::addLightingComponent(this);
-}
+DECLARE_COMPONENT(LightingComponent)
 
+LightingComponent::LightingComponent(GameObject* pGameObject) : Component(pGameObject) 
+{
+	if (pGameObject)
+		LightingSystem::Instance().AddLightingComponent(this);
+}
 
 LightingComponent::~LightingComponent()
 {
-	LightingSystem::removeLightingComponent(this);
+	LightingSystem::Instance().RemoveLightingComponent(this);
 }
 
 float LightingComponent::GetIntensity() 

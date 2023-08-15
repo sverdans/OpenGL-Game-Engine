@@ -1,44 +1,43 @@
 #include <Game/Systems/BehaviourSystem.h>
 #include <Game/Components/BehaviourComponent.h>
 
-void BehaviourSystem::addToUpdateQueue(BehaviourComponent* BC)
+void BehaviourSystem::AddToUpdateQueue(BehaviourComponent* pComponent)
 {
-	updateQueue.push_back(BC);
+	mUpdateQueue.push_back(pComponent);
 }
 
-void BehaviourSystem::removeFromUpdateQueue(BehaviourComponent* BC)
+void BehaviourSystem::RemoveFromUpdateQueue(BehaviourComponent* pComponent)
 {
-	updateQueue.remove(BC);
+	mUpdateQueue.remove(pComponent);
 }
 
-void BehaviourSystem::init()
+void BehaviourSystem::Init()
 {
-	for (auto it : updateQueue)
+	for (auto it : mUpdateQueue)
 		it->Init();
 }
 
-void BehaviourSystem::update()
+void BehaviourSystem::Update()
 {
-	for (auto it : updateQueue)
+	std::cout << mUpdateQueue.size() << std::endl;
+	for (auto it : mUpdateQueue)
 		it->Update();
 }
 
-void BehaviourSystem::lateUpdate()
+void BehaviourSystem::LateUpdate()
 {
-	for (auto it : updateQueue)
+	for (auto it : mUpdateQueue)
 		it->LateUpdate();
 }
 
-void BehaviourSystem::onPreRender()
+void BehaviourSystem::OnPreRender()
 {
-	for (auto it : updateQueue)
+	for (auto it : mUpdateQueue)
 		it->OnPreRender();
 }
 
 
 std::list<BehaviourComponent*>& BehaviourSystem::getUpdateQueue()
 {
-	return updateQueue;
+	return mUpdateQueue;
 }
-
-std::list<BehaviourComponent*> BehaviourSystem::updateQueue;

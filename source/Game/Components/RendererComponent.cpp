@@ -7,10 +7,11 @@ RendererComponent::RendererComponent(GameObject* pGameObject)
 	: Component(pGameObject)
 	, mlRenderEnable(true)
 {
-	RendererSystem::AddToRenderQueue(this);
+	if (pGameObject)
+		RendererSystem::Instance().AddToRenderQueue(this);
 }
 
 RendererComponent::~RendererComponent()
 {
-	RendererSystem::RemoveFromRenderQueue(this);
+	RendererSystem::Instance().RemoveFromRenderQueue(this);
 }

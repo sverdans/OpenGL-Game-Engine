@@ -3,17 +3,17 @@
 #include <Game/Components/LightingComponent.h>
 #include <Game/Components/TransformComponent.h>
 
-void LightingSystem::addLightingComponent(LightingComponent* LC)
+void LightingSystem::AddLightingComponent(LightingComponent* pComponent)
 {
-	lightingComponents.push_back(LC);
+	mLightingComponents.push_back(pComponent);
 }
 
-void LightingSystem::removeLightingComponent(LightingComponent* LC)
+void LightingSystem::RemoveLightingComponent(LightingComponent* pComponent)
 {
-	lightingComponents.remove(LC);
+	mLightingComponents.remove(pComponent);
 }
 
-void LightingSystem::update()
+void LightingSystem::Update()
 {
 	std::list<ShaderProgram*> shaders;
 	auto ds = ResourceManager::Instance().GetShader("defaultShader");
@@ -27,7 +27,7 @@ void LightingSystem::update()
 		shader->setVec3("ambientColor", ambientColor);
 
 		unsigned int dirIndex = 0, pointIndex = 0;
-		for (auto& it : lightingComponents)
+		for (auto& it : mLightingComponents)
 		{
 			switch (it->meType)
 			{
@@ -68,7 +68,3 @@ void LightingSystem::update()
 		shader->unuse();
 	}
 }
-
-float LightingSystem::ambientStrength = 0.4;
-glm::vec3 LightingSystem::ambientColor = glm::vec3(1.f, 1.f, 1.f);
-std::list<LightingComponent*> LightingSystem::lightingComponents;

@@ -46,8 +46,8 @@ int main(int argc, char** argv)
 
 	Editor::Instance().Initialize();
 
-	LightingSystem::setAmbientColor(glm::vec3(1.f, 1.f, 1.f));
-	LightingSystem::setAmbientStrength(0.225f);
+	LightingSystem::Instance().setAmbientColor(glm::vec3(1.f, 1.f, 1.f));
+	LightingSystem::Instance().setAmbientStrength(0.225f);
 
 	Time::setUpdateFrequency(60.0);
 	Time::start();
@@ -62,12 +62,12 @@ int main(int argc, char** argv)
 		{
 			Renderer::clear();
 
-			BehaviourSystem::update();
-			BehaviourSystem::lateUpdate();
-			BehaviourSystem::onPreRender();
+			BehaviourSystem::Instance().Update();
+			BehaviourSystem::Instance().LateUpdate();
+			BehaviourSystem::Instance().OnPreRender();
 
-			LightingSystem::update();
-			RendererSystem::Render();
+			LightingSystem::Instance().Update();
+			RendererSystem::Instance().Render();
 
 			Editor::Instance().Update();
 			Window::Instance().Update();
