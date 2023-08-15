@@ -138,6 +138,8 @@ void CameraComponent::OnPreRender()
 	}
 }
 
+std::string CameraComponent::Name() { return "CameraComponent"; }
+
 void CameraComponent::Deserialize(const nlohmann::json& jsonObject)
 {
 	mViewportWidth  = Window::Instance().GetWidth();
@@ -153,9 +155,9 @@ void CameraComponent::Deserialize(const nlohmann::json& jsonObject)
 	UpdateProjectionMatrix();
 }
 
-void CameraComponent::Serialize(nlohmann::json& jsonObject)
+nlohmann::json CameraComponent::Serialize()
 {
-	jsonObject[Name()] = {
+	return {
 		{ "isMovable",      mlIsMovable      },
 		{ "fieldOfView",    mFieldOfView     },
 		{ "farClipPlane",   mFarClipPlane    },

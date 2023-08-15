@@ -74,11 +74,11 @@ void Editor::Update()
 
 
 
-void Editor::PresentJsonObject(nlohmann::json& jsonValue)
+void Editor::PresentJsonObject(nlohmann::json& jsonObject)
 {
     ImGui::Indent(indentValue);
 
-    for (auto it = jsonValue.begin(); it != jsonValue.end(); ++it)
+    for (auto it = jsonObject.begin(); it != jsonObject.end(); ++it)
     {
         std::string tempInputUID = std::string("##" + inputUID + std::string(it.key()));
 

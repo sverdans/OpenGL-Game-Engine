@@ -80,7 +80,7 @@ void ModelRendererComponent::Deserialize(const nlohmann::json& jsonObject)
 	mlUseMaterial = jsonObject["useTexture"];
 }
 
-void ModelRendererComponent::Serialize(nlohmann::json& jsonObject)
+nlohmann::json ModelRendererComponent::Serialize()
 {
 	nlohmann::json colorJson {
 		{ "r", mColor.r },
@@ -88,7 +88,7 @@ void ModelRendererComponent::Serialize(nlohmann::json& jsonObject)
 		{ "b", mColor.b },
 	};
 
-	jsonObject[Name()] = {
+	return {
 		{ "shader", ResourceManager::Instance().GetShaderName(mpShader) },
 		{ "model" , ResourceManager::Instance().GetModelName(mpModel) },
 		{ "specularStrength", mSpecularStrength },

@@ -28,16 +28,17 @@ void ClockComponent::Update()
 	secondTransform->SetRotation(secondRotation);
 }
 
+std::string ClockComponent::Name() { return "ClockComponent"; }
+
 void ClockComponent::Deserialize(const nlohmann::json& jsonObject)
 {
 	scale = jsonObject["scale"];
 }
 
-void ClockComponent::Serialize(nlohmann::json& jsonObject)
+nlohmann::json ClockComponent::Serialize()
 {
-	jsonObject[Name()] = {
+	return {
 		{"scale", scale}
 	};
 }
 
-std::string ClockComponent::Name() { return "ClockComponent"; }

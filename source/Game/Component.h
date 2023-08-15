@@ -14,9 +14,9 @@ public:
 		: mpGameObject(pGameObject) { }
 	virtual ~Component() { }
 
-	virtual void Deserialize(const nlohmann::json& jsonObject) = 0;
-	virtual void Serialize(nlohmann::json& jsonObject) = 0;
 	virtual std::string Name() = 0;
+	virtual nlohmann::json Serialize() = 0;
+	virtual void Deserialize(const nlohmann::json& jsonObject) = 0;
 
 	GameObject* const GetGameObject() const { return mpGameObject; }
 };

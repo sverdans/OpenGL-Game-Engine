@@ -32,10 +32,9 @@ public:
 
 	void SetProjectionMode(EnProjectionMode eMode);
 
+	std::string Name() override;
+	nlohmann::json Serialize() override;
 	void Deserialize(const nlohmann::json& jsonObject) override;
-	void Serialize(nlohmann::json& jsonObject) override;
-
-	std::string Name() override { return "CameraComponent"; }
 
 private:
 	EnProjectionMode meProjectionMode;

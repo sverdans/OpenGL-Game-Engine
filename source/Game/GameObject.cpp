@@ -57,7 +57,7 @@ void GameObject::Serialize(nlohmann::json& jsonObject)
 
 	nlohmann::json jsonComponents;
 	for (auto& [sName, pComponent] : mComponents)
-		pComponent->Serialize(jsonComponents);
+		jsonComponents[pComponent->Name()] = pComponent->Serialize();
 
 	nlohmann::json jsonChildren;
 /*

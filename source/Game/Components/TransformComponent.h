@@ -39,7 +39,7 @@ public:
 	const glm::mat4x4& GetModelMatrix() const;
 
 	void Deserialize(const nlohmann::json& jsonObject) override;
-	void Serialize(nlohmann::json& jsonObject) override;
+	nlohmann::json Serialize() override;
 	std::string Name() override { return "TransformComponent"; }
 
 protected:

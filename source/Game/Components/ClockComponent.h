@@ -14,10 +14,9 @@ public:
 	void Init() override;
 	void Update() override;
 
-	void Deserialize(const nlohmann::json& jsonObject) override;
-	void Serialize(nlohmann::json& jsonObject) override;
-
 	std::string Name() override;
+	nlohmann::json Serialize() override;
+	void Deserialize(const nlohmann::json& jsonObject) override;
 
 private:
 	TransformComponent* secondTransform;

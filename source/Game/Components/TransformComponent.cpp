@@ -156,7 +156,7 @@ void TransformComponent::Deserialize(const nlohmann::json& jsonObject)
 	});
 }
 
-void TransformComponent::Serialize(nlohmann::json& jsonObject)
+nlohmann::json TransformComponent::Serialize()
 {
 	nlohmann::json jsonPosition {
 		{ "x", mPosition.x },
@@ -176,7 +176,7 @@ void TransformComponent::Serialize(nlohmann::json& jsonObject)
 		{ "z", mSize.z },
 	};
 
-	jsonObject[Name()] = {
+	return {
 		{ "position", jsonPosition },
 		{ "rotation", jsonRotation },
 		{ "size", jsonSize },
