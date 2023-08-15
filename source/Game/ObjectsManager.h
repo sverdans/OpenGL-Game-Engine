@@ -8,7 +8,7 @@
 #include <spdlog/spdlog.h>
 
 #define DECLARE_COMPONENT(NAME) \
-bool l ## NAME = ObjectsManager::Instance().DeclareComponent<NAME>();
+void* p ## NAME = ObjectsManager::Instance().DeclareComponent<NAME>();
 
 class ObjectsManager final
 {
@@ -21,13 +21,13 @@ public:
     }
 
     template<typename T>
-    bool DeclareComponent()
+    Component* DeclareComponent()
     {
         std::string sName { std::string(typeid(T).name()).substr(2) };
         spdlog::info(sName + " Declared");
         auto pComponent = new T(nullptr);
         mComponents.emplace(sName, pComponent);
-        return true;
+        return pComponent;
     }
 
     void Clear();
