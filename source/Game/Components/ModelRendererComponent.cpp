@@ -63,22 +63,8 @@ void ModelRendererComponent::Render()
 	mpShader->unuse();
 }
 
-void ModelRendererComponent::Deserialize(const nlohmann::json& jsonObject)
-{
-	mpShader = ResourceManager::Instance().GetShader(jsonObject["shader"]);
-	mpModel = ResourceManager::Instance().GetModel(jsonObject["model"]);
-	
-	SetSpecularStrength(jsonObject["specularStrength"]);
-	SetSpecularity(jsonObject["specularity"]);
-
-	mColor = {
-		jsonObject["color"]["r"], 
-		jsonObject["color"]["g"],
-		jsonObject["color"]["b"]
-	};
-
-	mlUseMaterial = jsonObject["useTexture"];
-}
+Component* ModelRendererComponent::Clone() { return new ModelRendererComponent(nullptr); }
+std::string ModelRendererComponent::Name() { return "ModelRendererComponent"; }
 
 nlohmann::json ModelRendererComponent::Serialize()
 {
@@ -96,4 +82,21 @@ nlohmann::json ModelRendererComponent::Serialize()
 		{ "specularity", mSpecularity },
 		{ "color", colorJson },
 	};
+}
+
+void ModelRendererComponent::Deserialize(const nlohmann::json& jsonObject)
+{
+	mpShader = ResourceManager::Instance().GetShader(jsonObject["shader"]);
+	mpModel = ResourceManager::Instance().GetModel(jsonObject["model"]);
+	
+	SetSpecularStrength(jsonObject["specularStrength"]);
+	SetSpecularity(jsonObject["specularity"]);
+
+	mColor = {
+		jsonObject["color"]["r"], 
+		jsonObject["color"]["g"],
+		jsonObject["color"]["b"]
+	};
+
+	mlUseMaterial = jsonObject["useTexture"];
 }

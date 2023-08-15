@@ -33,6 +33,12 @@ public:
 		return it != mComponents.end();
 	}
 
+	bool Contain(const std::string& sComponentName) const
+	{
+		auto it = mComponents.find(sComponentName);
+		return it != mComponents.end();
+	}
+
 	GameObject* AddGameObject();
 
 	GameObject* GetParent() const;

@@ -132,29 +132,8 @@ const glm::mat4x4& TransformComponent::GetModelMatrix() const
 	return mModel;
 }
 
-void TransformComponent::Deserialize(const nlohmann::json& jsonObject)
-{
-	const auto& jsonPosition = jsonObject["position"];
-	SetPosition({
-		jsonPosition["x"],
-		jsonPosition["y"],
-		jsonPosition["z"] 
-	});
-
-	const auto& jsonRotation = jsonObject["rotation"];
-	SetRotation({
-		jsonRotation["x"],
-		jsonRotation["y"],
-		jsonRotation["z"]
-	});
-
-	const auto& jsonSize = jsonObject["size"];
-	SetSize({
-		jsonSize["x"],
-		jsonSize["y"],
-		jsonSize["z"]
-	});
-}
+Component* TransformComponent::Clone() { return new TransformComponent(nullptr); }
+std::string TransformComponent::Name() { return "TransformComponent"; }
 
 nlohmann::json TransformComponent::Serialize()
 {
@@ -181,4 +160,28 @@ nlohmann::json TransformComponent::Serialize()
 		{ "rotation", jsonRotation },
 		{ "size", jsonSize },
 	};
+}
+
+void TransformComponent::Deserialize(const nlohmann::json& jsonObject)
+{
+	const auto& jsonPosition = jsonObject["position"];
+	SetPosition({
+		jsonPosition["x"],
+		jsonPosition["y"],
+		jsonPosition["z"] 
+	});
+
+	const auto& jsonRotation = jsonObject["rotation"];
+	SetRotation({
+		jsonRotation["x"],
+		jsonRotation["y"],
+		jsonRotation["z"]
+	});
+
+	const auto& jsonSize = jsonObject["size"];
+	SetSize({
+		jsonSize["x"],
+		jsonSize["y"],
+		jsonSize["z"]
+	});
 }

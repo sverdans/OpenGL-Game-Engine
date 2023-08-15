@@ -32,6 +32,7 @@ public:
 
 	void SetProjectionMode(EnProjectionMode eMode);
 
+	Component* Clone() override;
 	std::string Name() override;
 	nlohmann::json Serialize() override;
 	void Deserialize(const nlohmann::json& jsonObject) override;

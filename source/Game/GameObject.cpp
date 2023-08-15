@@ -60,13 +60,6 @@ void GameObject::Serialize(nlohmann::json& jsonObject)
 		jsonComponents[pComponent->Name()] = pComponent->Serialize();
 
 	nlohmann::json jsonChildren;
-/*
-	if (!mChildren.empty())
-	{
-		for (const auto& obj : mChildren)
-			jsonObject["GameObjects"].push_back(obj->msName);
-	}
-*/
 
 	jsonObject = {
 		{ "name", msName },
@@ -80,57 +73,34 @@ void GameObject::Deserialize(const nlohmann::json& jsonObject)
 {
 	msName = jsonObject["name"];
 
-	if (jsonObject.contains("tags"))
+	mTags.clear();
+	for (const auto& jsonTag : jsonObject["tags"])
+		AddTag(jsonTag);
+
+	const auto& jsonComponents = jsonObject["components"];
+	for (auto& it : jsonComponents.items())
 	{
-		mTags.clear();
-		for (const auto& jsonTag : jsonObject["tags"])
-			AddTag(jsonTag);
+		const std::string sComponentName = it.key();
+		const nlohmann::json& jsonComponent = it.value();
+
+		std::cout << "key: " << sComponentName << ", value:" << jsonComponent << std::endl;
+		
+		if (Contain(sComponentName))
+		{
+			mComponents[sComponentName]->Deserialize(jsonComponent);
+		}
+		else
+		{
+			auto pInstace = ObjectsManager::Instance().GetComponentInstance(sComponentName);
+			auto pComponent = pInstace->Clone();
+			pComponent->SetGameObject(this);
+			pComponent->Deserialize(jsonComponent);
+			mComponents[sComponentName] = pComponent;
+		}
 	}
 
-	auto& jsonComponents = jsonObject["components"];
-	for (auto& jsonComponent : jsonComponents.items())
-	{
-		std::cout << "key: " << jsonComponent.key() << ", value:" << jsonComponent.value() << '\n';
-	}
-
-/*
-	if (jsonObject.contains("TransformComponent"))
-	{
-		auto component = contain<TransformComponent>() ? getComponent<TransformComponent>() : addComponent<TransformComponent>(); 
-		component->deserialize(jsonObject[component->name()]);
-	}
-
-	if (jsonObject.contains("CameraComponent"))
-	{
-		auto component = contain<CameraComponent>() ? getComponent<CameraComponent>() : addComponent<CameraComponent>();
-		component->deserialize(jsonObject[component->name()]);
-	}
-
-	if (jsonObject.contains("ModelRendererComponent"))
-	{
-		auto component = contain<ModelRendererComponent>() ? getComponent<ModelRendererComponent>() : addComponent<ModelRendererComponent>();
-		component->deserialize(jsonObject[component->name()]);
-	}
-
-	if (jsonObject.contains("LightingComponent"))
-	{
-		auto component = contain<LightingComponent>() ? getComponent<LightingComponent>() : addComponent<LightingComponent>();
-		component->deserialize(jsonObject[component->name()]);
-	}
-
-	if (jsonObject.contains("LightingComponent"))
-	{
-		auto component = contain<LightingComponent>() ? getComponent<LightingComponent>() : addComponent<LightingComponent>();
-		component->deserialize(jsonObject[component->name()]);
-	}
-
-	if (jsonObject.contains("ClockComponent"))
-	{
-		auto component = contain<ClockComponent>() ? getComponent<ClockComponent>() : addComponent<ClockComponent>();
-		component->deserialize(jsonObject[component->name()]);
-	}
-*/
-
+	const auto& jsonChildren = jsonObject["children"];
+	/*
 	if (jsonObject.contains("GameObjects"))
 	{
 		mChildren.clear();
@@ -144,4 +114,5 @@ void GameObject::Deserialize(const nlohmann::json& jsonObject)
 			}
 		}
 	}
+	*/
 }

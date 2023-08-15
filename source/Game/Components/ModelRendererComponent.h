@@ -8,6 +8,28 @@ class ShaderProgram;
 
 class ModelRendererComponent : public RendererComponent
 {
+public:
+	ModelRendererComponent(GameObject* pGameObject);
+	ModelRendererComponent() = delete;
+	ModelRendererComponent(const ModelRendererComponent&) = delete;
+	ModelRendererComponent& operator = (const ModelRendererComponent&) = delete;
+	~ModelRendererComponent() = default;
+
+public:
+	void SetModel(const Model* pModel);
+	void SetShader(const ShaderProgram* pShader);
+	void SetColor(const glm::vec3& color);
+
+	void SetSpecularStrength(const float specularStrength);
+	void SetSpecularity(const int specularity);
+
+	void Render() override;
+
+	Component* Clone() override;
+	std::string Name() override;
+	nlohmann::json Serialize() override;
+	void Deserialize(const nlohmann::json& jsonObject) override;
+
 private:
 	Renderer::EnDrawMode meDrawMode;
 
@@ -19,26 +41,4 @@ private:
 
 	float mSpecularStrength;
 	int mSpecularity;
-
-public:
-	ModelRendererComponent() = delete;
-	ModelRendererComponent(const ModelRendererComponent&) = delete;
-	ModelRendererComponent& operator = (const ModelRendererComponent&) = delete;
-	~ModelRendererComponent() = default;
-
-	ModelRendererComponent(GameObject* pGameObject);
-
-	void SetModel(const Model* pModel);
-	void SetShader(const ShaderProgram* pShader);
-	void SetColor(const glm::vec3& color);
-
-	void SetSpecularStrength(const float specularStrength);
-	void SetSpecularity(const int specularity);
-
-	void Render() override;
-
-	void Deserialize(const nlohmann::json& jsonObject) override;
-	nlohmann::json Serialize() override;
-
-	std::string Name() override { return "ModelRendererComponent"; }
 };

@@ -29,18 +29,8 @@ void LightingComponent::SetColor(const glm::vec3& color)
 	mColor = color;
 }
 
+Component* LightingComponent::Clone() { return new LightingComponent(nullptr); }
 std::string LightingComponent::Name() { return "LightingComponent"; }
-
-void LightingComponent::Deserialize(const nlohmann::json& jsonObject)
-{
-	int r = jsonObject["color"]["r"];
-	int g = jsonObject["color"]["g"];
-	int b = jsonObject["color"]["b"];
-	mColor = { r, g, b };
-
-	SetIntensity(jsonObject["intensity"]);
-	meType = jsonObject["type"];
-}
 
 nlohmann::json LightingComponent::Serialize()
 {
@@ -55,4 +45,15 @@ nlohmann::json LightingComponent::Serialize()
 		{ "intensity", mIntensity },
 		{ "color", colorJson },
 	};
+}
+
+void LightingComponent::Deserialize(const nlohmann::json& jsonObject)
+{
+	int r = jsonObject["color"]["r"];
+	int g = jsonObject["color"]["g"];
+	int b = jsonObject["color"]["b"];
+	mColor = { r, g, b };
+
+	SetIntensity(jsonObject["intensity"]);
+	meType = jsonObject["type"];
 }

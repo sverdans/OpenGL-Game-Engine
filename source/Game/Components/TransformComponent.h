@@ -9,12 +9,12 @@ class TransformComponent : public Component
 {
 public:
 	TransformComponent(GameObject* gameObject);
-
 	TransformComponent() = delete;
 	TransformComponent(const TransformComponent&) = delete;
 	TransformComponent& operator = (const TransformComponent&) = delete;
 	~TransformComponent() = default;
 
+public:
 	const glm::vec3& SetPosition(const glm::vec3& position);
 	const glm::vec3& SetRotation(const glm::vec3& rotation);
 	const glm::vec3& SetSize(const glm::vec3& size);
@@ -38,9 +38,10 @@ public:
 
 	const glm::mat4x4& GetModelMatrix() const;
 
-	void Deserialize(const nlohmann::json& jsonObject) override;
+	Component* Clone() override;
+	std::string Name() override;
 	nlohmann::json Serialize() override;
-	std::string Name() override { return "TransformComponent"; }
+	void Deserialize(const nlohmann::json& jsonObject) override;
 
 protected:
 	glm::vec3 mPosition = glm::vec3(0.f, 0.f, 0.f);

@@ -14,21 +14,21 @@ public:
 	};
 
 public:
-	
-	float GetIntensity();
-	float SetIntensity(float intensity);
-	void SetColor(const glm::vec3& color);
-	
-	std::string Name() override;
-	nlohmann::json Serialize() override;
-	void Deserialize(const nlohmann::json& jsonObject) override;
-
-public:
 	LightingComponent(GameObject* gameObject);
 	LightingComponent() = delete;
 	~LightingComponent();
 	LightingComponent(const LightingComponent&) = delete;
 	LightingComponent& operator = (const LightingComponent&) = delete;
+
+public:
+	float GetIntensity();
+	float SetIntensity(float intensity);
+	void SetColor(const glm::vec3& color);
+	
+	Component* Clone() override;
+	std::string Name() override;
+	nlohmann::json Serialize() override;
+	void Deserialize(const nlohmann::json& jsonObject) override;
 
 private:
 	Type meType;
