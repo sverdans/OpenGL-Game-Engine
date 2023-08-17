@@ -3,6 +3,7 @@
 #include <list>
 #include <string>
 
+#include <General/Utils.h>
 #include <Game/Component.h>
 #include <Game/GameObject.h>
 #include <spdlog/spdlog.h>
@@ -12,40 +13,41 @@ void* p ## NAME = ObjectsManager::Instance().DeclareComponent<NAME>();
 
 class ObjectsManager final
 {
-    friend class Editor;
+	friend class Editor;
 public:
-    static ObjectsManager& Instance() 
-    { 
-        static ObjectsManager instance;
-        return instance;
-    }
+	static ObjectsManager& Instance() 
+	{ 
+		static ObjectsManager instance;
+		return instance;
+	}
 
-    template<typename T>
-    Component* DeclareComponent()
-    {
-        std::string sName { std::string(typeid(T).name()).substr(2) };
-        spdlog::info(sName + " Declared");
-        auto pComponent = new T(nullptr);
-        mComponents.emplace(sName, pComponent);
-        return pComponent;
-    }
+	template<typename T>
+	Component* DeclareComponent()
+	{
+		std::string sName = utils::ClassName<T>();
+		spdlog::info(sName + " Declared");
+		
+		auto pComponent = new T(nullptr);
+		mComponents.emplace(sName, pComponent);
+		return pComponent;
+	}
 
-    void Clear();
-    void Load(const std::string& sFilePath);
+	void Clear();
+	void Load(const std::string& sFilePath);
 
-    GameObject* FindByTag(const std::string sName);
-    GameObject* FindByName(const std::string sName);
-    Component* GetComponentInstance(const std::string& sName);
-
-private:
-    ObjectsManager();
-    ~ObjectsManager() = default;
-    ObjectsManager(const ObjectsManager&) = delete;
-    ObjectsManager(const ObjectsManager&&) = delete;
-    ObjectsManager& operator = (const ObjectsManager&) = delete;
-    ObjectsManager& operator = (const ObjectsManager&&) = delete;
+	GameObject* FindByTag(const std::string sName);
+	GameObject* FindByName(const std::string sName);
+	Component* GetComponentInstance(const std::string& sName);
 
 private:
-    std::list<GameObject*> mGameObjects;
-    std::map<std::string, Component*> mComponents;
+	ObjectsManager();
+	~ObjectsManager() = default;
+	ObjectsManager(const ObjectsManager&) = delete;
+	ObjectsManager(const ObjectsManager&&) = delete;
+	ObjectsManager& operator = (const ObjectsManager&) = delete;
+	ObjectsManager& operator = (const ObjectsManager&&) = delete;
+
+private:
+	std::list<GameObject*> mGameObjects;
+	std::map<std::string, Component*> mComponents;
 };

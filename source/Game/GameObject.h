@@ -4,8 +4,10 @@
 #include <list>
 #include <map>
 
-#include <Game/Component.h>
 #include <nlohmann/json.hpp>
+
+#include <General/Utils.h>
+#include <Game/Component.h>
 
 class GameObject final
 {
@@ -16,20 +18,23 @@ public:
 	template <typename T>
 	T* const AddComponent()
 	{
-		return static_cast<T*>(mComponents[typeid(T).name()] = new T(this));
+		std::string sComponentName = utils::ClassName<T>(); 
+		return static_cast<T*>(mComponents[sComponentName] = new T(this));
 	}
 
 	template <typename T>
 	T* const GetComponent()
 	{
-		auto it = mComponents.find(typeid(T).name());
+		std::string sComponentName = utils::ClassName<T>(); 
+		auto it = mComponents.find(sComponentName);
 		return it == mComponents.end() ? nullptr : static_cast<T*>(it->second);
 	}
 
 	template <typename T>
 	bool Contain() const
 	{
-		auto it = mComponents.find(typeid(T).name());
+		std::string sComponentName = utils::ClassName<T>(); 
+		auto it = mComponents.find(sComponentName);
 		return it != mComponents.end();
 	}
 

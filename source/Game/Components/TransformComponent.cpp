@@ -88,6 +88,10 @@ const glm::vec3 TransformComponent::GetGlobalPosition() const
 {
 	glm::vec3 globalPosition(0, 0, 0);
 	auto pObject = GetGameObject();
+	
+	if (!pObject)
+		return globalPosition;
+	
 	do
 	{
 		auto TC = pObject->GetComponent<TransformComponent>();

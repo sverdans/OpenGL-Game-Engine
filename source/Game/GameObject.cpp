@@ -87,6 +87,7 @@ void GameObject::Deserialize(const nlohmann::json& jsonObject)
 		
 		if (Contain(sComponentName))
 		{
+			std::cout << "Deserialize " << sComponentName << std::endl;
 			mComponents[sComponentName]->Deserialize(jsonComponent);
 		}
 		else

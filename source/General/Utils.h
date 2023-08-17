@@ -4,6 +4,14 @@
 
 namespace utils
 {
+	template <class T>
+	std::string ClassName()
+	{
+		#if __GNUC__
+			return std::string(typeid(T).name()).substr(2);
+		#endif
+	}
+
 	const std::string FetchDataFromFile(const std::string& sFilePath);
 	bool ParseJsonFile(const std::string& sFilePath, nlohmann::json& outJson);
 }

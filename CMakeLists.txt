@@ -8,6 +8,16 @@ set(BUILD_SHARED_LIBS OFF)
 project(${PROJECT_NAME} LANGUAGES CXX)
 option(ASAN "" ON)
 
+if(WIN32)
+    set(BUILD_PLATFORM PLATFORM_WIN32)
+elseif(APPLE)
+    set(BUILD_PLATFORM PLATFORM_MACOS)
+elseif(UNIX AND NOT APPLE)
+    set(BUILD_PLATFORM PLATFORM_LINUX)
+endif()
+
+message(STATUS "Building on platform : ${BUILD_PLATFORM}")
+
 function(fetch_dependencies)
     include(FetchContent)
     set(LIBS_DIR ${CMAKE_BINARY_DIR}/external)
@@ -89,6 +99,11 @@ function(fetch_dependencies)
     target_include_directories(imgui PUBLIC ${IMGUI_DIR})
     target_link_libraries(imgui PRIVATE glad glfw)
 
+    FetchContent_Declare(nfd
+        GIT_REPOSITORY https://github.com/btzy/nativefiledialog-extended.git
+        SOURCE_DIR ${LIBS_DIR}/nfd)
+    FetchContent_MakeAvailable(nfd)
+
     message(STATUS "Fetching project dependency - done")
 endfunction()
 
@@ -105,6 +120,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${LIBS_DIR}/imgui
     ${LIBS_DIR}/spdlog/include
     ${LIBS_DIR}/assimp/include
+    ${LIBS_DIR}/nfd/src/include
     ${LIBS_DIR}/nlohmann/include
     ${CMAKE_SOURCE_DIR}/source)
 
@@ -115,7 +131,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     imgui
     glfw
     glad
-    glm)
+    glm
+    nfd)
 
 if(${ASAN})
     message(STATUS "Building with Adress Sanitizer")

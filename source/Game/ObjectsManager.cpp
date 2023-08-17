@@ -1,7 +1,6 @@
 #include <typeinfo>
 #include <algorithm>
 
-#include <General/Utils.h>
 #include <Game/Component.h>
 #include <Game/GameObject.h>
 #include <Game/ObjectsManager.h>
@@ -28,7 +27,11 @@ void ObjectsManager::Clear()
 void ObjectsManager::Load(const std::string& sFilePath)
 {
 	nlohmann::json sourceObject;
-	utils::ParseJsonFile(sFilePath, sourceObject);
+	if (!utils::ParseJsonFile(sFilePath, sourceObject))
+	{
+		// warning
+		return;
+	}
 
 	for (const auto& jsonGameObject : sourceObject["GameObjects"])
 	{

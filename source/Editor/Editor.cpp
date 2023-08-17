@@ -1,4 +1,5 @@
 #include <nlohmann/json.hpp>
+#include <nfd.hpp>
 
 #include <Editor/Editor.h>
 #include <System/Window.h>
@@ -145,14 +146,20 @@ void Editor::DrawMenuStrip()
         {
             if (ImGui::MenuItem("Open"))
             {
-                ImVec2 size = ImVec2(
-                    Window::Instance().GetWidth() - 100,
-                    Window::Instance().GetHeight() - 100);
-
-                ImGui::SetNextWindowPos(ImVec2(50, 50));
-                ImGui::SetNextWindowSize(size);
-
             //	ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Project file", ".json", ".");
+                NFD::Guard nfdGuard;
+                NFD::UniquePath outPath;
+
+                nfdfilteritem_t filterItem[2] = {{"Source code", "c,cpp,cc"}, {"Headers", "h,hpp"}};
+
+                nfdresult_t result = NFD::OpenDialog(outPath, filterItem, 2);
+
+                if (result == NFD_OKAY) 
+                    std::cout << "Success!" << std::endl << outPath.get() << std::endl;
+                else if (result == NFD_CANCEL)
+                    std::cout << "User pressed cancel." << std::endl;
+                else
+                    std::cout << "Error: " << NFD::GetError() << std::endl;
             }
             
             ImGui::EndMenu();

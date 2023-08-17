@@ -27,6 +27,9 @@ CameraComponent::CameraComponent(GameObject* pGameObject)
 void CameraComponent::UpdateViewMatrix()
 {
 	auto pTC = GetGameObject()->GetComponent<TransformComponent>();
+	if (!pTC)
+		return;
+
 	glm::vec3 position = pTC->GetGlobalPosition();
 	viewMatrix = glm::lookAt(position, position + pTC->GetForward(), constants::WorldUp);
 }
