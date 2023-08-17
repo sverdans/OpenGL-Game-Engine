@@ -39,6 +39,7 @@ ShaderProgram* ResourceManager::LoadShader(
 		exit(-1);
 	}
 
+	std::cout << "Shader '" << sShaderName << "'created" << std::endl;
 	mShaders.emplace(sShaderName, pProgram);
 	return pProgram;
 }
@@ -62,18 +63,20 @@ Texture* ResourceManager::LoadTexture(
 	}
 
 	Texture* texture = new Texture(width, height, pixels, channels, GL_NEAREST, GL_CLAMP_TO_EDGE);
-	texture->type = sType;
-
-	mTextures.emplace(std::make_pair(sTextureName, texture));
-
 	stbi_image_free(pixels);
 
+	texture->type = sType;
+
+	std::cout << "Texture '" << sTextureName << "'created" << std::endl;
+	mTextures.emplace(std::make_pair(sTextureName, texture));
 	return texture;
 }
 
 Material* ResourceManager::LoadMaterial(const std::string& sName)
 {
 	Material* pMaterial = new Material();
+
+	std::cout << "Material '" << sName << "'created" << std::endl;
 	mMaterials.emplace(std::make_pair(sName, pMaterial));
 	return pMaterial;
 }
@@ -93,6 +96,8 @@ Model* ResourceManager::LoadModel(const std::string& sName, const std::string& s
 	ProcessNode(meshes, pScene->mRootNode, pScene);
 
 	Model* pModel = new Model(meshes, Renderer::EnDrawMode::Triangles);
+
+	std::cout << "Model '" << sName << "'created" << std::endl;
 	mModels.emplace(std::make_pair(sName, pModel));
 	return pModel;
 }
@@ -193,10 +198,11 @@ void ResourceManager::Load(const std::string& sFilePath)
 {
 	json document;
 	utils::ParseJsonFile(sFilePath, document);
-
-	if (document.contains("Shaders"))
+	const auto& jsonResources = document["resources"];
+	
+	if (jsonResources.contains("Shaders"))
 	{
-		auto jsonShaders = document["Shaders"];
+		auto jsonShaders = jsonResources["Shaders"];
 		if (jsonShaders.is_array())
 		{
 			for (const auto& currentShader : jsonShaders)
@@ -209,9 +215,9 @@ void ResourceManager::Load(const std::string& sFilePath)
 		}
 	}
 
-	if (document.contains("Textures"))
+	if (jsonResources.contains("Textures"))
 	{
-		auto jsonTextures = document["Textures"];
+		auto jsonTextures = jsonResources["Textures"];
 		if (jsonTextures.is_array())
 		{
 			for (const auto& currentTexture : jsonTextures)
@@ -223,9 +229,9 @@ void ResourceManager::Load(const std::string& sFilePath)
 		}
 	}
 
-	if (document.contains("Models"))
+	if (jsonResources.contains("Models"))
 	{
-		auto jsonModels = document["Models"];
+		auto jsonModels = jsonResources["Models"];
 		if (jsonModels.is_array())
 		{
 			for (const auto& currentModel : jsonModels)

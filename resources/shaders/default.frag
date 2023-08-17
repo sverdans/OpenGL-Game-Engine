@@ -66,13 +66,19 @@ void main()
 	}
 
 
-	if (useMaterial)
+	if (useMaterial > 0)
 	{
-		if (useTexture)
+		if (useTexture > 0)
+		{
 			fragColor = vec4(lighting, 1.0) * texture(diffuseTexture1, fragIn.textureCoords);
+		}
 		else
+		{
 			fragColor = vec4(lighting * materialColor, 1.0);
+		}
 	}
 	else
+	{
 		fragColor = vec4(lighting * modelColor, 1.0);
+	}
 }

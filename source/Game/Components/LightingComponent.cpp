@@ -5,8 +5,7 @@ DECLARE_COMPONENT(LightingComponent)
 
 LightingComponent::LightingComponent(GameObject* pGameObject) : Component(pGameObject) 
 {
-	if (pGameObject)
-		LightingSystem::Instance().AddLightingComponent(this);
+	LightingSystem::Instance().AddLightingComponent(this);
 }
 
 LightingComponent::~LightingComponent()

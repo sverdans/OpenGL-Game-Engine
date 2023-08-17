@@ -92,6 +92,7 @@ void GameObject::Deserialize(const json& jsonObject)
 		}
 		else
 		{
+			std::cout << "Create & Deserialize " << sComponentName << std::endl;
 			auto pInstace = ObjectsManager::Instance().GetComponentInstance(sComponentName);
 			auto pComponent = pInstace->Clone();
 			pComponent->SetGameObject(this);
@@ -100,7 +101,7 @@ void GameObject::Deserialize(const json& jsonObject)
 		}
 	}
 
-	const auto& jsonChildren = jsonObject["children"];
+	//const auto& jsonChildren = jsonObject["children"];
 	/*
 	if (jsonObject.contains("GameObjects"))
 	{

@@ -7,8 +7,7 @@ RendererComponent::RendererComponent(GameObject* pGameObject)
 	: Component(pGameObject)
 	, mlRenderEnable(true)
 {
-	if (pGameObject)
-		RendererSystem::Instance().AddToRenderQueue(this);
+	RendererSystem::Instance().AddToRenderQueue(this);
 }
 
 RendererComponent::~RendererComponent()

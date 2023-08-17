@@ -15,8 +15,11 @@ void RendererSystem::Render()
 {
 	for (auto it : mRenderQueue)
 	{
-		it->Update();
-		it->Render();
+		if (it->GetGameObject())
+		{
+			it->Update();
+			it->Render();
+		}
 	}
 }
 

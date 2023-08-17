@@ -6,7 +6,7 @@ class TransformComponent;
 class ClockComponent : public BehaviourComponent
 {
 public:
-	ClockComponent(GameObject* gameObject) : BehaviourComponent(gameObject) {}
+	ClockComponent(GameObject* pGameObject) : BehaviourComponent(pGameObject) {}
 	ClockComponent(const ClockComponent&) = delete;
 	ClockComponent& operator = (const ClockComponent&) = delete;
 	~ClockComponent() = default;

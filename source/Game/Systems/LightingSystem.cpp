@@ -29,6 +29,9 @@ void LightingSystem::Update()
 		unsigned int dirIndex = 0, pointIndex = 0;
 		for (auto& it : mLightingComponents)
 		{
+			if (!it->GetGameObject())
+				continue;
+
 			switch (it->meType)
 			{
 				case LightingComponent::Type::Directional:

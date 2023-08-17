@@ -7,6 +7,8 @@
 #include <Game/GameObject.h>
 #include <Game/ObjectsManager.h>
 #include <Game/ResourceManager.h>
+
+#include <Game/Systems/BehaviourSystem.h>
 #include <Game/Systems/LightingSystem.h>
 
 bool Editor::Initialize()
@@ -160,7 +162,15 @@ void Editor::DrawMenuStrip()
                 if (result == NFD_OKAY)
                 {
                     std::cout << "Success!" << std::endl << outPath.get() << std::endl;
+
+                    ObjectsManager::Instance().Clear();
+                    ResourceManager::Instance().Clear();
+
+                    ResourceManager::Instance().Load(outPath.get());
                     ObjectsManager::Instance().Load(outPath.get());
+
+                    BehaviourSystem::Instance().Init();
+                    LightingSystem::Instance().Update();
                 }
                 else if (result == NFD_CANCEL)
                 {

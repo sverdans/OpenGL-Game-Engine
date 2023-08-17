@@ -14,26 +14,45 @@ void BehaviourSystem::RemoveFromUpdateQueue(BehaviourComponent* pComponent)
 void BehaviourSystem::Init()
 {
 	for (auto it : mUpdateQueue)
-		it->Init();
+	{
+		if (it->GetGameObject())
+		{
+			it->Init();
+		}
+	}
 }
 
 void BehaviourSystem::Update()
 {
-	std::cout << mUpdateQueue.size() << std::endl;
 	for (auto it : mUpdateQueue)
-		it->Update();
+	{
+		if (it->GetGameObject())
+		{
+			it->Update();
+		}
+	}
 }
 
 void BehaviourSystem::LateUpdate()
 {
 	for (auto it : mUpdateQueue)
-		it->LateUpdate();
+	{
+		if (it->GetGameObject())
+		{
+			it->LateUpdate();
+		}
+	}
 }
 
 void BehaviourSystem::OnPreRender()
 {
 	for (auto it : mUpdateQueue)
-		it->OnPreRender();
+	{
+		if (it->GetGameObject())
+		{
+			it->OnPreRender();
+		}
+	}
 }
 
 

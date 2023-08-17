@@ -33,20 +33,15 @@ void basic_logfile_example()
 
 int main(int argc, char** argv)
 {
-	basic_logfile_example();
-
 	Window::Instance().Initialize(1000, 800, "OpenGL-Courswork");
+	Editor::Instance().Initialize();
 
 	Renderer::setClearColor(60.f / 255.f , 60.f / 255.f, 60.f / 255.f, 0.f);
-
-//	Renderer::setClearColor(0.f, 0.f, 0.f, 0.f);
 	Renderer::enableDepthTest();
 
 	InputHandler::init();
 
-	Editor::Instance().Initialize();
-
-	LightingSystem::Instance().setAmbientColor(glm::vec3(1.f, 1.f, 1.f));
+	LightingSystem::Instance().setAmbientColor({ 1.f, 1.f, 1.f });
 	LightingSystem::Instance().setAmbientStrength(0.225f);
 
 //	ObjectsManager::Instance().Load("/home/sverdans/Documents/c++/OpenGL-Game-Engine/resources/projects/courswork.json");
@@ -78,9 +73,9 @@ int main(int argc, char** argv)
 
 	ObjectsManager::Instance().Clear();
 	ResourceManager::Instance().Clear();
-	
-	Window::Instance().Finalize();
+
 	Editor::Instance().Finalize();
+	Window::Instance().Finalize();
 
 	return 0;
 }

@@ -3,8 +3,7 @@
 
 BehaviourComponent::BehaviourComponent(GameObject* pGameObject) : Component(pGameObject)
 {
-    if (pGameObject)
-	    BehaviourSystem::Instance().AddToUpdateQueue(this);
+	BehaviourSystem::Instance().AddToUpdateQueue(this);
 }
 
 BehaviourComponent::~BehaviourComponent()
