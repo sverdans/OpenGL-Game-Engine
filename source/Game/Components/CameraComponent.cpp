@@ -146,7 +146,7 @@ void CameraComponent::OnPreRender()
 Component* CameraComponent::Clone() { return new CameraComponent(nullptr); }
 std::string CameraComponent::Name() { return "CameraComponent"; }
 
-nlohmann::json CameraComponent::Serialize()
+json CameraComponent::Serialize()
 {
 	return {
 		{ "isMovable",      mlIsMovable      },
@@ -157,7 +157,7 @@ nlohmann::json CameraComponent::Serialize()
 	};
 }
 
-void CameraComponent::Deserialize(const nlohmann::json& jsonObject)
+void CameraComponent::Deserialize(const json& jsonObject)
 {
 	mViewportWidth  = Window::Instance().GetWidth();
 	mViewportHeight = Window::Instance().GetHeight();

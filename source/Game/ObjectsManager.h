@@ -33,7 +33,7 @@ public:
 	}
 
 	void Clear();
-	void Load(const std::string& sFilePath);
+	bool Load(const std::string& sFilePath);
 
 	GameObject* FindByTag(const std::string sName);
 	GameObject* FindByName(const std::string sName);

@@ -11,12 +11,14 @@
 
 #include <nlohmann/json.hpp>
 
+using json = nlohmann::ordered_json;
+
 class GameObject;
 
 class Editor
 {
 private:
-	void PresentJsonObject(nlohmann::json& jsonValue);
+	void PresentJsonObject(json& jsonValue);
 	void PresentResourceManager();
 	void PresentObjectsManager();
 

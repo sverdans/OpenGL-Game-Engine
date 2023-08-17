@@ -40,8 +40,8 @@ public:
 
 	Component* Clone() override;
 	std::string Name() override;
-	nlohmann::json Serialize() override;
-	void Deserialize(const nlohmann::json& jsonObject) override;
+	json Serialize() override;
+	void Deserialize(const json& jsonObject) override;
 
 protected:
 	glm::vec3 mPosition = glm::vec3(0.f, 0.f, 0.f);

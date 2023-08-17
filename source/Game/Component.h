@@ -2,6 +2,8 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
+using json = nlohmann::ordered_json;
+
 class GameObject;
 
 class Component 
@@ -16,8 +18,8 @@ public:
 
 	virtual Component* Clone() = 0;
 	virtual std::string Name() = 0;
-	virtual nlohmann::json Serialize() = 0;
-	virtual void Deserialize(const nlohmann::json& jsonObject) = 0;
+	virtual json Serialize() = 0;
+	virtual void Deserialize(const json& jsonObject) = 0;
 
 	GameObject* const GetGameObject() const { return mpGameObject; }
 	void SetGameObject(GameObject* pGameObject) { mpGameObject = pGameObject; }

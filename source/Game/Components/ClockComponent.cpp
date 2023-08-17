@@ -33,14 +33,14 @@ void ClockComponent::Update()
 Component* ClockComponent::Clone() { return new ClockComponent(nullptr); } 
 std::string ClockComponent::Name() { return "ClockComponent"; }
 
-nlohmann::json ClockComponent::Serialize()
+json ClockComponent::Serialize()
 {
 	return {
 		{"scale", scale}
 	};
 }
 
-void ClockComponent::Deserialize(const nlohmann::json& jsonObject)
+void ClockComponent::Deserialize(const json& jsonObject)
 {
 	scale = jsonObject["scale"];
 }

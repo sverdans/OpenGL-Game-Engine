@@ -29,11 +29,15 @@ bool Editor::Initialize()
     sidebarMinSize = ImVec2(200, window.GetHeight());
     sidebarMaxSize = ImVec2(400, window.GetHeight());
 
+    NFD_Init();
+
     return lInit;
 }
 
 void Editor::Finalize()
 {
+    NFD_Quit();
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -75,7 +79,7 @@ void Editor::Update()
 
 
 
-void Editor::PresentJsonObject(nlohmann::json& jsonObject)
+void Editor::PresentJsonObject(json& jsonObject)
 {
     ImGui::Indent(indentValue);
 
@@ -147,19 +151,25 @@ void Editor::DrawMenuStrip()
             if (ImGui::MenuItem("Open"))
             {
             //	ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Project file", ".json", ".");
-                NFD::Guard nfdGuard;
+                
                 NFD::UniquePath outPath;
+                nfdfilteritem_t filterItem[1] = { {"Projects file", "json"} };
 
-                nfdfilteritem_t filterItem[2] = {{"Source code", "c,cpp,cc"}, {"Headers", "h,hpp"}};
+                nfdresult_t result = NFD::OpenDialog(outPath, filterItem, 1);
 
-                nfdresult_t result = NFD::OpenDialog(outPath, filterItem, 2);
-
-                if (result == NFD_OKAY) 
+                if (result == NFD_OKAY)
+                {
                     std::cout << "Success!" << std::endl << outPath.get() << std::endl;
+                    ObjectsManager::Instance().Load(outPath.get());
+                }
                 else if (result == NFD_CANCEL)
+                {
                     std::cout << "User pressed cancel." << std::endl;
+                }
                 else
+                {
                     std::cout << "Error: " << NFD::GetError() << std::endl;
+                }
             }
             
             ImGui::EndMenu();
@@ -278,8 +288,7 @@ void Editor::DrawGameObjectSidebar()
     {
         gameObjectSidebarSize = ImVec2(ImGui::GetWindowSize().x, window.GetHeight());
     
-        nlohmann::json jsonGameObject;
-        currentGameObject->Serialize(jsonGameObject);
+        json jsonGameObject = currentGameObject->Serialize();
 
         needDeserializeCurrentObject = false;
         inputUID.clear();

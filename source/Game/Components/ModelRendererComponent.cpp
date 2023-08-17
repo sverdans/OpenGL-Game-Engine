@@ -68,9 +68,9 @@ void ModelRendererComponent::Render()
 Component* ModelRendererComponent::Clone() { return new ModelRendererComponent(nullptr); }
 std::string ModelRendererComponent::Name() { return "ModelRendererComponent"; }
 
-nlohmann::json ModelRendererComponent::Serialize()
+json ModelRendererComponent::Serialize()
 {
-	nlohmann::json colorJson {
+	json colorJson {
 		{ "r", mColor.r },
 		{ "g", mColor.g },
 		{ "b", mColor.b },
@@ -86,7 +86,7 @@ nlohmann::json ModelRendererComponent::Serialize()
 	};
 }
 
-void ModelRendererComponent::Deserialize(const nlohmann::json& jsonObject)
+void ModelRendererComponent::Deserialize(const json& jsonObject)
 {
 	mpShader = ResourceManager::Instance().GetShader(jsonObject["shader"]);
 	mpModel = ResourceManager::Instance().GetModel(jsonObject["model"]);

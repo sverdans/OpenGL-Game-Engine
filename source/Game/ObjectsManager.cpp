@@ -5,6 +5,8 @@
 #include <Game/GameObject.h>
 #include <Game/ObjectsManager.h>
 
+using json = nlohmann::ordered_json;
+
 ObjectsManager::ObjectsManager() { }
 
 Component* ObjectsManager::GetComponentInstance(const std::string& sName)
@@ -24,21 +26,24 @@ void ObjectsManager::Clear()
 	mGameObjects.clear();
 }
 
-void ObjectsManager::Load(const std::string& sFilePath)
+bool ObjectsManager::Load(const std::string& sFilePath)
 {
-	nlohmann::json sourceObject;
+	json sourceObject;
+
 	if (!utils::ParseJsonFile(sFilePath, sourceObject))
 	{
+		std::cout << "parse error" << std::endl;
 		// warning
-		return;
+		return false;
 	}
 
-	for (const auto& jsonGameObject : sourceObject["GameObjects"])
+	for (const auto& jsonGameObject : sourceObject["objects"])
 	{
 		GameObject* object = new GameObject();
 		object->Deserialize(jsonGameObject);
 		mGameObjects.push_back(object);
 	}
+	return true;
 }
 
 GameObject* ObjectsManager::FindByTag(const std::string sTag)

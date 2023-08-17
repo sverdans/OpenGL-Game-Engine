@@ -139,21 +139,21 @@ const glm::mat4x4& TransformComponent::GetModelMatrix() const
 Component* TransformComponent::Clone() { return new TransformComponent(nullptr); }
 std::string TransformComponent::Name() { return "TransformComponent"; }
 
-nlohmann::json TransformComponent::Serialize()
+json TransformComponent::Serialize()
 {
-	nlohmann::json jsonPosition {
+	json jsonPosition {
 		{ "x", mPosition.x },
 		{ "y", mPosition.y },
 		{ "z", mPosition.z },
 	};
 
-	nlohmann::json jsonRotation {
+	json jsonRotation {
 		{ "x", mRotation.x },
 		{ "y", mRotation.y },
 		{ "z", mRotation.z },
 	};
 	
-	nlohmann::json jsonSize {
+	json jsonSize {
 		{ "x", mSize.x },
 		{ "y", mSize.y },
 		{ "z", mSize.z },
@@ -166,7 +166,7 @@ nlohmann::json TransformComponent::Serialize()
 	};
 }
 
-void TransformComponent::Deserialize(const nlohmann::json& jsonObject)
+void TransformComponent::Deserialize(const json& jsonObject)
 {
 	const auto& jsonPosition = jsonObject["position"];
 	SetPosition({

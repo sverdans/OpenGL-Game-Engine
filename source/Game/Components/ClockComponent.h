@@ -17,8 +17,8 @@ public:
 
 	Component* Clone() override;
 	std::string Name() override;
-	nlohmann::json Serialize() override;
-	void Deserialize(const nlohmann::json& jsonObject) override;
+	json Serialize() override;
+	void Deserialize(const json& jsonObject) override;
 
 private:
 	TransformComponent* secondTransform;

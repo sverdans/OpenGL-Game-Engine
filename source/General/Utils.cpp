@@ -24,7 +24,7 @@ const std::string FetchDataFromFile(const std::string& sFilePath)
 	return std::string(buffer.str());
 }
 
-bool ParseJsonFile(const std::string& sFilePath, nlohmann::json& outJson)
+bool ParseJsonFile(const std::string& sFilePath, json& outJson)
 {
 	const std::string sJsonString = FetchDataFromFile(sFilePath);
 
@@ -34,7 +34,7 @@ bool ParseJsonFile(const std::string& sFilePath, nlohmann::json& outJson)
 		return false;
 	}
 
-	outJson = nlohmann::json::parse(sJsonString);
+	outJson = json::parse(sJsonString);
 	
 	if (!outJson.is_object())
 	{

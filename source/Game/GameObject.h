@@ -9,6 +9,8 @@
 #include <General/Utils.h>
 #include <Game/Component.h>
 
+using json = nlohmann::ordered_json;
+
 class GameObject final
 {
 	friend class ObjectsManager;
@@ -53,8 +55,8 @@ public:
 	void RemoveTag(const std::string sTag);
 	void AddTag(const std::string sTag);
 
-	void Serialize(nlohmann::json& jsonObject);
-	void Deserialize(const nlohmann::json& jsonObject);
+	json Serialize();
+	void Deserialize(const json& jsonObject);
 
 private:
 	GameObject(GameObject* pParent);

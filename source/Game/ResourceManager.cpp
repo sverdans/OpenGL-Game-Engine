@@ -191,7 +191,7 @@ std::string ResourceManager::GetModelName(const Model* pModel) const
 
 void ResourceManager::Load(const std::string& sFilePath)
 {
-	nlohmann::json document;
+	json document;
 	utils::ParseJsonFile(sFilePath, document);
 
 	if (document.contains("Shaders"))
