@@ -19,10 +19,11 @@ bool Renderer::init(GLFWwindow* pWindow)
 		return false;
 	}
 
-	//std::cout << "OpenGL context initialized:" << std::endl;
-	//std::cout << "\tVendor: " << getVendorString() << std::endl;
-	//std::cout << "\tRenderer: " << getRendererString() << std::endl;
-	//std::cout << "\tVersion: " << getVersionString() << std::endl;
+	spdlog::get("main")->info(
+		"\nOpenGL context initialized: \n\tVendor: {}\n\tRenderer: {}\n\tVersion: {}",
+		getVendorString(),
+		getRendererString(),
+		getVersionString());
 
 	depthTest = true;
 

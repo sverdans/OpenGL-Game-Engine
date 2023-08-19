@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <General/Utils.h>
+#include <spdlog/spdlog.h>
 
 namespace utils
 {
@@ -13,7 +14,7 @@ const std::string FetchDataFromFile(const std::string& sFilePath)
 
 	if (!fin.is_open())
 	{
-		// warning
+		spdlog::get("main")->warn("Can not read '{}' file", sFilePath);
 		return std::string("");
 	}
 
@@ -27,19 +28,20 @@ const std::string FetchDataFromFile(const std::string& sFilePath)
 bool ParseJsonFile(const std::string& sFilePath, json& outJson)
 {
 	const std::string sJsonString = FetchDataFromFile(sFilePath);
-
+	
 	if (sJsonString.empty())
 	{
-		std::cout << "Error! No JSON objects in file. File path: " << sFilePath << "." << std::endl;
+		spdlog::get("main")->warn("No JSON data in file '{}'", sFilePath);
 		return false;
 	}
 
-	outJson = json::parse(sJsonString);
-	
-	if (!outJson.is_object())
+	try
 	{
-		std::cout << "JSON parse error." << std::endl;
-		std::cout << "File path: " << sFilePath << std::endl;
+		outJson = json::parse(sJsonString);
+	}
+	catch (const std::exception& e)
+	{
+		spdlog::get("main")->warn("json parse error from file '{}' : {}", sFilePath, e.what());
 		return false;
 	}
 

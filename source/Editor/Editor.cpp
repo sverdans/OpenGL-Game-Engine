@@ -16,6 +16,7 @@ bool Editor::Initialize()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
+    auto& window = Window::Instance();
 
     if (!ImGui_ImplOpenGL3_Init())
     {
@@ -23,7 +24,7 @@ bool Editor::Initialize()
         return false;
     }
 
-    if (!ImGui_ImplGlfw_InitForOpenGL(Window::Instance().GetWindowPtr(), true))
+    if (!ImGui_ImplGlfw_InitForOpenGL(window.mpWindow, true))
     {
         spdlog::get("main")->critical("ImGui_ImplGlfw_InitForOpenGL failed");
         ImGui_ImplOpenGL3_Shutdown();
@@ -37,8 +38,6 @@ bool Editor::Initialize()
         ImGui_ImplGlfw_Shutdown();
         return false;
     }
-
-    const auto& window = Window::Instance();
 
     managersSidebarSize   = ImVec2(200, window.GetHeight());
     gameObjectSidebarSize = ImVec2(200, window.GetHeight());

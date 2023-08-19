@@ -56,9 +56,10 @@ void Window::Finalize()
 	glfwTerminate();
 }
 
-bool Window::NeedFinalize() const
+bool Window::ShouldRun() const
 {
-	return glfwWindowShouldClose(mpWindow);
+	glfwPollEvents();
+	return !glfwWindowShouldClose(mpWindow);
 }
 
 void Window::Resize(int width, int height)
@@ -75,4 +76,3 @@ void Window::Update()
 float Window::GetWidth() const  { return mSize.x; }
 float Window::GetHeight() const { return mSize.y; }
 const glm::vec2& Window::GetSize() const { return mSize; }
-GLFWwindow* Window::GetWindowPtr() { return mpWindow; }

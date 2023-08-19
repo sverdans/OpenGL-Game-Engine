@@ -41,16 +41,18 @@ int main(int argc, char** argv)
 	if (!SetupLogger())
 		return -1;
 	
-	if (!Window::Instance().Initialize(1000, 800, "OpenGL-Courswork"))
+	auto& window = Window::Instance(); 
+	if (!window.Initialize(1000, 800, "OpenGL-Courswork"))
 	{
-		Window::Instance().Finalize();
+		window.Finalize();
 		return -1;
 	}
 
-	if (!Editor::Instance().Initialize())
+	auto& editor = Editor::Instance();
+	if (!editor.Initialize())
 	{
-		Editor::Instance().Finalize();
-		Window::Instance().Finalize();
+		editor.Finalize();
+		window.Finalize();
 		return -1;
 	}
 
@@ -65,10 +67,8 @@ int main(int argc, char** argv)
 	Time::setUpdateFrequency(60.0);
 	Time::start();
 
-	while (!Window::Instance().NeedFinalize())
+	while (window.ShouldRun())
 	{
-		glfwPollEvents();
-
 		Time::update();
 
 		if (Time::CheckFPS())
@@ -82,16 +82,16 @@ int main(int argc, char** argv)
 			LightingSystem::Instance().Update();
 			RendererSystem::Instance().Render();
 
-			Editor::Instance().Update();
-			Window::Instance().Update();
+			editor.Update();
+			window.Update();
 		}
 	}
 
 	ObjectsManager::Instance().Clear();
 	ResourceManager::Instance().Clear();
 
-	Editor::Instance().Finalize();
-	Window::Instance().Finalize();
+	editor.Finalize();
+	window.Finalize();
 
 	return 0;
 }

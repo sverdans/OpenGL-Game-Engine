@@ -7,6 +7,7 @@
 
 class Window final
 {
+	friend class Editor;
 public:
 	static Window& Instance()
 	{
@@ -15,17 +16,15 @@ public:
 	}
 
 	bool Initialize(int width, int height, const std::string& sTitle);
-	bool NeedFinalize() const;
+	bool ShouldRun() const;
 	void Finalize();
 
 	void Update();
 	void Resize(int width, int height);
 
-
 	float GetWidth() const;
 	float GetHeight() const;
 	const glm::vec2& GetSize() const;
-	GLFWwindow* GetWindowPtr();
 
 private:
 	static void OnResize(GLFWwindow* window, int width, int height)
