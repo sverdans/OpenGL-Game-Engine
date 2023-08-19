@@ -13,26 +13,36 @@ using json = nlohmann::ordered_json;
 
 class GameObject final
 {
-	friend class ObjectsManager;
 	friend class Editor;
+	friend class ObjectsManager;
 public:
 
-	template <typename T>
+	template<СomponentInherited T>
 	T* const AddComponent()
 	{
-		std::string sComponentName = utils::ClassName<T>(); 
-		return static_cast<T*>(mComponents[sComponentName] = new T(this));
+		std::string sComponentName = utils::ClassName<T>();
+		if (mComponents.find(sComponentName) == mComponents.end())
+		{
+			return nullptr;
+		}
+
+		Component* pComponent = new T(this);
+		mComponents[sComponentName] = pComponent;
+		return static_cast<T*>(pComponent);
 	}
 
-	template <typename T>
+	template<СomponentInherited T>
 	T* const GetComponent()
 	{
 		std::string sComponentName = utils::ClassName<T>(); 
 		auto it = mComponents.find(sComponentName);
-		return it == mComponents.end() ? nullptr : static_cast<T*>(it->second);
+
+		return it != mComponents.end() 
+			? static_cast<T*>(it->second) 
+			: nullptr;
 	}
 
-	template <typename T>
+	template<СomponentInherited T>
 	bool Contain() const
 	{
 		std::string sComponentName = utils::ClassName<T>(); 

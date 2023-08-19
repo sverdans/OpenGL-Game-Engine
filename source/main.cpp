@@ -43,8 +43,6 @@ int main(int argc, char** argv)
 
 	LightingSystem::Instance().setAmbientColor({ 1.f, 1.f, 1.f });
 	LightingSystem::Instance().setAmbientStrength(0.225f);
-
-//	ObjectsManager::Instance().Load("/home/sverdans/Documents/c++/OpenGL-Game-Engine/resources/projects/courswork.json");
 	
 	Time::setUpdateFrequency(60.0);
 	Time::start();

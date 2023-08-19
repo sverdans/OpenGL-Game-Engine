@@ -4,7 +4,7 @@
 
 namespace utils
 {
-	template <class T>
+	template<class T>
 	std::string ClassName()
 	{
 		#if __GNUC__

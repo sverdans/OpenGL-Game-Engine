@@ -1,12 +1,16 @@
 #pragma once
 #include <string>
+#include <concepts>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::ordered_json;
 
 class GameObject;
+class Component;
 
-class Component 
+template<class T> concept СomponentInherited = std::derived_from<T, Component>;
+
+class Component
 {
 private:
 	GameObject* mpGameObject { nullptr };

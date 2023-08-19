@@ -21,7 +21,7 @@ public:
 		return instance;
 	}
 
-	template<typename T>
+	template<СomponentInherited T>
 	Component* DeclareComponent()
 	{
 		std::string sName = utils::ClassName<T>();
