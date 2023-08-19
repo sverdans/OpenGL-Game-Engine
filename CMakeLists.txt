@@ -111,6 +111,7 @@ fetch_dependencies()
 
 file(GLOB_RECURSE SOURCE "source/*.cpp")
 file(GLOB_RECURSE INCLUDE "source/*.h")
+file(GLOB INCLUDES_COMPONENT "source/Game/Components/*.h")
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 
@@ -134,12 +135,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     glm
     nfd)
 
+target_precompile_headers(${PROJECT_NAME} PUBLIC 
+    ${INCLUDES_COMPONENT})
+
 if(${ASAN})
     message(STATUS "Building with Adress Sanitizer")
     target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
     target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 endif()
-
-file(GLOB INCLUDES_COMPONENT "source/Game/Components/*.h")
-
-target_precompile_headers(${PROJECT_NAME} PUBLIC ${INCLUDES_COMPONENT})

@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 
+#include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
 #include <System/Window.h>
@@ -19,22 +20,39 @@
 
 #include <Editor/Editor.h>
 
-void basic_logfile_example()
+bool SetupLogger()
 {
-    try 
-    {
-        auto logger = spdlog::basic_logger_mt("basic_logger", "logs/basic-log.txt");
-    }
-    catch (const spdlog::spdlog_ex &ex)
-    {
-        std::cout << "Log init failed: " << ex.what() << std::endl;
-    }
+	try 
+	{
+		auto pLogger = spdlog::basic_logger_mt("main", "logs/log.log", true);
+	}
+	catch (const spdlog::spdlog_ex &ex)
+	{
+		std::cout << "Log init failed: " << ex.what() << std::endl;
+		return false;
+	}
+
+	spdlog::get("main")->info("Logger initilized");
+	return true;
 }
 
 int main(int argc, char** argv)
 {
-	Window::Instance().Initialize(1000, 800, "OpenGL-Courswork");
-	Editor::Instance().Initialize();
+	if (!SetupLogger())
+		return -1;
+	
+	if (!Window::Instance().Initialize(1000, 800, "OpenGL-Courswork"))
+	{
+		Window::Instance().Finalize();
+		return -1;
+	}
+
+	if (!Editor::Instance().Initialize())
+	{
+		Editor::Instance().Finalize();
+		Window::Instance().Finalize();
+		return -1;
+	}
 
 	Renderer::setClearColor(60.f / 255.f , 60.f / 255.f, 60.f / 255.f, 0.f);
 	Renderer::enableDepthTest();

@@ -25,6 +25,13 @@ public:
 	virtual json Serialize() = 0;
 	virtual void Deserialize(const json& jsonObject) = 0;
 
-	GameObject* const GetGameObject() const { return mpGameObject; }
-	void SetGameObject(GameObject* pGameObject) { mpGameObject = pGameObject; }
+	GameObject* const GetGameObject() const
+	{
+		return mpGameObject;
+	}
+	
+	void SetGameObject(GameObject* pGameObject)
+	{
+		mpGameObject = pGameObject;
+	}
 };

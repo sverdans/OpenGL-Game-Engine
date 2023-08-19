@@ -4,6 +4,7 @@
 #include <list>
 #include <map>
 
+#include <spdlog/spdlog.h>
 #include <nlohmann/json.hpp>
 
 #include <General/Utils.h>
@@ -23,11 +24,14 @@ public:
 		std::string sComponentName = utils::ClassName<T>();
 		if (mComponents.find(sComponentName) == mComponents.end())
 		{
+			spdlog::get("main")->warn("'" + sComponentName + "' already exist in Object " + msName);
 			return nullptr;
 		}
 
 		Component* pComponent = new T(this);
 		mComponents[sComponentName] = pComponent;
+		spdlog::get("main")->debug("Add '" + sComponentName + "' in Object " + msName);
+
 		return static_cast<T*>(pComponent);
 	}
 

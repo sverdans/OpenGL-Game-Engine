@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include <spdlog/spdlog.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -13,20 +15,21 @@ bool Renderer::init(GLFWwindow* pWindow)
 
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		exit(-1);
+		spdlog::get("main")->critical("Failed to initialize GLAD");
+		return false;
 	}
 
-	std::cout << "OpenGL context initialized:" << std::endl;
-	std::cout << "\tVendor: " << getVendorString() << std::endl;
-	std::cout << "\tRenderer: " << getRendererString() << std::endl;
-	std::cout << "\tVersion: " << getVersionString() << std::endl;
+	//std::cout << "OpenGL context initialized:" << std::endl;
+	//std::cout << "\tVendor: " << getVendorString() << std::endl;
+	//std::cout << "\tRenderer: " << getRendererString() << std::endl;
+	//std::cout << "\tVersion: " << getVersionString() << std::endl;
 
 	depthTest = true;
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
+
 	return true;
 }
 

@@ -25,8 +25,6 @@ public:
 	Component* DeclareComponent()
 	{
 		std::string sName = utils::ClassName<T>();
-		spdlog::info(sName + " Declared");
-		
 		auto pComponent = new T(nullptr);
 		mComponents.emplace(sName, pComponent);
 		return pComponent;

@@ -2,11 +2,15 @@
 #include <System/InputHandler.h>
 #include <Renderer/Renderer.h>
 
+#include <spdlog/logger.h>
+
 bool Window::Initialize(int width, int height, const std::string& sTitle)
 {
+	spdlog::get("main")->info("Window initialize");
+
 	if (!glfwInit())
 	{
-		std::cout << "Error! GLFW initialization failed." << std::endl;
+		spdlog::get("main")->critical("GLFW initialization failed");
 		return false;
 	}
 
@@ -21,7 +25,7 @@ bool Window::Initialize(int width, int height, const std::string& sTitle)
 	if (!mpWindow)
 	{
 		glfwTerminate();
-		std::cout << "Error! GLFW window creating failed." << std::endl;
+		spdlog::get("main")->critical("GLFW window creating failed");
 		return false;
 	}
 
@@ -29,7 +33,8 @@ bool Window::Initialize(int width, int height, const std::string& sTitle)
 
 	if (!Renderer::init(mpWindow))
 	{
-		std::cout << "Error! GLAD initialization failed." << std::endl;
+		glfwTerminate();
+		spdlog::get("main")->critical("GLAD initialization failed");
 		return false;
 	}
 
@@ -44,7 +49,10 @@ bool Window::Initialize(int width, int height, const std::string& sTitle)
 
 void Window::Finalize()
 {
-	glfwDestroyWindow(mpWindow);
+	spdlog::get("main")->info("Window finalize");
+
+	if (mpWindow)
+		glfwDestroyWindow(mpWindow);
 	glfwTerminate();
 }
 

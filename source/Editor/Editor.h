@@ -46,6 +46,7 @@ private:
 	Editor& operator = (const Editor&&) = delete;
 
 private:
+	void SetupStyle();
 	void OnDrawBegin();
 	void OnDrawEnd();
 

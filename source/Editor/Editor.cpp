@@ -15,13 +15,28 @@ bool Editor::Initialize()
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-
     ImGuiIO& io = ImGui::GetIO();
 
-    ImGui_ImplOpenGL3_Init();
-    bool lInit = ImGui_ImplGlfw_InitForOpenGL(Window::Instance().GetWindowPtr(), true);
+    if (!ImGui_ImplOpenGL3_Init())
+    {
+        spdlog::get("main")->critical("ImGui_ImplOpenGL3_Init failed");
+        return false;
+    }
 
-    std::cout << "ImGui_ImplGlfw_InitForOpenGL: " << lInit << std::endl;
+    if (!ImGui_ImplGlfw_InitForOpenGL(Window::Instance().GetWindowPtr(), true))
+    {
+        spdlog::get("main")->critical("ImGui_ImplGlfw_InitForOpenGL failed");
+        ImGui_ImplOpenGL3_Shutdown();
+        return false;
+    }
+
+    if (NFD_Init() == NFD_ERROR)
+    {
+        spdlog::get("main")->critical(std::string("NFD_Init failed: ") + NFD_GetError());
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        return false;
+    }
 
     const auto& window = Window::Instance();
 
@@ -31,15 +46,13 @@ bool Editor::Initialize()
     sidebarMinSize = ImVec2(200, window.GetHeight());
     sidebarMaxSize = ImVec2(400, window.GetHeight());
 
-    NFD_Init();
-
-    return lInit;
+    SetupStyle();
+    return true;
 }
 
 void Editor::Finalize()
 {
     NFD_Quit();
-
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -56,6 +69,37 @@ void Editor::OnDrawEnd()
 {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Editor::SetupStyle()
+{
+    auto& style = ImGui::GetStyle();
+
+    style.WindowPadding     = {  5, 5 };    
+    style.FramePadding      = {  5, 3 };    
+    style.CellPadding       = {  5, 3 };    
+    style.ItemSpacing       = { 10, 3 };
+    style.ItemInnerSpacing  = {  5, 5 };
+    style.TouchExtraPadding = {  0, 0 };
+
+    style.IndentSpacing = 20;
+    style.ScrollbarSize = 15;
+    style.GrabMinSize   = 15;
+    
+    style.WindowBorderSize  =  0;
+    style.ChildBorderSize   =  0;
+    style.PopupBorderSize   =  0;
+    style.FrameBorderSize   =  0;
+    style.TabBorderSize     =  0;
+
+    style.WindowRounding    =  0;
+    style.ChildRounding     =  5;
+    style.FrameRounding     =  5;
+    style.ScrollbarRounding = 10;
+    style.GrabRounding      =  5;
+    style.TabRounding       =  5;
+
+    style.WindowTitleAlign = { 0.5f, 0.5f };
 }
 
 void Editor::Update()
@@ -103,7 +147,7 @@ void Editor::PresentJsonObject(json& jsonObject)
                 it.value() = f;
             }
             ImGui::SameLine();
-            ImGui::Text(it.key().c_str());
+            ImGui::Text("%s", it.key().c_str());
         }
 
         if (type == "string")
@@ -116,7 +160,7 @@ void Editor::PresentJsonObject(json& jsonObject)
                 it.value() = s;
             }
             ImGui::SameLine();
-            ImGui::Text(it.key().c_str());
+            ImGui::Text("%s", it.key().c_str());
         }
 
         if (type == "boolean")
@@ -128,7 +172,7 @@ void Editor::PresentJsonObject(json& jsonObject)
                 it.value() = b;
             }
             ImGui::SameLine();
-            ImGui::Text(it.key().c_str());
+            ImGui::Text("%s", it.key().c_str());
         }
 
         if (type == "object")
@@ -187,24 +231,6 @@ void Editor::DrawMenuStrip()
 
         ImGui::EndMainMenuBar();
     }
-
-    /*if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
-    {
-        if (ImGuiFileDialog::Instance()->IsOk())
-        {
-            std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-
-            ObjectsManager::deleteGameObjects();
-            ResourceManager::deleteResources();
-
-            ResourceManager::loadResources(filePathName);
-            ObjectsManager::loadGameObjects(filePathName);
-
-            BehaviourSystem::init();
-            LightingSystem::update();
-        }
-        ImGuiFileDialog::Instance()->Close();
-    }*/
 }
 
 void Editor::PresentResourceManager()
@@ -216,7 +242,7 @@ void Editor::PresentResourceManager()
         {
             for (const auto& shader : ResourceManager::Instance().mShaders)
             {
-                ImGui::Text(shader.first.c_str());
+                ImGui::Text("%s", shader.first.c_str());
             }
         }
 
@@ -224,7 +250,7 @@ void Editor::PresentResourceManager()
         {
             for (const auto& texture : ResourceManager::Instance().mTextures)
             {
-                ImGui::Text(texture.first.c_str());
+                ImGui::Text("%s", texture.first.c_str());
             }
         }
 
@@ -232,7 +258,7 @@ void Editor::PresentResourceManager()
         {
             for (const auto& material : ResourceManager::Instance().mMaterials)
             {
-                ImGui::Text(material.first.c_str());
+                ImGui::Text("%s", material.first.c_str());
             }
         }
 
@@ -240,7 +266,7 @@ void Editor::PresentResourceManager()
         {
             for (const auto& model : ResourceManager::Instance().mModels)
             {
-                ImGui::Text(model.first.c_str());
+                ImGui::Text("%s", model.first.c_str());
             }
         }
     
