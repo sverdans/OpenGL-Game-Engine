@@ -16,7 +16,7 @@ class ObjectsManager final
 	friend class Editor;
 public:
 	static ObjectsManager& Instance() 
-	{ 
+	{
 		static ObjectsManager instance;
 		return instance;
 	}
@@ -24,9 +24,8 @@ public:
 	template<СomponentInherited T>
 	Component* DeclareComponent()
 	{
-		std::string sName = utils::ClassName<T>();
 		auto pComponent = new T(nullptr);
-		mComponents.emplace(sName, pComponent);
+		mComponents.emplace(pComponent->Name(), pComponent);
 		return pComponent;
 	}
 

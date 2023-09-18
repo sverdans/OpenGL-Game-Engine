@@ -11,7 +11,7 @@
 DECLARE_COMPONENT(TransformComponent)
 
 TransformComponent::TransformComponent(GameObject* pGameObject)
-	: Component(pGameObject) 
+	: NamedComponent(pGameObject) 
 { }
 
 const glm::vec3& TransformComponent::SetPosition(const glm::vec3& position)
@@ -135,9 +135,6 @@ const glm::mat4x4& TransformComponent::GetModelMatrix() const
 
 	return mModel;
 }
-
-Component* TransformComponent::Clone() { return new TransformComponent(nullptr); }
-std::string TransformComponent::Name() { return "TransformComponent"; }
 
 json TransformComponent::Serialize()
 {

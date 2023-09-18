@@ -3,9 +3,10 @@
 #include <glm/mat4x4.hpp>
 
 #include <Game/Component.h>
+#include <Game/NamedComponent.h>
 #include <Game/ObjectsManager.h>
 
-class TransformComponent : public Component
+class TransformComponent : public NamedComponent<TransformComponent>
 {
 public:
 	TransformComponent(GameObject* gameObject);
@@ -38,8 +39,6 @@ public:
 
 	const glm::mat4x4& GetModelMatrix() const;
 
-	Component* Clone() override;
-	std::string Name() override;
 	json Serialize() override;
 	void Deserialize(const json& jsonObject) override;
 

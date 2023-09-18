@@ -22,6 +22,7 @@ public:
 
 	virtual Component* Clone() = 0;
 	virtual std::string Name() = 0;
+	
 	virtual json Serialize() = 0;
 	virtual void Deserialize(const json& jsonObject) = 0;
 
